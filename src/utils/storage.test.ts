@@ -12,7 +12,7 @@
  * - localStorage unavailable (graceful degradation)
  */
 
-import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 import {
   loadPreferences,
   savePreferences,
