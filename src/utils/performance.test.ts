@@ -32,14 +32,17 @@ describe('reportWebVitals', () => {
     reportWebVitals();
     window.dispatchEvent(new Event('load'));
 
-    expect(consoleLog).toHaveBeenCalledWith('[Performance] Page Load Metrics:', {
-      'DNS Lookup': '2ms',
-      'TCP Connection': '5ms',
-      'Request Time': '15ms',
-      'Response Time': '20ms',
-      'DOM Processing': '40ms',
-      'Total Load Time': '120ms',
-    });
+    expect(consoleLog).toHaveBeenCalledWith(
+      '[Performance] Page Load Metrics:',
+      {
+        'DNS Lookup': '2ms',
+        'TCP Connection': '5ms',
+        'Request Time': '15ms',
+        'Response Time': '20ms',
+        'DOM Processing': '40ms',
+        'Total Load Time': '120ms',
+      }
+    );
   });
 
   it('does not log when navigation timing is unavailable', () => {
@@ -57,13 +60,15 @@ describe('measureRender', () => {
   it('runs the callback and logs elapsed render time in development', () => {
     const callback = vi.fn();
     const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(performance, 'now').mockReturnValueOnce(10).mockReturnValueOnce(13.456);
+    vi.spyOn(performance, 'now')
+      .mockReturnValueOnce(10)
+      .mockReturnValueOnce(13.456);
 
     measureRender('IdiomCard', callback);
 
     expect(callback).toHaveBeenCalledOnce();
     expect(consoleLog).toHaveBeenCalledWith(
-      '[Performance] IdiomCard rendered in 3.46ms',
+      '[Performance] IdiomCard rendered in 3.46ms'
     );
   });
 
@@ -73,7 +78,7 @@ describe('measureRender', () => {
     expect(() =>
       measureRender('BrokenComponent', () => {
         throw error;
-      }),
+      })
     ).toThrow(error);
   });
 });
@@ -105,9 +110,11 @@ describe('measurePerformance', () => {
     expect(measure).toHaveBeenCalledWith(
       'search-index',
       'search-start',
-      'search-end',
+      'search-end'
     );
-    expect(consoleLog).toHaveBeenCalledWith('[Performance] search-index: 42.42ms');
+    expect(consoleLog).toHaveBeenCalledWith(
+      '[Performance] search-index: 42.42ms'
+    );
   });
 
   it('skips missing marks without logging or rethrowing', () => {
@@ -117,7 +124,7 @@ describe('measurePerformance', () => {
     });
 
     expect(() =>
-      measurePerformance('missing', 'missing-start', 'missing-end'),
+      measurePerformance('missing', 'missing-start', 'missing-end')
     ).not.toThrow();
     expect(consoleLog).not.toHaveBeenCalled();
   });

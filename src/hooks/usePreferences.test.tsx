@@ -4,7 +4,9 @@ import { createRoot } from 'react-dom/client';
 import { usePreferences } from './usePreferences';
 import type { UserPreferences } from '../types';
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+(
+  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }
+).IS_REACT_ACT_ENVIRONMENT = true;
 
 const mockAppContext = vi.hoisted(() => ({
   preferences: {
@@ -25,7 +27,11 @@ vi.mock('../contexts/AppContext', () => ({
 
 type PreferencesApi = ReturnType<typeof usePreferences>;
 
-function PreferencesHarness({ onHook }: { onHook: (api: PreferencesApi) => void }) {
+function PreferencesHarness({
+  onHook,
+}: {
+  onHook: (api: PreferencesApi) => void;
+}) {
   onHook(usePreferences());
   return null as ReactNode;
 }
@@ -37,7 +43,13 @@ function renderHook() {
   let api: PreferencesApi | undefined;
 
   act(() => {
-    root.render(<PreferencesHarness onHook={(value) => { api = value; }} />);
+    root.render(
+      <PreferencesHarness
+        onHook={(value) => {
+          api = value;
+        }}
+      />
+    );
   });
 
   const unmount = () => {
@@ -145,7 +157,10 @@ describe('usePreferences', () => {
 
     api.setSelectedLanguages(['python', 'go']);
 
-    expect(mockAppContext.setSelectedLanguages).toHaveBeenCalledWith(['python', 'go']);
+    expect(mockAppContext.setSelectedLanguages).toHaveBeenCalledWith([
+      'python',
+      'go',
+    ]);
     unmount();
   });
 
@@ -155,7 +170,9 @@ describe('usePreferences', () => {
 
     api.setTheme('light');
 
-    expect(mockAppContext.updatePreferences).toHaveBeenCalledWith({ theme: 'light' });
+    expect(mockAppContext.updatePreferences).toHaveBeenCalledWith({
+      theme: 'light',
+    });
     unmount();
   });
 

@@ -1,7 +1,10 @@
 import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppProvider, useAppContext } from './AppContext';
-import { cleanupRenderedComponents, renderComponent } from '../test/renderComponent';
+import {
+  cleanupRenderedComponents,
+  renderComponent,
+} from '../test/renderComponent';
 import type { Idiom, Language, UserPreferences } from '../types';
 
 const mocks = vi.hoisted(() => ({
@@ -100,7 +103,7 @@ async function flushPromises() {
 
 function clickButton(container: HTMLElement, text: string) {
   const button = Array.from(container.querySelectorAll('button')).find(
-    (element) => element.textContent === text,
+    (element) => element.textContent === text
   );
   if (!button) {
     throw new Error(`button not found: ${text}`);
@@ -131,7 +134,7 @@ describe('AppProvider', () => {
     const rendered = renderComponent(
       <AppProvider>
         <AppContextProbe />
-      </AppProvider>,
+      </AppProvider>
     );
 
     expect(rendered.container.textContent).toContain('正在加载数据...');
@@ -147,16 +150,26 @@ describe('AppProvider', () => {
     const rendered = renderComponent(
       <AppProvider>
         <AppContextProbe />
-      </AppProvider>,
+      </AppProvider>
     );
     await flushPromises();
 
-    expect(rendered.container.querySelector('[data-testid="idiom-count"]')?.textContent).toBe('1');
-    expect(rendered.container.querySelector('[data-testid="language-count"]')?.textContent).toBe('1');
     expect(
-      rendered.container.querySelector('[data-testid="selected-languages"]')?.textContent,
+      rendered.container.querySelector('[data-testid="idiom-count"]')
+        ?.textContent
+    ).toBe('1');
+    expect(
+      rendered.container.querySelector('[data-testid="language-count"]')
+        ?.textContent
+    ).toBe('1');
+    expect(
+      rendered.container.querySelector('[data-testid="selected-languages"]')
+        ?.textContent
     ).toBe('javascript');
-    expect(rendered.container.querySelector('[data-testid="favorite-state"]')?.textContent).toBe('favorite');
+    expect(
+      rendered.container.querySelector('[data-testid="favorite-state"]')
+        ?.textContent
+    ).toBe('favorite');
   });
 
   it('saves preference updates from context actions', async () => {
@@ -168,7 +181,7 @@ describe('AppProvider', () => {
     const rendered = renderComponent(
       <AppProvider>
         <AppContextProbe />
-      </AppProvider>,
+      </AppProvider>
     );
     await flushPromises();
 
@@ -197,12 +210,15 @@ describe('AppProvider', () => {
   it('renders an error state and retries loading data', async () => {
     mocks.loadAllData
       .mockRejectedValueOnce(new Error('network down'))
-      .mockResolvedValueOnce({ idioms: [sampleIdiom], languages: [sampleLanguage] });
+      .mockResolvedValueOnce({
+        idioms: [sampleIdiom],
+        languages: [sampleLanguage],
+      });
 
     const rendered = renderComponent(
       <AppProvider>
         <AppContextProbe />
-      </AppProvider>,
+      </AppProvider>
     );
     await flushPromises();
 
@@ -214,14 +230,19 @@ describe('AppProvider', () => {
 
     expect(mocks.loadAllData).toHaveBeenCalledTimes(2);
     expect(rendered.container.textContent).toContain('add favorite');
-    expect(rendered.container.querySelector('[data-testid="idiom-count"]')?.textContent).toBe('1');
+    expect(
+      rendered.container.querySelector('[data-testid="idiom-count"]')
+        ?.textContent
+    ).toBe('1');
   });
 
   it('throws when useAppContext is rendered without a provider', () => {
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     expect(() => renderComponent(<AppContextProbe />)).toThrow(
-      'useAppContext must be used within an AppProvider',
+      'useAppContext must be used within an AppProvider'
     );
 
     consoleError.mockRestore();

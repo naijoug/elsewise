@@ -109,7 +109,13 @@ describe('savePreferences', () => {
     vi.spyOn(localStorage, 'setItem').mockImplementation(() => {
       throw new Error('QuotaExceededError');
     });
-    expect(() => savePreferences({ favoriteIdioms: [], selectedLanguages: [], theme: 'light' })).not.toThrow();
+    expect(() =>
+      savePreferences({
+        favoriteIdioms: [],
+        selectedLanguages: [],
+        theme: 'light',
+      })
+    ).not.toThrow();
     localStorage.setItem = original;
   });
 });
@@ -145,7 +151,9 @@ describe('addFavoriteIdiom', () => {
     addFavoriteIdiom('array-map');
     addFavoriteIdiom('array-map');
     const prefs = loadPreferences();
-    expect(prefs.favoriteIdioms.filter((id) => id === 'array-map')).toHaveLength(1);
+    expect(
+      prefs.favoriteIdioms.filter((id) => id === 'array-map')
+    ).toHaveLength(1);
   });
 });
 

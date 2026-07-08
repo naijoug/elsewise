@@ -152,14 +152,26 @@ describe('isVisibleToScreenReader', () => {
   });
 
   it.each([
-    ['aria-hidden', (element: HTMLElement) => element.setAttribute('aria-hidden', 'true')],
-    ['hidden attribute', (element: HTMLElement) => element.setAttribute('hidden', '')],
-    ['display none', (element: HTMLElement) => {
-      element.style.display = 'none';
-    }],
-    ['visibility hidden', (element: HTMLElement) => {
-      element.style.visibility = 'hidden';
-    }],
+    [
+      'aria-hidden',
+      (element: HTMLElement) => element.setAttribute('aria-hidden', 'true'),
+    ],
+    [
+      'hidden attribute',
+      (element: HTMLElement) => element.setAttribute('hidden', ''),
+    ],
+    [
+      'display none',
+      (element: HTMLElement) => {
+        element.style.display = 'none';
+      },
+    ],
+    [
+      'visibility hidden',
+      (element: HTMLElement) => {
+        element.style.visibility = 'hidden';
+      },
+    ],
   ])('当元素设置 %s 时返回 false', (_name, hide) => {
     const element = document.createElement('span');
     hide(element);

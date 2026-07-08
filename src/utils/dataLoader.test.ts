@@ -67,18 +67,20 @@ describe('loadIdioms', () => {
       vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.reject(new SyntaxError('Unexpected token')),
-      }),
+      })
     );
     await expect(loadIdioms()).rejects.toThrow(SyntaxError);
   });
 
   it('logs error before rethrowing', async () => {
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     vi.stubGlobal('fetch', mockFetchStatus(500));
     await expect(loadIdioms()).rejects.toThrow();
     expect(consoleError).toHaveBeenCalledWith(
       'Error loading idioms:',
-      expect.any(Error),
+      expect.any(Error)
     );
     consoleError.mockRestore();
   });
@@ -94,7 +96,7 @@ describe('loadLanguages', () => {
   it('throws when response is not ok', async () => {
     vi.stubGlobal('fetch', mockFetchStatus(500));
     await expect(loadLanguages()).rejects.toThrow(
-      'Failed to load languages: 500',
+      'Failed to load languages: 500'
     );
   });
 
@@ -104,7 +106,7 @@ describe('loadLanguages', () => {
       vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.reject(new SyntaxError('Unexpected token')),
-      }),
+      })
     );
     await expect(loadLanguages()).rejects.toThrow(SyntaxError);
   });
@@ -148,11 +150,15 @@ describe('loadAllData', () => {
       });
     vi.stubGlobal('fetch', fetchMock);
 
-    await expect(loadAllData()).rejects.toThrow('Failed to load languages: 403');
+    await expect(loadAllData()).rejects.toThrow(
+      'Failed to load languages: 403'
+    );
   });
 
   it('logs error before rethrowing on aggregate failure', async () => {
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     vi.stubGlobal('fetch', mockFetchStatus(500));
     await expect(loadAllData()).rejects.toThrow();
     expect(consoleError).toHaveBeenCalled();

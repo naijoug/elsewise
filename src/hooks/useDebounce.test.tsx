@@ -3,7 +3,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createRoot } from 'react-dom/client';
 import { useDebounce } from './useDebounce';
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+(
+  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }
+).IS_REACT_ACT_ENVIRONMENT = true;
 
 // Tiny harness component that exposes the debounced value via a callback.
 function DebounceHarness({
@@ -23,9 +25,11 @@ function DebounceHarness({
 
 // Helper to render the harness with createRoot + act, matching the project's
 // existing test pattern (see src/test/renderComponent.tsx).
-function renderHarness(
-  initialProps: { value: string; delay: number; onDebounced: (v: string) => void },
-) {
+function renderHarness(initialProps: {
+  value: string;
+  delay: number;
+  onDebounced: (v: string) => void;
+}) {
   const container = document.createElement('div');
   document.body.appendChild(container);
   const root = createRoot(container);
@@ -40,7 +44,7 @@ function renderHarness(
           value={props.value}
           delay={props.delay}
           onDebounced={props.onDebounced}
-        />,
+        />
       );
     });
   };
@@ -70,7 +74,11 @@ describe('useDebounce', () => {
   it('does not update debounced value before delay elapses', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
-    const { rerender } = renderHarness({ value: 'hello', delay: 300, onDebounced: spy });
+    const { rerender } = renderHarness({
+      value: 'hello',
+      delay: 300,
+      onDebounced: spy,
+    });
 
     spy.mockClear();
     rerender({ value: 'world' });
@@ -82,7 +90,11 @@ describe('useDebounce', () => {
   it('updates debounced value after delay', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
-    const { rerender } = renderHarness({ value: 'hello', delay: 300, onDebounced: spy });
+    const { rerender } = renderHarness({
+      value: 'hello',
+      delay: 300,
+      onDebounced: spy,
+    });
 
     rerender({ value: 'world' });
     spy.mockClear();
@@ -96,7 +108,11 @@ describe('useDebounce', () => {
   it('resets timer when value changes rapidly within delay', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
-    const { rerender } = renderHarness({ value: 'a', delay: 300, onDebounced: spy });
+    const { rerender } = renderHarness({
+      value: 'a',
+      delay: 300,
+      onDebounced: spy,
+    });
 
     // Rapid consecutive changes
     rerender({ value: 'b' });
@@ -120,7 +136,13 @@ describe('useDebounce', () => {
     const spy = vi.fn();
 
     // Harness without explicit delay — use a wrapper.
-    function DefaultDelayHarness({ value, onDebounced }: { value: string; onDebounced: (v: string) => void }) {
+    function DefaultDelayHarness({
+      value,
+      onDebounced,
+    }: {
+      value: string;
+      onDebounced: (v: string) => void;
+    }) {
       const debounced = useDebounce(value);
       onDebounced(debounced);
       return null as ReactNode;
@@ -154,7 +176,11 @@ describe('useDebounce', () => {
   it('handles value changes to empty string', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
-    const { rerender } = renderHarness({ value: 'data', delay: 200, onDebounced: spy });
+    const { rerender } = renderHarness({
+      value: 'data',
+      delay: 200,
+      onDebounced: spy,
+    });
 
     rerender({ value: '' });
     spy.mockClear();
@@ -165,7 +191,11 @@ describe('useDebounce', () => {
   it('handles delay of 0 (updates immediately after microtask)', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
-    const { rerender } = renderHarness({ value: 'x', delay: 0, onDebounced: spy });
+    const { rerender } = renderHarness({
+      value: 'x',
+      delay: 0,
+      onDebounced: spy,
+    });
 
     rerender({ value: 'y' });
     spy.mockClear();
@@ -178,7 +208,11 @@ describe('useDebounce', () => {
   it('does not fire after unmount', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
-    const { rerender, unmount } = renderHarness({ value: 'x', delay: 300, onDebounced: spy });
+    const { rerender, unmount } = renderHarness({
+      value: 'x',
+      delay: 300,
+      onDebounced: spy,
+    });
 
     rerender({ value: 'y' });
     unmount();
@@ -192,7 +226,13 @@ describe('useDebounce', () => {
     vi.useFakeTimers();
     const spy = vi.fn();
 
-    function NumericHarness({ value, onDebounced }: { value: number; onDebounced: (v: number) => void }) {
+    function NumericHarness({
+      value,
+      onDebounced,
+    }: {
+      value: number;
+      onDebounced: (v: number) => void;
+    }) {
       const debounced = useDebounce(value, 100);
       onDebounced(debounced);
       return null as ReactNode;
