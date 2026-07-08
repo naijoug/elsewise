@@ -122,10 +122,23 @@ export function isVisibleToScreenReader(element: HTMLElement): boolean {
  * @returns 元素的无障碍名称
  */
 export function getAccessibleName(element: HTMLElement): string {
-  return (
-    element.getAttribute('aria-label') ||
-    element.getAttribute('aria-labelledby') ||
-    element.textContent ||
-    ''
-  ).trim();
+  const ariaLabel = element.getAttribute('aria-label')?.trim();
+  if (ariaLabel) {
+    return ariaLabel;
+  }
+
+  const labelledBy = element.getAttribute('aria-labelledby');
+  if (labelledBy) {
+    const referencedName = labelledBy
+      .split(/\s+/)
+      .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+      .filter(Boolean)
+      .join(' ');
+
+    if (referencedName) {
+      return referencedName;
+    }
+  }
+
+  return (element.textContent || '').trim();
 }
