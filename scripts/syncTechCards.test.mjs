@@ -131,6 +131,106 @@ implementations:
     });
   });
 
+  it('rejects feature files that mention unknown language ids', async () => {
+    await withTempWorkspace(async (root) => {
+      await writeFeature(
+        root,
+        'pattern-matching',
+        `id: pattern-matching
+title: 模式匹配
+description: 按结构匹配并解构数据。
+category: 控制流
+difficulty: intermediate
+paradigms:
+  - 函数式
+tags:
+  - match
+coverage:
+  required:
+    - python
+implementations:
+  python:
+    status: ready
+    code: |
+      match value:
+        case {"kind": "ok"}:
+          pass
+    explanation: Python 使用 match/case 做结构化匹配。
+  elixir:
+    status: ready
+    code: |
+      {:ok, value} = result
+    explanation: Elixir 广泛使用模式匹配。
+`
+      );
+
+      await expect(
+        generateIdiomsFromHandbook({
+          handbookDir: path.join(root, 'handbook'),
+          knownLanguageIds: ['python'],
+        })
+      ).rejects.toThrow('pattern-matching: unknown language id elixir');
+    });
+  });
+
+  it('rejects duplicate feature ids before writing generated data', async () => {
+    await withTempWorkspace(async (root) => {
+      await writeFeature(
+        root,
+        'error-handling-a',
+        `id: error-handling
+title: 错误处理
+description: 处理可能失败的操作。
+category: 错误处理
+difficulty: beginner
+paradigms:
+  - 过程式
+tags:
+  - 错误
+coverage:
+  required:
+    - go
+implementations:
+  go:
+    status: ready
+    code: |
+      if err != nil { return err }
+    explanation: Go 使用显式 error 返回值。
+`
+      );
+      await writeFeature(
+        root,
+        'error-handling-b',
+        `id: error-handling
+title: 重复错误处理
+description: 重复的 feature id 应被拒绝。
+category: 错误处理
+difficulty: beginner
+paradigms:
+  - 过程式
+tags:
+  - 错误
+coverage:
+  required:
+    - go
+implementations:
+  go:
+    status: ready
+    code: |
+      return err
+    explanation: 重复卡片不应覆盖前一张卡片。
+`
+      );
+
+      await expect(
+        generateIdiomsFromHandbook({
+          handbookDir: path.join(root, 'handbook'),
+          knownLanguageIds: ['go'],
+        })
+      ).rejects.toThrow('duplicate feature id error-handling');
+    });
+  });
+
   it('preserves legacy ByteBite idioms that have not been migrated yet', async () => {
     await withTempWorkspace(async (root) => {
       await writeFeature(
