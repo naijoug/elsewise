@@ -231,6 +231,93 @@ implementations:
     });
   });
 
+  it('allows required languages to be omitted when coverage marks them not applicable', async () => {
+    await withTempWorkspace(async (root) => {
+      await writeFeature(
+        root,
+        'memory-management',
+        `id: memory-management
+title: 内存管理
+description: 管理对象生命周期与资源释放。
+category: 运行时
+difficulty: advanced
+paradigms:
+  - 系统编程
+tags:
+  - 内存
+coverage:
+  required:
+    - rust
+    - python
+  notApplicable:
+    python: Python 由解释器和垃圾回收器管理对象生命周期。
+implementations:
+  rust:
+    status: ready
+    code: |
+      let value = String::from("owned");
+    explanation: Rust 使用所有权模型管理内存。
+`
+      );
+
+      const idioms = await generateIdiomsFromHandbook({
+        handbookDir: path.join(root, 'handbook'),
+        knownLanguageIds: ['rust', 'python'],
+      });
+
+      expect(idioms).toHaveLength(1);
+      expect(idioms[0].implementations.map((item) => item.languageId)).toEqual(['rust']);
+    });
+  });
+
+  it('rejects required implementations that are present but not ready', async () => {
+    await withTempWorkspace(async (root) => {
+      await writeFeature(
+        root,
+        'defer-cleanup',
+        `id: defer-cleanup
+title: 延迟清理
+description: 在作用域结束或函数返回时释放资源。
+category: 资源管理
+difficulty: intermediate
+paradigms:
+  - 过程式
+tags:
+  - defer
+coverage:
+  required:
+    - go
+implementations:
+  go:
+    status: todo
+    code: |
+      defer file.Close()
+    explanation: Go 使用 defer 注册延迟执行的清理操作。
+`
+      );
+
+      await expect(
+        generateIdiomsFromHandbook({
+          handbookDir: path.join(root, 'handbook'),
+          knownLanguageIds: ['go'],
+        })
+      ).rejects.toThrow('defer-cleanup required implementation for go is todo, expected ready');
+    });
+  });
+
+  it('fails when the optional handbook checkout is unavailable and there is no existing data', async () => {
+    await withTempWorkspace(async (root) => {
+      await expect(
+        syncTechCards({
+          handbookDir: path.join(root, 'missing-handbook'),
+          bytebiteDir: path.join(root, 'bytebite'),
+          knownLanguageIds: ['python'],
+          allowMissingHandbook: true,
+        })
+      ).rejects.toThrow('Tech cards handbook not found');
+    });
+  });
+
   it('preserves legacy ByteBite idioms that have not been migrated yet', async () => {
     await withTempWorkspace(async (root) => {
       await writeFeature(
