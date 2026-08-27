@@ -114,6 +114,20 @@ function validateFeature(feature, knownLanguageIds) {
   }
 }
 
+function compareImplementationsByLanguage(knownLanguageIds) {
+  const languageOrder = new Map((knownLanguageIds ?? []).map((languageId, index) => [languageId, index]));
+  return (left, right) => {
+    const leftOrder = languageOrder.has(left.languageId)
+      ? languageOrder.get(left.languageId)
+      : Number.MAX_SAFE_INTEGER;
+    const rightOrder = languageOrder.has(right.languageId)
+      ? languageOrder.get(right.languageId)
+      : Number.MAX_SAFE_INTEGER;
+    if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+    return left.languageId.localeCompare(right.languageId);
+  };
+}
+
 export async function loadKnownLanguageIds(bytebiteDir) {
   const languagesPath = path.join(bytebiteDir, 'src', 'data', 'languages.json');
   const languages = JSON.parse(await readFile(languagesPath, 'utf8'));
@@ -142,7 +156,8 @@ export async function generateIdiomsFromHandbook({ handbookDir, knownLanguageIds
 
     const implementations = Object.entries(feature.implementations)
       .map(([languageId, implementation]) => normalizeImplementation(languageId, implementation, feature.id))
-      .filter(Boolean);
+      .filter(Boolean)
+      .sort(compareImplementationsByLanguage(knownLanguageIds));
 
     if (implementations.length < 1) {
       throw new Error(`${feature.id}: at least one ready implementation is required for export`);
