@@ -8,8 +8,8 @@
 
 ## ✨ 功能特性
 
-- 🔍 **智能搜索**: 快速搜索编程习语，支持关键词匹配
-- 🎯 **灵活筛选**: 按范式、难度、分类和语言筛选内容
+- 🔍 **智能搜索**: 按标题、描述、标签、分类、语言名称/ID、代码或实现说明关键词搜索编程习语，并在结果中展示命中原因
+- 🎯 **灵活筛选**: 按范式、难度、分类和语言筛选内容，支持一键清除或移除单个条件
 - 📊 **代码对比**: 并排展示多种语言的实现，支持2-4列动态布局
 - 🎨 **语法高亮**: 使用 Prism.js 提供清晰的代码高亮
 - 💾 **收藏功能**: 本地保存喜欢的习语，方便后续查看
@@ -48,8 +48,8 @@ npm run test
 # 运行单次测试
 npm run test:run
 
-# 运行测试覆盖率
-npm run test:coverage
+# 运行完整验证（lint + format + test + build）
+npm run validate
 ```
 
 ### 构建
@@ -65,6 +65,12 @@ npm run preview
 npm run validate
 ```
 
+## 🔎 搜索与筛选说明
+
+搜索框会在同一次查询中匹配：习语标题、描述、标签、分类、语言名称/ID、实现代码和实现说明。结果卡片会显示“匹配：标题 / 实现语言”等命中原因，帮助你判断为什么该习语被召回。
+
+筛选面板支持分类、范式、难度和实现语言多选；多个筛选组之间是 AND 关系，同一筛选组内部是 OR 关系。结果摘要区会把当前搜索和筛选条件展示为 chip，可移除单个条件，也可以一键清除全部条件。移动端点击“显示筛选面板”后会直接展开筛选选项。
+
 ## 📁 项目结构
 
 ```
@@ -75,10 +81,12 @@ bytebite/
 │   │   ├── layout/          # 布局组件（Header, Footer, Layout）
 │   │   ├── CodeComparison.tsx    # 代码对比视图
 │   │   ├── LanguageSelector.tsx  # 语言选择器
-│   │   ├── IdiomList.tsx         # 习语列表
+│   │   ├── IdiomList.tsx         # 习语列表和空状态
 │   │   ├── IdiomCard.tsx         # 习语卡片
+│   │   ├── IdiomSearchControls.tsx # 搜索输入和移动端筛选入口
+│   │   ├── SearchResultSummary.tsx # 结果数量与活跃条件 chip
 │   │   ├── FilterPanel.tsx       # 筛选面板
-│   │   └── SearchBar.tsx         # 搜索栏
+│   │   └── SearchBar.tsx         # 可复用搜索栏
 │   ├── pages/               # 页面组件
 │   │   ├── HomePage.tsx           # 首页
 │   │   ├── IdiomDetailPage.tsx    # 习语详情页
