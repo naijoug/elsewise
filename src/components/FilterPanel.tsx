@@ -22,7 +22,7 @@ export const FilterPanel = memo(function FilterPanel({
   availableParadigms = [],
   availableLanguages = [],
 }: FilterPanelProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const difficulties: Array<'beginner' | 'intermediate' | 'advanced'> = [
     'beginner',

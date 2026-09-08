@@ -109,14 +109,23 @@ describe('FilterPanel', () => {
     expect(onFilterChange).toHaveBeenCalledWith({});
   });
 
-  it('移动端展开按钮会切换筛选选项容器的可见状态', () => {
+  it('移动端默认展示筛选选项，并支持收起后重新展开', () => {
     const view = renderFilterPanel();
     const toggleButton = view.querySelector<HTMLButtonElement>(
       'button[aria-controls="filter-options"]'
     );
     const filterOptions = view.querySelector<HTMLDivElement>('#filter-options');
 
+    expect(toggleButton?.getAttribute('aria-expanded')).toBe('true');
+    expect(toggleButton?.getAttribute('aria-label')).toBe('收起筛选面板');
+    expect(filterOptions?.className).toContain('block');
+
+    act(() => {
+      toggleButton?.click();
+    });
+
     expect(toggleButton?.getAttribute('aria-expanded')).toBe('false');
+    expect(toggleButton?.getAttribute('aria-label')).toBe('展开筛选面板');
     expect(filterOptions?.className).toContain('hidden');
 
     act(() => {
@@ -124,6 +133,7 @@ describe('FilterPanel', () => {
     });
 
     expect(toggleButton?.getAttribute('aria-expanded')).toBe('true');
+    expect(toggleButton?.getAttribute('aria-label')).toBe('收起筛选面板');
     expect(filterOptions?.className).toContain('block');
   });
 });
