@@ -49,6 +49,11 @@
 
 ### 4. 测试和验证脚本
 
+- ✅ **syncTechCards.mjs** - tech-cards 主数据同步
+  - 从 `books/tech-cards-handbook/data/features/*.yaml` 同步习语内容
+  - 生成或更新 `src/data/idioms.json`
+  - 保留尚未迁移到 handbook 的旧 ByteBite 数据
+
 - ✅ **verify-build.sh** - 构建验证
   - 检查构建产物完整性
   - 显示文件大小统计
@@ -80,6 +85,7 @@
 ```json
 {
   "dev": "启动开发服务器",
+  "sync:tech-cards": "从 tech-cards 主数据同步习语数据",
   "build": "标准构建",
   "build:preview": "预览环境构建",
   "build:production": "生产环境构建",
@@ -93,7 +99,7 @@
   "test:coverage": "测试覆盖率",
   "test:e2e": "端到端测试",
   "test:all": "运行所有测试",
-  "validate": "完整验证",
+  "validate": "完整验证（lint + format + test + build，build 前同步数据）",
   "verify-build": "验证构建",
   "pre-deploy": "部署前检查"
 }
@@ -121,6 +127,7 @@
 - ✅ **QUICK_DEPLOY.md** - 快速部署指南
   - 常用命令
   - 快速部署流程
+  - tech-cards 数据同步提醒
   - 故障排查
   - 回滚步骤
 
@@ -158,7 +165,10 @@ dist/
 ### 手动部署
 
 ```bash
-# 1. 运行完整检查
+# 0. 如果刚改过 tech-cards 主数据，先确认同步数量
+npm run sync:tech-cards
+
+# 1. 运行完整检查（含 lint、format、test、build 和数据同步）
 npm run pre-deploy
 
 # 2. 构建生产版本
@@ -237,6 +247,7 @@ vercel --prod  # 或 netlify deploy --prod
 
 1. **构建失败**
    - 检查 Node.js 版本
+   - 如果刚改过习语内容，先运行 `npm run sync:tech-cards` 确认同步数量
    - 清理 node_modules 和 dist
    - 重新安装依赖
 
@@ -255,7 +266,7 @@ vercel --prod  # 或 netlify deploy --prod
 - [完整部署指南](./DEPLOYMENT.md)
 - [部署检查清单](./DEPLOYMENT_CHECKLIST.md)
 - [快速部署指南](./QUICK_DEPLOY.md)
-- [脚本文档](./scripts/README.md)
+- [脚本文档](../scripts/README.md)
 - [主 README](./README.md)
 
 ## ✨ 下一步

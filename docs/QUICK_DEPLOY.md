@@ -3,9 +3,11 @@
 ## 🚀 一键部署
 
 ```bash
-# 运行完整的部署前检查并部署
+# 运行完整的部署前检查、生产构建和构建产物验证
 npm run pre-deploy && npm run build:production && npm run verify-build
 ```
+
+`pre-deploy` 和 `build:production` 都会通过构建链路执行 `npm run sync:tech-cards`，从 `books/tech-cards-handbook/data/features/*.yaml` 同步生成 `src/data/idioms.json`。如果刚改过 tech-cards 主数据，先单独运行一次同步并确认输出的习语数量符合预期。
 
 ## 📦 常用命令
 
@@ -13,6 +15,7 @@ npm run pre-deploy && npm run build:production && npm run verify-build
 
 ```bash
 npm run dev              # 启动开发服务器
+npm run sync:tech-cards  # 从 tech-cards 主数据同步习语数据
 npm run build            # 构建项目
 npm run preview          # 预览生产构建
 ```
@@ -23,7 +26,7 @@ npm run preview          # 预览生产构建
 npm run test:run         # 运行测试
 npm run lint             # 代码检查
 npm run format:check     # 格式检查
-npm run validate         # 完整验证（lint + format + test + build）
+npm run validate         # 完整验证（lint + format + test + build，build 前会同步数据）
 ```
 
 ### 部署
@@ -80,6 +83,7 @@ git push origin main
 
 1. 运行部署前检查
 ```bash
+npm run sync:tech-cards  # 可选：刚改过 tech-cards 主数据时先单独确认同步数量
 npm run pre-deploy
 ```
 
@@ -110,6 +114,7 @@ netlify deploy --prod
 # 清理并重新安装
 rm -rf node_modules dist
 npm install
+npm run sync:tech-cards
 npm run build
 ```
 
@@ -156,7 +161,7 @@ git push origin main
 
 ```bash
 npm run build
-ls -lh dist/assets/
+npm run verify-build
 ```
 
 ### 性能测试
@@ -194,4 +199,4 @@ lighthouse http://localhost:4173 --view
 
 - 完整部署指南: [DEPLOYMENT.md](./DEPLOYMENT.md)
 - 部署检查清单: [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)
-- 脚本文档: [scripts/README.md](./scripts/README.md)
+- 脚本文档: [scripts/README.md](../scripts/README.md)
