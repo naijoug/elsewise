@@ -385,8 +385,8 @@ type TypeSystem = 'static' | 'dynamic' | 'gradual';
 ### 本地验证
 
 ```bash
-# 验证 JSON 格式
-npm run validate-data
+# 从 tech-cards-handbook 主数据同步并验证生成后的 JSON
+npm run sync:tech-cards
 
 # 运行完整验证
 npm run validate
@@ -398,8 +398,8 @@ npm run validate
 # 格式化所有文件
 npm run format
 
-# 只格式化数据文件
-prettier --write "src/data/*.json"
+# 只格式化数据文件（通常由 sync:tech-cards 生成后再检查）
+npx prettier --check "src/data/*.json"
 ```
 
 ## 常见问题

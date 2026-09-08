@@ -67,9 +67,11 @@
 - 文件和 I/O 操作
 - 网络请求处理
 
-### 2. 编辑数据文件
+### 2. 编辑主数据文件
 
-编辑 `src/data/idioms.json`，添加新的习语对象：
+ByteBite 的习语数据由 `npm run sync:tech-cards` 从 `../books/tech-cards-handbook/data/features/*.yaml` 同步生成到 `src/data/idioms.json`。新增或修改跨语言习语时，优先编辑 tech-cards-handbook 的 YAML 主数据；不要直接手改生成后的 `src/data/idioms.json`，否则下一次构建会覆盖你的改动。
+
+主数据仍应能同步成下面这样的习语对象：
 
 ```json
 {
@@ -135,6 +137,8 @@
 - **多样性**: 尽量为每个习语提供 3-5 种语言的实现
 
 ### 6. 示例
+
+下面示例展示同步后的 JSON 形状；实际贡献时请把等价内容写入 `../books/tech-cards-handbook/data/features/*.yaml`，再运行 `npm run sync:tech-cards` 生成 ByteBite 数据。
 
 ```json
 {
@@ -349,6 +353,9 @@ npm install
 # 开发
 npm run dev
 
+# 同步 tech-cards-handbook 主数据到 ByteBite JSON（改动习语时运行）
+npm run sync:tech-cards
+
 # 运行测试
 npm run test:run
 
@@ -469,7 +476,7 @@ A: 可以！你可以先添加你熟悉的语言实现，其他人可以补充�
 
 ### Q: 如何测试我的更改？
 
-A: 运行 `npm run dev` 启动开发服务器，在浏览器中测试。确保运行 `npm run validate` 通过所有检查。
+A: 如果改动了习语主数据，先运行 `npm run sync:tech-cards` 确认能生成 `src/data/idioms.json`；再运行 `npm run dev` 启动开发服务器，在浏览器中测试。提交前确保运行 `npm run validate` 通过所有检查。
 
 ### Q: PR 多久会被审查？
 
