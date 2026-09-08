@@ -12,6 +12,7 @@ import {
   getAvailableLanguageOptions,
   getAvailableParadigms,
   getIdiomSearchMatchLabels,
+  IDIOM_SEARCH_SCOPE_HINT,
   searchAndFilterIdioms,
 } from '../utils/filters';
 import type { ActiveFilterSummaryItem } from '../utils/filters';
@@ -146,7 +147,7 @@ export const IdiomList = memo(function IdiomList({ idioms }: IdiomListProps) {
         <EmptyState
           icon="search"
           title="未找到习语"
-          description="可尝试标题、标签、语言、代码或实现说明关键词"
+          description={`可尝试${IDIOM_SEARCH_SCOPE_HINT}`}
           className="py-12"
           action={
             hasActiveFilters && (

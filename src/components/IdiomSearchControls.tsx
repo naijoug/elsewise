@@ -3,6 +3,7 @@ import type { FilterOptions } from '../types';
 import { SearchBar } from './SearchBar';
 import { FilterPanel } from './FilterPanel';
 import type { LanguageFilterOption } from './FilterPanel';
+import { IDIOM_SEARCH_SCOPE_HINT } from '../utils/filters';
 
 export interface IdiomSearchControlsProps {
   searchQuery: string;
@@ -37,7 +38,7 @@ export function IdiomSearchControls({
             value={searchQuery}
             onChange={onSearchChange}
             onClear={onSearchClear}
-            placeholder="搜索标题、标签、语言或代码..."
+            placeholder={`搜索${IDIOM_SEARCH_SCOPE_HINT}...`}
           />
         </div>
         <button

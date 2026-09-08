@@ -37,7 +37,7 @@ describe('IdiomSearchControls', () => {
 
     expect(
       view.querySelector<HTMLInputElement>(
-        'input[placeholder="搜索标题、标签、语言或代码..."]'
+        'input[placeholder="搜索标题、描述、标签、分类、语言名称/ID、代码或实现说明关键词..."]'
       )
     ).not.toBeNull();
     expect(toggleButton?.getAttribute('aria-expanded')).toBe('false');

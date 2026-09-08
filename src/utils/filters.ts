@@ -27,6 +27,9 @@ export interface ActiveFilterSummaryOptions {
 
 type LanguageLookup = Map<string, string>;
 
+export const IDIOM_SEARCH_SCOPE_HINT =
+  '标题、描述、标签、分类、语言名称/ID、代码或实现说明关键词';
+
 export type ActiveFilterSummaryItemType =
   | 'query'
   | 'category'
@@ -231,7 +234,8 @@ export function getActiveFilterSummaryLabels(
  * - 习语描述
  * - 习语标签
  * - 习语分类
- * - 实现语言、代码和说明
+ * - 实现语言 ID 与语言展示名称
+ * - 实现代码和说明
  *
  * 搜索不区分大小写，会自动去除首尾空格
  *

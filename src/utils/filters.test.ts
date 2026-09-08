@@ -12,6 +12,7 @@ import {
   summarizeSearchMatchLabels,
   getActiveFilterSummaryLabels,
   getActiveFilterSummaryItems,
+  IDIOM_SEARCH_SCOPE_HINT,
 } from './filters';
 import type { Idiom, FilterOptions, Language } from '../types';
 
@@ -111,6 +112,12 @@ const mockLanguages: Language[] = [
 ];
 
 describe('searchIdioms', () => {
+  it('对外说明的搜索范围包含语言展示名称和语言 ID', () => {
+    expect(IDIOM_SEARCH_SCOPE_HINT).toBe(
+      '标题、描述、标签、分类、语言名称/ID、代码或实现说明关键词'
+    );
+  });
+
   it('应该返回所有习语当搜索词为空', () => {
     const result = searchIdioms(mockIdioms, '');
     expect(result).toHaveLength(3);
