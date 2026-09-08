@@ -67,6 +67,7 @@ describe('loadPreferences', () => {
   });
 
   it('returns defaults when JSON is corrupted', () => {
+    const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     setStored('{not valid json');
     const result = loadPreferences();
     expect(result).toEqual({
@@ -74,6 +75,11 @@ describe('loadPreferences', () => {
       selectedLanguages: [],
       theme: 'light',
     });
+    expect(consoleWarn).toHaveBeenCalledWith(
+      'Failed to load preferences from localStorage:',
+      expect.any(SyntaxError)
+    );
+    consoleWarn.mockRestore();
   });
 
   it('returns defaults when localStorage throws', () => {

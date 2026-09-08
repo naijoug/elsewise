@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { loadAllData, loadIdioms, loadLanguages } from './dataLoader';
 import type { Idiom, Language } from '../types';
 
@@ -45,6 +45,12 @@ function mockFetchStatus(status: number) {
   });
 }
 
+let consoleError: ReturnType<typeof vi.spyOn>;
+
+beforeEach(() => {
+  consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -73,16 +79,12 @@ describe('loadIdioms', () => {
   });
 
   it('logs error before rethrowing', async () => {
-    const consoleError = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
     vi.stubGlobal('fetch', mockFetchStatus(500));
     await expect(loadIdioms()).rejects.toThrow();
     expect(consoleError).toHaveBeenCalledWith(
       'Error loading idioms:',
       expect.any(Error)
     );
-    consoleError.mockRestore();
   });
 });
 
@@ -156,12 +158,8 @@ describe('loadAllData', () => {
   });
 
   it('logs error before rethrowing on aggregate failure', async () => {
-    const consoleError = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
     vi.stubGlobal('fetch', mockFetchStatus(500));
     await expect(loadAllData()).rejects.toThrow();
     expect(consoleError).toHaveBeenCalled();
-    consoleError.mockRestore();
   });
 });
