@@ -30,9 +30,10 @@
 
 ### 数据和内容
 
+- [ ] 已从 tech-cards 主数据同步生成本地数据（`npm run sync:tech-cards`，或由 `npm run validate` / `npm run build:production` 间接执行）
 - [ ] 所有数据文件完整且有效
-- [ ] idioms.json 包含所有必需字段
-- [ ] languages.json 包含所有必需字段
+- [ ] `src/data/idioms.json` 包含所有必需字段
+- [ ] `src/data/languages.json` 包含所有必需字段
 - [ ] 代码示例已验证正确性
 - [ ] 没有占位符或测试数据
 
@@ -127,7 +128,7 @@
 ### 自动部署（推荐）
 
 1. 确保所有检查项已完成
-2. 运行预部署检查：
+2. 运行预部署检查（会覆盖 lint、format、test、build、构建产物和数据文件存在性检查）：
    ```bash
    npm run pre-deploy
    ```
@@ -174,7 +175,8 @@ netlify deploy --prod
 - [ ] 网站可以正常访问
 - [ ] 所有页面正常加载
 - [ ] 搜索功能正常工作
-- [ ] 筛选功能正常工作
+- [ ] 搜索能匹配标题、描述、标签、分类、语言名称/ID、代码或实现说明
+- [ ] 筛选功能正常工作（筛选组之间 AND、组内 OR，移动端筛选面板首次打开后选项可见）
 - [ ] 代码对比视图正常显示
 - [ ] 收藏功能正常工作
 - [ ] 移动端显示正常

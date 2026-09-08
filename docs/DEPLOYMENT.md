@@ -15,9 +15,19 @@
 ## 前置要求
 
 - Node.js 20.x 或更高版本
-- npm 或 yarn 包管理器
+- npm（项目脚本以 `package-lock.json` 和 `npm run ...` 为准）
 - Git 版本控制
 - Vercel 或 Netlify 账户（用于部署）
+
+## 数据同步边界
+
+ByteBite 的习语数据不是直接在 `src/data/idioms.json` 中手写维护的；部署前应先从 `books/tech-cards-handbook/data/features/*.yaml` 同步生成本地数据：
+
+```bash
+npm run sync:tech-cards
+```
+
+`npm run build`、`npm run build:preview`、`npm run build:production` 和 `npm run validate` 都会通过构建链路执行这一步。若刚修改过 tech-cards 主数据，建议先单独运行一次 `npm run sync:tech-cards`，确认输出的习语数量符合预期，再进入部署检查。
 
 ## 构建配置
 
@@ -185,7 +195,7 @@ cp .env.example .env.local
 ### 1. 验证构建
 
 ```bash
-# 运行完整验证（lint + format + test + build）
+# 运行完整验证（lint + format + test + sync + build）
 npm run validate
 ```
 
@@ -233,6 +243,7 @@ lighthouse http://localhost:4173 --view
 
 在部署到生产环境前，确保：
 
+- [ ] 习语主数据已同步（`npm run sync:tech-cards`，或由 `npm run validate` / `npm run build:production` 间接执行）
 - [ ] 所有测试通过
 - [ ] 代码已通过 lint 检查
 - [ ] 代码格式符合规范

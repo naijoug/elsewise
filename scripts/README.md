@@ -1,6 +1,6 @@
 # ByteBite 部署脚本
 
-本目录包含用于构建、验证和部署 ByteBite 应用的脚本。
+本目录包含用于构建、验证和部署 ByteBite 应用的脚本。习语内容以 `books/tech-cards-handbook/data/features/*.yaml` 为主数据，部署前通过 `npm run sync:tech-cards` 同步到 `src/data/idioms.json`；`npm run build`、`npm run build:production` 和 `npm run validate` 会在构建链路中自动执行同步。
 
 ## 可用脚本
 
@@ -40,9 +40,9 @@ bash scripts/pre-deploy-check.sh
 2. ESLint 代码检查
 3. Prettier 格式检查
 4. 单元测试
-5. 生产构建
+5. 生产构建（构建前会同步 tech-cards 主数据）
 6. 构建输出验证
-7. 数据文件检查
+7. 本地数据文件存在性检查
 8. 环境配置检查
 
 **退出码：**
@@ -104,7 +104,7 @@ pkill -f "vite preview"
 ### 本地部署前检查
 
 ```bash
-# 1. 运行完整的预部署检查
+# 1. 运行完整的预部署检查（含数据同步、lint、format、test、build）
 npm run pre-deploy
 
 # 2. 如果所有检查通过，构建生产版本
