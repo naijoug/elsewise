@@ -25,6 +25,8 @@ export interface ActiveFilterSummaryOptions {
   languages?: LanguageFilterOption[];
 }
 
+type LanguageLookup = Map<string, string>;
+
 export type ActiveFilterSummaryItemType =
   | 'query'
   | 'category'
@@ -52,6 +54,23 @@ function includesQuery(value: string, normalizedQuery: string): boolean {
   return value.toLowerCase().includes(normalizedQuery);
 }
 
+function buildLanguageLookup(
+  languages: LanguageFilterOption[] = []
+): LanguageLookup {
+  return new Map(languages.map((language) => [language.id, language.name]));
+}
+
+function implementationMatchesLanguageQuery(
+  languageId: string,
+  normalizedQuery: string,
+  languageLookup: LanguageLookup
+): boolean {
+  return (
+    includesQuery(languageId, normalizedQuery) ||
+    includesQuery(languageLookup.get(languageId) || '', normalizedQuery)
+  );
+}
+
 /**
  * 返回单个习语被关键词命中的字段标签。
  *
@@ -60,7 +79,8 @@ function includesQuery(value: string, normalizedQuery: string): boolean {
  */
 export function getIdiomSearchMatchLabels(
   idiom: Idiom,
-  query: string
+  query: string,
+  languages: LanguageFilterOption[] = []
 ): SearchMatchLabel[] {
   const normalizedQuery = normalizeSearchQuery(query);
 
@@ -69,6 +89,7 @@ export function getIdiomSearchMatchLabels(
   }
 
   const labels: SearchMatchLabel[] = [];
+  const languageLookup = buildLanguageLookup(languages);
 
   if (includesQuery(idiom.title, normalizedQuery)) {
     labels.push('标题');
@@ -88,7 +109,11 @@ export function getIdiomSearchMatchLabels(
 
   if (
     idiom.implementations.some((implementation) =>
-      includesQuery(implementation.languageId, normalizedQuery)
+      implementationMatchesLanguageQuery(
+        implementation.languageId,
+        normalizedQuery,
+        languageLookup
+      )
     )
   ) {
     labels.push('实现语言');
@@ -220,12 +245,17 @@ export function getActiveFilterSummaryLabels(
  * // 返回标题、描述、标签或分类中包含"数组"的所有习语
  * ```
  */
-export function searchIdioms(idioms: Idiom[], query: string): Idiom[] {
+export function searchIdioms(
+  idioms: Idiom[],
+  query: string,
+  languages: LanguageFilterOption[] = []
+): Idiom[] {
   if (!query || query.trim() === '') {
     return idioms;
   }
 
   const normalizedQuery = normalizeSearchQuery(query);
+  const languageLookup = buildLanguageLookup(languages);
 
   return idioms.filter((idiom) => {
     // 搜索标题
@@ -252,7 +282,11 @@ export function searchIdioms(idioms: Idiom[], query: string): Idiom[] {
     if (
       idiom.implementations.some(
         (implementation) =>
-          includesQuery(implementation.languageId, normalizedQuery) ||
+          implementationMatchesLanguageQuery(
+            implementation.languageId,
+            normalizedQuery,
+            languageLookup
+          ) ||
           includesQuery(implementation.code, normalizedQuery) ||
           includesQuery(implementation.explanation, normalizedQuery)
       )
@@ -347,10 +381,11 @@ export function filterIdioms(idioms: Idiom[], filters: FilterOptions): Idiom[] {
 export function searchAndFilterIdioms(
   idioms: Idiom[],
   query: string,
-  filters: FilterOptions
+  filters: FilterOptions,
+  languages: LanguageFilterOption[] = []
 ): Idiom[] {
   // 先搜索，再筛选
-  const searchResults = searchIdioms(idioms, query);
+  const searchResults = searchIdioms(idioms, query, languages);
   return filterIdioms(searchResults, filters);
 }
 

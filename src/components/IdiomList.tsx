@@ -29,10 +29,19 @@ export const IdiomList = memo(function IdiomList({ idioms }: IdiomListProps) {
   // 使用防抖优化搜索性能
   const debouncedQuery = useDebounce(searchQuery, 300);
 
+  const availableLanguageOptions = useMemo(() => {
+    return getAvailableLanguageOptions(idioms, languages);
+  }, [idioms, languages]);
+
   // 计算过滤后的习语列表
   const filteredIdioms = useMemo(() => {
-    return searchAndFilterIdioms(idioms, debouncedQuery, filters);
-  }, [idioms, debouncedQuery, filters]);
+    return searchAndFilterIdioms(
+      idioms,
+      debouncedQuery,
+      filters,
+      availableLanguageOptions
+    );
+  }, [idioms, debouncedQuery, filters, availableLanguageOptions]);
 
   // 处理搜索 (memoized)
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,10 +69,6 @@ export const IdiomList = memo(function IdiomList({ idioms }: IdiomListProps) {
         (filters.languages && filters.languages.length > 0)
     );
   }, [searchQuery, filters]);
-
-  const availableLanguageOptions = useMemo(() => {
-    return getAvailableLanguageOptions(idioms, languages);
-  }, [idioms, languages]);
 
   const activeFilterSummaryItems = useMemo(() => {
     return getActiveFilterSummaryItems({
@@ -130,7 +135,11 @@ export const IdiomList = memo(function IdiomList({ idioms }: IdiomListProps) {
           idioms={filteredIdioms}
           ariaLabel="编程习语列表"
           getSearchMatchLabels={(idiom) =>
-            getIdiomSearchMatchLabels(idiom, debouncedQuery)
+            getIdiomSearchMatchLabels(
+              idiom,
+              debouncedQuery,
+              availableLanguageOptions
+            )
           }
         />
       ) : (

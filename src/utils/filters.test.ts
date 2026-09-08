@@ -98,6 +98,16 @@ const mockLanguages: Language[] = [
     features: ['list'],
     officialDocs: 'https://docs.python.org/',
   },
+  {
+    id: 'go',
+    name: 'Golang',
+    version: '1.25',
+    paradigms: ['过程式', '并发'],
+    typeSystem: 'static',
+    description: 'Go language',
+    features: ['goroutine'],
+    officialDocs: 'https://go.dev/doc/',
+  },
 ];
 
 describe('searchIdioms', () => {
@@ -134,6 +144,13 @@ describe('searchIdioms', () => {
     const result = searchIdioms(mockIdioms, 'python');
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('test-1');
+  });
+
+  it('应该根据语言展示名称搜索习语', () => {
+    const result = searchIdioms(mockIdioms, 'golang', mockLanguages);
+
+    expect(result).toHaveLength(2);
+    expect(result.map((idiom) => idiom.id)).toEqual(['test-2', 'test-3']);
   });
 
   it('应该根据实现代码搜索习语', () => {
@@ -173,6 +190,16 @@ describe('getIdiomSearchMatchLabels', () => {
   it('应该返回命中的实现字段标签', () => {
     const labels = getIdiomSearchMatchLabels(mockIdioms[1], 'try-catch');
     expect(labels).toEqual(['实现说明']);
+  });
+
+  it('应该把语言展示名称命中解释为实现语言', () => {
+    const labels = getIdiomSearchMatchLabels(
+      mockIdioms[2],
+      'golang',
+      mockLanguages
+    );
+
+    expect(labels).toContain('实现语言');
   });
 
   it('应该支持不区分大小写匹配实现代码', () => {
@@ -339,6 +366,18 @@ describe('searchAndFilterIdioms', () => {
     expect(result.map((i) => i.id)).toContain('test-1');
     expect(result.map((i) => i.id)).toContain('test-2');
   });
+
+  it('应该在组合搜索和筛选时支持语言展示名称', () => {
+    const result = searchAndFilterIdioms(
+      mockIdioms,
+      'golang',
+      { difficulty: ['intermediate'] },
+      mockLanguages
+    );
+
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('test-2');
+  });
 });
 
 describe('getAvailableCategories', () => {
@@ -398,7 +437,7 @@ describe('getAvailableLanguageOptions', () => {
     );
 
     expect(languageOptions).toEqual([
-      { id: 'go', name: 'go' },
+      { id: 'go', name: 'Golang' },
       { id: 'javascript', name: 'JavaScript' },
       { id: 'python', name: 'Python' },
     ]);
