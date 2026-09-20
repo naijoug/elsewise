@@ -1,5 +1,7 @@
 # 实施计划
 
+> 状态：历史实施记录，仅作历史参考。2026-09-20 明确归档边界；旧技术栈、接口、SHALL 条目和勾选状态不代表当前实现或新任务范围。当前架构见 [docs/ARCHITECTURE.md](../../../docs/ARCHITECTURE.md)，当前功能与路线图见 [README](../../../README.md)，验证要求见 [docs/TESTING.md](../../../docs/TESTING.md)。
+
 - [x] 1. 初始化项目结构和配置
   - 使用 Vite 创建 React + TypeScript 项目
   - 配置 Tailwind CSS

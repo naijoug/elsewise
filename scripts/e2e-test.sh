@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# ByteBite End-to-End Test Script
-# This script performs basic end-to-end testing of the deployed application
+# ByteBite HTTP Smoke Test Script
+# Checks HTTP responses and assets; it does not execute browser interactions.
 
 set -e
 
@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 BASE_URL="${1:-http://localhost:4173}"
 TIMEOUT=10
 
-echo -e "${BLUE}🧪 ByteBite End-to-End Test${NC}"
+echo -e "${BLUE}🧪 ByteBite HTTP Smoke Test${NC}"
 echo "=================================="
 echo "Testing URL: $BASE_URL"
 echo ""
@@ -65,37 +65,37 @@ TESTS_FAILED=0
 
 # Test 1: Homepage loads
 if check_url "$BASE_URL" 200 "Homepage loads"; then
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 2: Homepage contains app title
 if check_content "$BASE_URL" "ByteBite" "Homepage contains app title"; then
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 3: Homepage contains root div
 if check_content "$BASE_URL" "id=\"root\"" "Homepage contains root element"; then
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 4: JavaScript bundle loads
 if check_content "$BASE_URL" "type=\"module\"" "JavaScript module loads"; then
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 5: CSS loads
 if check_content "$BASE_URL" "stylesheet" "CSS stylesheet loads"; then
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 6: Check if assets are accessible (try to get a JS file)
@@ -106,10 +106,10 @@ if [ -n "$js_file" ]; then
   status=$(curl -s -o /dev/null -w "%{http_code}" --max-time $TIMEOUT "$asset_url" 2>/dev/null || echo "000")
   if [ "$status" = "200" ]; then
     echo -e "${GREEN}✅ PASS${NC}"
-    ((TESTS_PASSED++))
+    ((TESTS_PASSED+=1))
   else
     echo -e "${RED}❌ FAIL${NC} (Asset returned HTTP $status)"
-    ((TESTS_FAILED++))
+    ((TESTS_FAILED+=1))
   fi
 else
   echo -e "${YELLOW}⚠️  SKIP${NC} (No JS file found in HTML)"
@@ -120,10 +120,10 @@ echo -n "Testing: SPA routing works... "
 status=$(curl -s -o /dev/null -w "%{http_code}" --max-time $TIMEOUT "$BASE_URL/favorites" 2>/dev/null || echo "000")
 if [ "$status" = "200" ]; then
   echo -e "${GREEN}✅ PASS${NC}"
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
   echo -e "${RED}❌ FAIL${NC} (Route returned HTTP $status)"
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 8: 404 handling (non-existent routes should still return 200 for SPA)
@@ -131,10 +131,10 @@ echo -n "Testing: 404 handling... "
 status=$(curl -s -o /dev/null -w "%{http_code}" --max-time $TIMEOUT "$BASE_URL/non-existent-page" 2>/dev/null || echo "000")
 if [ "$status" = "200" ]; then
   echo -e "${GREEN}✅ PASS${NC}"
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
   echo -e "${RED}❌ FAIL${NC} (Expected 200 for SPA, got $status)"
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 9: Check response time
@@ -143,10 +143,10 @@ response_time=$(curl -s -o /dev/null -w "%{time_total}" --max-time $TIMEOUT "$BA
 response_time_ms=$(echo "$response_time * 1000" | bc)
 if (( $(echo "$response_time < 2" | bc -l) )); then
   echo -e "${GREEN}✅ PASS${NC} (${response_time_ms%.*}ms)"
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
   echo -e "${YELLOW}⚠️  SLOW${NC} (${response_time_ms%.*}ms > 2000ms)"
-  ((TESTS_FAILED++))
+  ((TESTS_FAILED+=1))
 fi
 
 # Test 10: Check security headers (if configured)
@@ -154,14 +154,14 @@ echo -n "Testing: Security headers... "
 headers=$(curl -s -I --max-time $TIMEOUT "$BASE_URL" 2>/dev/null || echo "")
 security_headers=0
 if echo "$headers" | grep -qi "X-Content-Type-Options"; then
-  ((security_headers++))
+  ((security_headers+=1))
 fi
 if echo "$headers" | grep -qi "X-Frame-Options"; then
-  ((security_headers++))
+  ((security_headers+=1))
 fi
 if [ $security_headers -ge 1 ]; then
   echo -e "${GREEN}✅ PASS${NC} ($security_headers security headers found)"
-  ((TESTS_PASSED++))
+  ((TESTS_PASSED+=1))
 else
   echo -e "${YELLOW}⚠️  WARN${NC} (No security headers found)"
 fi

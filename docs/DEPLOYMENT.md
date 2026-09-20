@@ -1,314 +1,106 @@
-# ByteBite 部署指南
+# 部署指南
 
-本文档介绍如何部署 ByteBite 应用到生产环境。
+当前仓库的自动发布目标是 **GitHub Pages**。Vercel 与 Netlify 提供可选托管配置，
+没有由当前 GitHub Actions 自动部署到这两个平台的集成。
 
-## 目录
+## 环境与数据
 
-- [前置要求](#前置要求)
-- [构建配置](#构建配置)
-- [部署到 Vercel](#部署到-vercel)
-- [部署到 Netlify](#部署到-netlify)
-- [GitHub Actions CI/CD](#github-actions-cicd)
-- [环境变量](#环境变量)
-- [生产构建测试](#生产构建测试)
+- Node 22.x，最低 22.12.0；版本线见 `.nvmrc`，支持范围见 `package.json` 的 engines。
+- 使用 `npm ci` 安装已锁定的依赖。
+- 发布文件来自 `dist/`，由 rolldown-vite 构建。
+- 习语来源、`TECH_CARDS_HANDBOOK_DIR`、同步回退和生成文件提交规则见[数据指南](DATA_FORMAT.md)。
 
-## 前置要求
+只克隆 ByteBite 的构建可使用已提交快照。若本次发布包含习语更新，必须在可用的源目录同步后检查并提交 JSON，
+并记录源提交。构建成功或同步输出总数不能单独证明发布了最新内容。
 
-- Node.js 20.x 或更高版本
-- npm（项目脚本以 `package-lock.json` 和 `npm run ...` 为准）
-- Git 版本控制
-- Vercel 或 Netlify 账户（用于部署）
+## 本地准备
 
-## 数据同步边界
-
-ByteBite 的习语数据不是直接在 `src/data/idioms.json` 中手写维护的；部署前应先从 `books/tech-cards-handbook/data/features/*.yaml` 同步生成本地数据：
+对默认根路径部署，只需选择一次完整验证入口：
 
 ```bash
-npm run sync:tech-cards
-```
-
-`npm run build`、`npm run build:preview`、`npm run build:production` 和 `npm run validate` 都会通过构建链路执行这一步。若刚修改过 tech-cards 主数据，建议先单独运行一次 `npm run sync:tech-cards`，确认输出的习语数量符合预期，再进入部署检查。
-
-## 构建配置
-
-### 本地构建
-
-```bash
-# 开发构建
-npm run build
-
-# 预览环境构建
-npm run build:preview
-
-# 生产环境构建
-npm run build:production
-```
-
-### 构建输出
-
-构建后的文件将输出到 `dist/` 目录：
-
-```
-dist/
-├── index.html
-├── assets/
-│   ├── index-[hash].js
-│   ├── index-[hash].css
-│   ├── react-vendor-[hash].js
-│   ├── prism-vendor-[hash].js
-│   └── vendor-[hash].js
-└── data/
-    ├── idioms.json
-    └── languages.json
-```
-
-## 部署到 Vercel
-
-### 方式一：通过 Vercel CLI
-
-1. 安装 Vercel CLI：
-```bash
-npm install -g vercel
-```
-
-2. 登录 Vercel：
-```bash
-vercel login
-```
-
-3. 部署到预览环境：
-```bash
-vercel
-```
-
-4. 部署到生产环境：
-```bash
-vercel --prod
-```
-
-### 方式二：通过 Git 集成
-
-1. 在 [Vercel Dashboard](https://vercel.com/dashboard) 导入项目
-2. 选择 GitHub 仓库
-3. Vercel 会自动检测 Vite 项目并使用 `vercel.json` 配置
-4. 点击 "Deploy" 开始部署
-
-### Vercel 环境变量设置
-
-在 Vercel Dashboard 的项目设置中添加环境变量：
-
-- `VITE_ENV`: `production`
-- 其他自定义环境变量（参考 `.env.example`）
-
-## 部署到 Netlify
-
-### 方式一：通过 Netlify CLI
-
-1. 安装 Netlify CLI：
-```bash
-npm install -g netlify-cli
-```
-
-2. 登录 Netlify：
-```bash
-netlify login
-```
-
-3. 初始化站点：
-```bash
-netlify init
-```
-
-4. 部署：
-```bash
-netlify deploy --prod
-```
-
-### 方式二：通过 Git 集成
-
-1. 在 [Netlify Dashboard](https://app.netlify.com/) 点击 "Add new site"
-2. 选择 "Import an existing project"
-3. 连接 GitHub 仓库
-4. Netlify 会自动使用 `netlify.toml` 配置
-5. 点击 "Deploy site"
-
-### Netlify 环境变量设置
-
-在 Netlify Dashboard 的 Site settings > Environment variables 中添加：
-
-- `VITE_ENV`: `production`
-- 其他自定义环境变量
-
-## GitHub Actions CI/CD
-
-项目包含两个 GitHub Actions 工作流：
-
-### CI 工作流 (`.github/workflows/ci.yml`)
-
-在每次推送和 PR 时自动运行：
-
-- 代码检查（ESLint）
-- 格式检查（Prettier）
-- 运行测试
-- 构建项目
-- 上传构建产物
-
-### 部署工作流 (`.github/workflows/deploy.yml`)
-
-在推送到 `main` 分支时自动部署到生产环境。
-
-#### 配置 GitHub Secrets
-
-在 GitHub 仓库的 Settings > Secrets and variables > Actions 中添加：
-
-**Vercel 部署所需：**
-- `VERCEL_TOKEN`: Vercel API Token
-- `VERCEL_ORG_ID`: Vercel 组织 ID
-- `VERCEL_PROJECT_ID`: Vercel 项目 ID
-
-获取这些值：
-1. 访问 [Vercel Tokens](https://vercel.com/account/tokens)
-2. 创建新 Token
-3. 在项目设置中找到 Org ID 和 Project ID
-
-## 环境变量
-
-### 创建环境变量文件
-
-```bash
-# 复制示例文件
-cp .env.example .env.local
-```
-
-### 可用的环境变量
-
-参考 `.env.example` 文件中的说明。
-
-### 环境变量优先级
-
-1. `.env.production` - 生产环境
-2. `.env.local` - 本地开发（不提交到 Git）
-3. `.env` - 默认值
-
-## 生产构建测试
-
-### 1. 验证构建
-
-```bash
-# 运行完整验证（lint + format + test + sync + build）
-npm run validate
-```
-
-### 2. 本地预览生产构建
-
-```bash
-# 构建项目
-npm run build
-
-# 启动预览服务器
+npm ci
+npm run pre-deploy
 npm run preview
 ```
 
-访问 `http://localhost:4173` 查看生产构建。
+`pre-deploy` 依次检查 Node、运行 production 环境的 validate、检查输出产物；只构建一次，失败时保留日志并停止。
+之后的 preview 使用已构建的 dist，无需再执行 build。若需要自动启动预览并做 HTTP 冒烟检查，
+用 `npm run test:all` 替代 `pre-deploy` 和手动 preview。
 
-### 3. 检查构建产物
+纯 UI 或逻辑修改的本地检查可以更小，详见[验证指南](TESTING.md)。正式发布按[目标相关检查清单](DEPLOYMENT_CHECKLIST.md)验收。
+
+## GitHub Pages 自动发布
+
+[deploy.yml](../.github/workflows/deploy.yml) 在 main 推送或手动 dispatch 时运行：
+
+1. checkout 本仓库，使用 `.nvmrc` 指定的 Node 版本线安装依赖。
+2. 普通仓库根据仓库名设置 `GHP_BASE=/<仓库名>/`；用户/组织主页仓库使用 `/`。
+3. 运行 production 环境的完整预部署检查和构建。
+4. 复制 `dist/index.html` 为 `dist/404.html`，上传并通过 Pages Action 发布。
+
+仓库 Settings → Pages 的构建来源需设为 GitHub Actions，并允许工作流使用 Pages 和 OIDC 权限。
+当前工作流不需要 `VERCEL_TOKEN`、`VERCEL_ORG_ID` 或 `VERCEL_PROJECT_ID`。
+
+本地复现普通项目的构建前缀：
 
 ```bash
-# 查看构建文件大小
-ls -lh dist/assets/
-
-# 分析包大小（可选）
-npx vite-bundle-visualizer
+GHP_BASE=/bytebite/ npm run pre-deploy
+npm run preview
 ```
 
-### 4. 性能测试
+资源前缀和应用路由要分别验收。当前 [App.tsx](../src/App.tsx) 的 BrowserRouter 没有 basename，
+因此子路径 `/bytebite/` 的页面匹配存在待处理问题；不能因资源构建成功或提供了 404.html 就认定路由正常。
+发布前应在目标路径检查首页、详情、收藏和直接刷新。GitHub Pages 的 404 回退可能返回 HTTP 404，
+与本地 preview 的 200 rewrite 不同。
 
-使用 Lighthouse 测试生产构建：
+[ci.yml](../.github/workflows/ci.yml) 在 main/develop 推送和对应 PR 时检查 lint、格式、测试、构建与输出文件。
+PR 使用 preview 环境构建并上传 artifact，不会创建在线预览站点或发布预览链接。
+CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布产物的检查为准。
 
-```bash
-# 安装 Lighthouse CLI
-npm install -g lighthouse
+## Vercel 可选方案
 
-# 运行 Lighthouse
-lighthouse http://localhost:4173 --view
-```
+通过 Vercel 的 Git 导入配置项目，使用 [vercel.json](../vercel.json)：
 
-目标指标：
-- Performance: > 90
-- Accessibility: > 95
-- Best Practices: > 90
-- SEO: > 90
+- 安装：`npm ci`；构建：`npm run build:production`；输出：`dist`。
+- Node 版本使用 package.json engines 指定的 22.x。
+- 根路径部署保持 `GHP_BASE` 未设置；配置已包含 SPA rewrite 和静态资源缓存响应头。
+- Git 集成的生产分支和预览部署由 Vercel 项目设置控制，不代表本仓库已配置 GitHub Actions Vercel 发布。
 
-## 部署检查清单
+如另外实现 CLI 或 Actions 发布，再按选定流程配置 Vercel 凭据；无需为 Pages 发布准备这些凭据。
 
-在部署到生产环境前，确保：
+## Netlify 可选方案
 
-- [ ] 习语主数据已同步（`npm run sync:tech-cards`，或由 `npm run validate` / `npm run build:production` 间接执行）
-- [ ] 所有测试通过
-- [ ] 代码已通过 lint 检查
-- [ ] 代码格式符合规范
-- [ ] 生产构建成功
-- [ ] 本地预览正常工作
-- [ ] 环境变量已正确配置
-- [ ] 数据文件完整且有效
-- [ ] 性能指标达标
-- [ ] 可访问性测试通过
-- [ ] 移动端响应式正常
+通过 Netlify 的 Git 导入配置项目，使用 [netlify.toml](../netlify.toml)：
 
-## 回滚策略
+- Node 22；构建：`npm run build:production`；输出：`dist`。
+- 安装依赖使用锁文件；本地和自定义流水线使用 `npm ci`。
+- 根路径部署保持 `GHP_BASE` 未设置；配置已包含 200 SPA rewrite、缓存和响应头。
+- 自动发布与预览由 Netlify 项目设置控制。
 
-### Vercel 回滚
+平台托管构建会再次生成产物，不能把本地检查当作远程产物已经验收。
 
-1. 访问 Vercel Dashboard
-2. 选择项目
-3. 在 Deployments 页面找到之前的部署
-4. 点击 "Promote to Production"
+## 环境变量
 
-### Netlify 回滚
+| 名称 | 用途 |
+| --- | --- |
+| `VITE_ENV` | 在 Vite 配置中控制 source map；production 时关闭，preview 时开启 |
+| `GHP_BASE` | 构建时资源前缀，缺省 `/` |
+| `TECH_CARDS_HANDBOOK_DIR` | 构建机器上的 handbook 目录，不是浏览器变量 |
 
-1. 访问 Netlify Dashboard
-2. 选择站点
-3. 在 Deploys 页面找到之前的部署
-4. 点击 "Publish deploy"
+`.env.production` 存在不代表 `process.env.VITE_ENV` 在配置求值前已设置；使用 `build:production` 或 `pre-deploy` 明确传入。
+`.env.example` 中的 API、账户、分析等条目是未来预留项，未配置这些功能不阻塞当前静态站点发布。
 
-## 监控和日志
+## 故障定位与回滚
 
-### Vercel
+| 问题 | 优先检查 |
+| --- | --- |
+| Node 不匹配 | engines、`.nvmrc` 与托管实际版本 |
+| 数据没更新 | 是否出现 keeping existing 警告、源路径和已提交 JSON 差异 |
+| 资源加载失败 | GHP_BASE、构建后的资源 URL 和上传文件 |
+| 子路径页面错误 | BrowserRouter 路径处理、站点前缀和直接刷新行为 |
+| 校验失败 | 查看失败步骤的原始输出，只重跑受影响检查 |
 
-- 访问 Vercel Dashboard > 项目 > Analytics 查看性能数据
-- 查看 Functions 日志（如果使用 Serverless Functions）
-
-### Netlify
-
-- 访问 Netlify Dashboard > 站点 > Analytics 查看流量数据
-- 查看 Deploy logs 了解构建详情
-
-## 故障排查
-
-### 构建失败
-
-1. 检查 Node.js 版本是否匹配
-2. 清除缓存：`rm -rf node_modules dist && npm install`
-3. 检查环境变量是否正确设置
-4. 查看构建日志中的错误信息
-
-### 部署后页面空白
-
-1. 检查浏览器控制台错误
-2. 确认路由配置正确（SPA 重定向）
-3. 检查静态资源路径
-4. 验证 base URL 配置
-
-### 性能问题
-
-1. 检查包大小是否过大
-2. 确认代码分割正常工作
-3. 验证缓存策略
-4. 使用 CDN 加速静态资源
-
-## 更多资源
-
-- [Vite 部署文档](https://vitejs.dev/guide/static-deploy.html)
-- [Vercel 文档](https://vercel.com/docs)
-- [Netlify 文档](https://docs.netlify.com/)
-- [GitHub Actions 文档](https://docs.github.com/en/actions)
+需要回滚时，先确定要恢复的行为和目标版本。在 Pages 流程中撤销相关代码更改后重新通过检查发布；
+`git revert <commit>` 是撤销一个提交，不等同于将整个站点恢复到该提交状态。
+Vercel/Netlify 可使用平台历史部署回滚，并核对仓库状态以免下一次发布覆盖。
+回滚范围和发布目标按用户已授权的操作执行。

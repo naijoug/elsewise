@@ -1,158 +1,51 @@
-# Performance Optimizations
+# 性能说明与历史测量
 
-This document summarizes the performance optimizations implemented for the ByteBite application.
+当前架构见 [ARCHITECTURE.md](ARCHITECTURE.md)。本文记录可调查的机制、测量方法和旧结果，
+不要求每次修改都做性能优化或重跑完整基准。
 
-## 1. React.memo Optimizations
+## 当前机制
 
-Applied `React.memo` to prevent unnecessary re-renders of components:
+| 机制 | 入口与边界 |
+| --- | --- |
+| 页面懒加载 | [App.tsx](../src/App.tsx) 使用 lazy 与 Suspense；实际请求大小需在浏览器中测量 |
+| 依赖拆包 | [vite.config.ts](../vite.config.ts) 将 React 相关依赖与其他 vendor 分开 |
+| 计算和组件缓存 | 相关组件使用 memo/useMemo/useCallback；仅在依赖未变时复用，不代表所有重渲染都被消除 |
+| 搜索防抖 | [useDebounce.ts](../src/hooks/useDebounce.ts)；搜索与筛选语义见 [filters.ts](../src/utils/filters.ts) |
+| 数据资源 | [dataLoader.ts](../src/utils/dataLoader.ts) 并行 fetch 两份构建后的 JSON |
+| 测量工具 | [performance.ts](../src/utils/performance.ts) 提供标记与测量辅助函数 |
 
-- **IdiomCard**: Memoized to avoid re-rendering when parent updates but props haven't changed
-- **CodeComparison**: Memoized to prevent re-rendering during language selection changes
-- **LanguageSelector**: Memoized to optimize dropdown interactions
-- **IdiomList**: Memoized to prevent re-renders when filters haven't changed
-- **FilterPanel**: Memoized to optimize filter interactions
-- **FavoriteButton**: Memoized to prevent re-renders on favorite state changes
-- **Badge**: Memoized as it's used frequently throughout the app
+生成的源 JSON 保持可读格式。输出大小、传输压缩和缓存效果取决于构建产物及托管配置，
+不能从“执行过同步”推断数据压缩或内容更新。同步边界见 [DATA_FORMAT.md](DATA_FORMAT.md)。
+`chunkSizeWarningLimit` 只是构建警告阈值，不是已达到的性能指标。
 
-## 2. useMemo Optimizations
+## 如何验证
 
-Added `useMemo` hooks to cache expensive computations:
+先确定要改善的页面、指标和用户场景，再测量对应改动。验证入口见 [TESTING.md](TESTING.md)。
 
-- **IdiomList**: 
-  - Cached filtered idioms list
-  - Cached active filters check
-  
-- **CodeComparison**:
-  - Cached filtered implementations based on selected languages
-  - Cached language name lookup function
-  
-- **LanguageSelector**:
-  - Cached language name lookup function
-  
-- **IdiomDetailPage**:
-  - Cached idiom lookup
-  - Cached available language IDs
-  - Cached available languages list
-  - Cached display languages calculation
-  
-- **LanguagePage**:
-  - Cached language lookup
-  - Cached language idioms list
-  
-- **FavoritesPage**:
-  - Cached favorite idioms list
+- 生产构建及输出检查使用 `npm run pre-deploy`，同一产物无需重复构建。
+- 页面性能在浏览器或性能工具中测量，记录提交、日期、URL、浏览器、设备、网络、冷/热缓存和结果。
+- 单独区分首屏加载、交互耗时、代码高亮耗时与产物体积。
+- 历史目标包括 FCP < 1.5s、LCP < 2.5s、代码高亮 < 200ms；当前没有证明这些目标全站达标的报告。
+- HTTP 冒烟检查中的响应时间不等于 FCP、LCP 或浏览器交互时间。
 
-## 3. useCallback Optimizations
+## 历史记录：2026-09-08 19:01 CST
 
-Added `useCallback` hooks to memoize event handlers:
+以下保留旧文档记录，未重新测量；原记录未包含提交、Node 版本、设备或网络环境。
+它不代表当前 checkout 的验证状态。
 
-- **IdiomList**: Memoized search, filter change, and clear filters handlers
-- **LanguageSelector**: Memoized toggle, clear, reset, and remove language handlers
-- **FilterPanel**: Memoized toggle filter and clear filters handlers
+| 历史产物 | 原始体积 | gzip 体积 |
+| --- | --- | --- |
+| languages JSON | 4.75 kB | 1.58 kB |
+| idioms JSON | 69.68 kB | 17.70 kB |
+| 主 CSS | 28.94 kB | 6.26 kB |
+| contexts JS | 40.51 kB | 10.54 kB |
+| vendor JS | 59.84 kB | 17.96 kB |
+| react-vendor JS | 226.02 kB | 72.33 kB |
 
-## 4. Code Splitting and Lazy Loading
+旧记录报告 25 个测试文件、182 个测试通过；输出包含 24 个 JS、2 个 CSS，目录大小约 2.0M。
+该目录大小与逐文件 gzip 体积口径不同。旧校验器的“数据存在”结果也不能证明当时每份 JSON 都已输出。
 
-Implemented lazy loading for route components:
+## 待评估方向
 
-- **HomePage**: Lazy loaded
-- **IdiomDetailPage**: Lazy loaded
-- **FavoritesPage**: Lazy loaded
-- **LanguagePage**: Lazy loaded
-- **NotFoundPage**: Lazy loaded
-
-Added Suspense boundary with loading fallback for smooth transitions.
-
-## 5. Build Optimizations
-
-### Vite Configuration
-- **Manual Chunk Splitting**: Separated vendor code into chunks:
-  - `react-vendor`: React, React DOM, React Router
-  - `vendor`: Other third-party libraries
-  - Route-level page chunks: `HomePage`, `IdiomDetailPage`, `LanguagePage`, `FavoritesPage`, and `NotFoundPage`
-
-- **Dependency Pre-bundling**: Optimized common dependencies
-- **Chunk Size Warning Limit**: Increased to 1000KB for better control
-- **Build-time Data Sync**: `npm run build`, `npm run build:preview`, `npm run build:production`, and `npm run validate` all run `npm run sync:tech-cards` before TypeScript and Vite build steps, so generated data matches the tech-cards source before deployment.
-
-### Build Results
-
-Latest verified production build: 2026-09-08 19:01 CST via `npm run validate && npm run verify-build`.
-
-```
-dist/index.html                                    1.42 kB │ gzip:  0.67 kB
-dist/assets/languages-DDW2Echt.json                4.75 kB │ gzip:  1.58 kB
-dist/assets/idioms-BAS9JVuW.json                  69.68 kB │ gzip: 17.70 kB
-dist/assets/index-BoYjcccF.css                    28.94 kB │ gzip:  6.26 kB
-dist/assets/contexts-BEK6vBTH.js                  40.51 kB │ gzip: 10.54 kB
-dist/assets/vendor-B4OiNIw3.js                    59.84 kB │ gzip: 17.96 kB
-dist/assets/react-vendor-DocQR72L.js             226.02 kB │ gzip: 72.33 kB
-```
-
-`npm run verify-build` reported `24 JavaScript files`, `2 CSS files`, data files present, and total build size `2.0M`.
-
-## 6. Data File Generation and Compression
-
-`src/data/idioms.json` is generated from `books/tech-cards-handbook/data/features/*.yaml` by `npm run sync:tech-cards`; do not treat the generated JSON as the contribution source of truth. The current build keeps data files minified and emitted as cacheable JSON assets:
-
-- **idioms JSON asset**: 69.68 kB raw / 17.70 kB gzip, synced from 21 tech-card idioms plus retained local data.
-- **languages JSON asset**: 4.75 kB raw / 1.58 kB gzip.
-
-## 7. Resource Hints
-
-Added resource hints to index.html:
-
-- **Preload**: Critical JSON data files
-- **DNS Prefetch**: External resources (fonts, CDNs)
-
-## 8. Performance Monitoring
-
-Created performance utilities (`src/utils/performance.ts`):
-
-- Performance mark and measure functions
-- Page load metrics logging (development only)
-- Component render time measurement
-
-## Expected Performance Improvements
-
-### Loading Performance
-- **Faster Initial Load**: Code splitting reduces initial bundle size
-- **Better Caching**: Vendor chunks cached separately from app code
-- **Reduced Data Transfer**: Compressed JSON files
-
-### Runtime Performance
-- **Fewer Re-renders**: React.memo prevents unnecessary component updates
-- **Faster Computations**: useMemo caches expensive calculations
-- **Stable Callbacks**: useCallback prevents function recreation
-
-### User Experience
-- **Smoother Interactions**: Optimized filter and search operations
-- **Faster Navigation**: Lazy-loaded routes load on demand
-- **Better Responsiveness**: Debounced search with optimized rendering
-
-## Verification
-
-Current verification gate:
-
-```bash
-npm run validate
-npm run verify-build
-```
-
-Latest verified result on 2026-09-08 19:01 CST:
-
-- ✅ ESLint returned 0; it emitted only the existing `baseline-browser-mapping` freshness warning.
-- ✅ Prettier check passed for all matched source files.
-- ✅ Vitest passed: 25 test files, 182 tests.
-- ✅ `npm run sync:tech-cards` synced 21 ByteBite idioms from `books/tech-cards-handbook` before build.
-- ✅ TypeScript build and Vite production build completed.
-- ✅ Build verification found expected HTML, assets, JSON data files, 24 JavaScript files, and 2 CSS files.
-
-## Future Optimizations
-
-Potential areas for further optimization:
-
-1. **Virtual Scrolling**: For large idiom lists (if needed)
-2. **Image Optimization**: Optimize and lazy-load images
-3. **Service Worker**: Add offline support and caching
-4. **Web Vitals Monitoring**: Add real user monitoring
-5. **Bundle Analysis**: Regular analysis to identify optimization opportunities
+虚拟滚动、Service Worker、真实用户性能监控与进一步的 bundle 分析尚未作为当前能力交付。
+仅在具体任务或测量显示收益时推进，避免无依据地增加缓存、memo 或依赖。
