@@ -10,7 +10,7 @@
 - 发布文件来自 `dist/`，由 rolldown-vite 构建。
 - 习语来源、`TECH_CARDS_HANDBOOK_DIR`、同步回退和生成文件提交规则见[数据指南](DATA_FORMAT.md)。
 
-只克隆 ByteBite 的构建可使用已提交快照。若本次发布包含习语更新，必须在可用的源目录同步后检查并提交 JSON，
+只克隆 Elsewise 的构建可使用已提交快照。若本次发布包含习语更新，必须在可用的源目录同步后检查并提交 JSON，
 并记录源提交。构建成功或同步输出总数不能单独证明发布了最新内容。
 
 ## 本地准备
@@ -36,24 +36,47 @@ npm run preview
 1. checkout 本仓库，使用 `.nvmrc` 指定的 Node 版本线安装依赖。
 2. 普通仓库根据仓库名设置 `GHP_BASE=/<仓库名>/`；用户/组织主页仓库使用 `/`。
 3. 运行 production 环境的完整预部署检查和构建。
-4. 复制 `dist/index.html` 为 `dist/404.html`，上传并通过 Pages Action 发布。
+4. 复制 `dist/index.html` 为 `dist/404.html`，用 Chromium 验收最终产物的桌面和移动端交互及 404 回退。
+5. 浏览器测试通过后上传，并通过 Pages Action 发布。
 
 仓库 Settings → Pages 的构建来源需设为 GitHub Actions，并允许工作流使用 Pages 和 OIDC 权限。
 当前工作流不需要 `VERCEL_TOKEN`、`VERCEL_ORG_ID` 或 `VERCEL_PROJECT_ID`。
 
+## Elsewise 更名与已有检出
+
+项目由 ByteBite 更名为 **Elsewise（异曲）**，仓库目标为 `naijoug/elsewise`。
+已有检出可保持本地文件夹名，更新远端即可：
+
+```bash
+git remote set-url origin git@github.com:naijoug/elsewise.git
+```
+
+默认 Pages 地址随仓库改名变为 `https://naijoug.github.io/elsewise/`。
+仓库重命名不等于新代码已经发布；须用新前缀重新构建并部署。
+GitHub 仓库旧链接与 Pages 旧站点是不同资源，不应依赖旧 Pages 地址自动跳转。
+同域名下从 `/bytebite/` 迁到 `/elsewise/` 不改变 Local Storage 的源，
+应用会自动读取旧收藏和语言偏好，详见[架构说明](ARCHITECTURE.md)。
+
+历史规格 `.kiro/specs/bytebite/`、历史验收记录与原始版权署名保留原名，避免改写历史。
+
+## 验证 Pages 新前缀
+
 本地复现普通项目的构建前缀：
 
 ```bash
-GHP_BASE=/bytebite/ npm run pre-deploy
-npm run preview
+GHP_BASE=/elsewise/ npm run pre-deploy
+cp dist/index.html dist/404.html
+npx playwright install chromium
+GHP_BASE=/elsewise/ npm run test:e2e
+GHP_BASE=/elsewise/ npm run preview
 ```
 
-资源前缀和应用路由要分别验收。当前 [App.tsx](../src/App.tsx) 的 BrowserRouter 没有 basename，
-因此子路径 `/bytebite/` 的页面匹配存在待处理问题；不能因资源构建成功或提供了 404.html 就认定路由正常。
+资源前缀、BrowserRouter 的 basename 和错误页返回首页地址统一来自构建时的 `BASE_URL`。
+预览与浏览器测试必须传入与构建一致的 `GHP_BASE`；`test:e2e` 使用已有产物，不重新构建。
 发布前应在目标路径检查首页、详情、收藏和直接刷新。GitHub Pages 的 404 回退可能返回 HTTP 404，
 与本地 preview 的 200 rewrite 不同。
 
-[ci.yml](../.github/workflows/ci.yml) 在 main/develop 推送和对应 PR 时检查 lint、格式、测试、构建与输出文件。
+[ci.yml](../.github/workflows/ci.yml) 在 main/develop 推送和对应 PR 时检查 lint、格式、测试、构建、输出文件和桌面/移动端浏览器交互。
 PR 使用 preview 环境构建并上传 artifact，不会创建在线预览站点或发布预览链接。
 CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布产物的检查为准。
 
@@ -84,7 +107,8 @@ CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布
 | 名称 | 用途 |
 | --- | --- |
 | `VITE_ENV` | 在 Vite 配置中控制 source map；production 时关闭，preview 时开启 |
-| `GHP_BASE` | 构建时资源前缀，缺省 `/` |
+| `VITE_APP_TITLE` | HTML 页面标题；开发与生产环境分别在对应 `.env` 文件维护 |
+| `GHP_BASE` | 资源和路由前缀，以 `/` 开头和结尾，缺省 `/`；预览和浏览器测试须使用同一值 |
 | `TECH_CARDS_HANDBOOK_DIR` | 构建机器上的 handbook 目录，不是浏览器变量 |
 
 `.env.production` 存在不代表 `process.env.VITE_ENV` 在配置求值前已设置；使用 `build:production` 或 `pre-deploy` 明确传入。

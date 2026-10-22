@@ -1,25 +1,13 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   base: process.env.GHP_BASE || '/',
   build: {
-    // Optimize chunk splitting
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          // Separate vendor chunks for better caching
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-              return 'react-vendor';
-            }
-            return 'vendor';
-          }
-        },
-      },
-    },
+    // Keep automatic chunks: merging Prism core and side-effect language
+    // modules into one vendor chunk runs grammars before Prism is initialized.
     // Increase chunk size warning limit
     chunkSizeWarningLimit: 1000,
     // Enable source maps for production debugging
@@ -37,4 +25,4 @@ export default defineConfig({
     strictPort: true,
     host: true,
   },
-})
+});

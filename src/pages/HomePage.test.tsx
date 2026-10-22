@@ -109,9 +109,7 @@ describe('HomePage', () => {
     );
 
     expect(container.querySelector('h1')?.textContent).toBe('编程习语');
-    expect(container.textContent).toContain(
-      '通过对比不同编程语言的实现方式，学习和理解编程概念'
-    );
+    expect(container.textContent).toContain('不同语言，同一种巧思。');
     expect(list?.getAttribute('aria-label')).toBe('mock idiom list');
     expect(
       renderedCards.map((card) => card.getAttribute('data-idiom-id'))

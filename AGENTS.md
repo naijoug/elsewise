@@ -1,8 +1,13 @@
-# ByteBite 项目约定
+# Elsewise 项目约定
+
+@/Users/guojian/.codex/RTK.md
+
+个人工作区的外部账号操作须先读取并遵守
+`/Users/guojian/Workspace/naijoug/AGENTS.md`；临时检出也使用此规范。
 
 ## 项目边界
 
-ByteBite 是 React + TypeScript 的客户端 SPA，使用静态 JSON 和浏览器 Local Storage。
+Elsewise 是 React + TypeScript 的客户端 SPA，使用静态 JSON 和浏览器 Local Storage。
 当前功能是习语浏览、搜索筛选、语言对比和收藏；在线执行代码、账户、AI 解释属于路线图。
 运行环境使用 Node 22.x（最低 22.12.0），包管理器使用 npm 和已提交的 package-lock.json。
 

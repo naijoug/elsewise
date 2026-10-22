@@ -1,4 +1,12 @@
-import { useState, useRef, useEffect, memo, useMemo, useCallback } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  memo,
+  useMemo,
+  useCallback,
+  useId,
+} from 'react';
 import type { Language } from '../types';
 import { Badge } from './common/Badge';
 import { Button } from './common/Button';
@@ -20,6 +28,7 @@ export const LanguageSelector = memo(function LanguageSelector({
 }: LanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const listboxId = useId();
 
   // 关闭下拉菜单当点击外部时
   useEffect(() => {
@@ -91,7 +100,19 @@ export const LanguageSelector = memo(function LanguageSelector({
   );
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
+    <div
+      className={`relative ${className}`}
+      ref={dropdownRef}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && isOpen) {
+          event.preventDefault();
+          setIsOpen(false);
+          dropdownRef.current
+            ?.querySelector<HTMLButtonElement>('[aria-haspopup="listbox"]')
+            ?.focus();
+        }
+      }}
+    >
       {/* 选择器按钮 */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
@@ -102,6 +123,7 @@ export const LanguageSelector = memo(function LanguageSelector({
             className="flex-1"
             aria-expanded={isOpen}
             aria-haspopup="listbox"
+            aria-controls={isOpen ? listboxId : undefined}
           >
             <span className="flex items-center gap-2">
               <svg
@@ -233,6 +255,8 @@ export const LanguageSelector = memo(function LanguageSelector({
         <div
           className="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto"
           role="listbox"
+          id={listboxId}
+          aria-multiselectable="true"
           aria-label="可选择的编程语言"
         >
           <div className="p-2">

@@ -29,6 +29,7 @@ export const IdiomList = memo(function IdiomList({ idioms }: IdiomListProps) {
 
   // 使用防抖优化搜索性能
   const debouncedQuery = useDebounce(searchQuery, 300);
+  const isSearchUpdating = searchQuery.trim() !== debouncedQuery.trim();
 
   const availableLanguageOptions = useMemo(() => {
     return getAvailableLanguageOptions(idioms, languages);
@@ -125,6 +126,7 @@ export const IdiomList = memo(function IdiomList({ idioms }: IdiomListProps) {
         resultCount={filteredIdioms.length}
         totalCount={idioms.length}
         hasActiveFilters={hasActiveFilters}
+        isUpdating={isSearchUpdating}
         activeFilterItems={activeFilterSummaryItems}
         onClearFilters={handleClearFilters}
         onRemoveFilterItem={handleRemoveFilterItem}

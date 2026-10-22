@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ByteBite HTTP Smoke Test Script
+# Elsewise HTTP Smoke Test Script
 # Checks HTTP responses and assets; it does not execute browser interactions.
 
 set -e
@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 BASE_URL="${1:-http://localhost:4173}"
 TIMEOUT=10
 
-echo -e "${BLUE}🧪 ByteBite HTTP Smoke Test${NC}"
+echo -e "${BLUE}🧪 Elsewise HTTP Smoke Test${NC}"
 echo "=================================="
 echo "Testing URL: $BASE_URL"
 echo ""
@@ -71,7 +71,7 @@ else
 fi
 
 # Test 2: Homepage contains app title
-if check_content "$BASE_URL" "ByteBite" "Homepage contains app title"; then
+if check_content "$BASE_URL" "Elsewise" "Homepage contains app title"; then
   ((TESTS_PASSED+=1))
 else
   ((TESTS_FAILED+=1))

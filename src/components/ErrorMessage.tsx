@@ -31,7 +31,7 @@ export function ErrorMessage({
           )}
           {showHomeButton && (
             <button
-              onClick={() => (window.location.href = '/')}
+              onClick={() => (window.location.href = import.meta.env.BASE_URL)}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
             >
               返回首页

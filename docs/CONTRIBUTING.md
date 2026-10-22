@@ -1,7 +1,7 @@
 # 贡献指南
 
 欢迎提交内容、代码、文档或问题反馈。讨论时保持尊重，说明问题、复现方法和预期行为。
-[GitHub Issues](https://github.com/naijoug/bytebite/issues) 用于报告问题和讨论较大的功能变更。
+[GitHub Issues](https://github.com/naijoug/elsewise/issues) 用于报告问题和讨论较大的功能变更。
 
 ## 开发准备
 

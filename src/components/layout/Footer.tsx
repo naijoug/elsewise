@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import { brand } from '../../config/brand';
+
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -10,10 +13,10 @@ export const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           <div>
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">
-              ByteBite
+              {brand.displayName}
             </h3>
             <p className="text-sm text-gray-600">
-              编程语言对比学习平台，帮助开发者通过对比学习不同语言的实现方式。
+              {brand.tagline} 通过对照不同实现，理解编程概念与语言设计。
             </p>
           </div>
 
@@ -23,28 +26,28 @@ export const Footer = () => {
             </h4>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/idioms"
+                <Link
+                  to="/"
                   className="inline-block py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors min-h-[44px] flex items-center focus:outline-none focus:underline"
                 >
                   习语列表
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/languages"
+                <Link
+                  to="/languages"
                   className="inline-block py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors min-h-[44px] flex items-center focus:outline-none focus:underline"
                 >
                   编程语言
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/favorites"
+                <Link
+                  to="/favorites"
                   className="inline-block py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors min-h-[44px] flex items-center focus:outline-none focus:underline"
                 >
                   我的收藏
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -56,7 +59,7 @@ export const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="https://github.com"
+                  href={brand.repositoryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors min-h-[44px] flex items-center focus:outline-none focus:underline"
@@ -68,7 +71,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/about"
+                  href={`${brand.repositoryUrl}#readme`}
                   className="inline-block py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors min-h-[44px] flex items-center focus:outline-none focus:underline"
                 >
                   关于项目
@@ -80,7 +83,7 @@ export const Footer = () => {
 
         <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200">
           <p className="text-center text-xs sm:text-sm text-gray-500">
-            © {currentYear} ByteBite. 保留所有权利。
+            © {currentYear} {brand.name}. 采用 MIT 许可证。
           </p>
         </div>
       </div>

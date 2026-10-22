@@ -1,6 +1,8 @@
-# ByteBite 🍔
+# Elsewise · 异曲
 
-通过对比不同编程语言的实现方式，学习编程概念与语言设计。
+**不同语言，同一种巧思。**
+
+通过对比不同编程语言的实现方式，学习编程概念与语言设计。项目原名 ByteBite。
 
 ## 当前功能
 
@@ -18,8 +20,8 @@
 使用 Node **22.x，最低 22.12.0**；本地、CI 和托管使用同一版本线。使用 npm 和已提交的锁文件。
 
 ```bash
-git clone https://github.com/naijoug/bytebite.git
-cd bytebite
+git clone https://github.com/naijoug/elsewise.git
+cd elsewise
 # 使用 nvm 时：nvm install && nvm use
 npm ci
 npm run dev
@@ -75,7 +77,7 @@ npm run dev
 
 ## 参与项目
 
-通过 [GitHub Issues](https://github.com/naijoug/bytebite/issues) 报告问题或讨论功能。
+通过 [GitHub Issues](https://github.com/naijoug/elsewise/issues) 报告问题或讨论功能。
 提交贡献前阅读[贡献指南](docs/CONTRIBUTING.md)。项目使用 [MIT 许可证](LICENSE)。
 
 灵感来源：[Rosetta Code](https://rosettacode.org/)、[Learn X in Y minutes](https://learnxinyminutes.com/)、[Programming Idioms](https://programming-idioms.org/)。

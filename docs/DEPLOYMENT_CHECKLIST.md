@@ -7,6 +7,7 @@
 
 - [ ] 明确目标平台、环境、提交和站点前缀。
 - [ ] 相应 CI/预部署检查通过，确认最终发布产物而非之前遗留的 dist。
+- [ ] 最终产物的桌面和移动端浏览器测试通过（`npm run test:e2e`）。
 - [ ] 构建使用 Node 22.x（最低 22.12.0）与锁文件安装。
 - [ ] 生成数据差异属于本次变更；如源仓库缺失，已确认使用的是预期快照。
 - [ ] 只包含当前任务相关改动，发布操作在已授权范围内。
@@ -17,7 +18,7 @@
 | --- | --- |
 | 习语内容 | 核对 YAML 来源/提交、同步日志、输出条目与页面展示 |
 | UI 或交互 | 检查受影响流程、键盘/焦点；布局变化检查移动端 |
-| 路由或 Pages 前缀 | 检查首页、详情、收藏、直接刷新和 404；当前 Router 无 basename 的子路径问题需要处理后验收 |
+| 路由或 Pages 前缀 | 使用同一 GHP_BASE 运行 test:e2e，检查首页、详情、语言、收藏、直接刷新和 404 |
 | Vercel/Netlify | 核对本平台的构建、输出、SPA rewrite、项目设置；只准备所选平台需要的凭据 |
 | 性能改动 | 在注明设备、网络、页面和提交的条件下测量相关指标 |
 | 可访问性改动 | 检查相应行为；完整合规声明需全范围报告 |
@@ -29,3 +30,29 @@
 - [ ] 在目标 URL 打开受影响页面，验证交互、资源和数据。
 - [ ] 记录版本、日期、目标、检查结果与尚未验证项。
 - [ ] 需要回滚时明确恢复目标，参见[回滚说明](DEPLOYMENT.md#故障定位与回滚)。
+
+## 最近本地验收：Elsewise 更名，2026-10-21
+
+范围：基于 `6425f4e` 的当前工作区，保留之前未提交的改动；macOS、Node 22.22.3。
+
+- `GHP_BASE=/elsewise/ npm run pre-deploy` 通过：lint、格式、204 个 Vitest 测试、TypeScript、生产构建和产物检查。
+- 将本次构建的 `index.html` 复制为 `404.html` 后，`GHP_BASE=/elsewise/ npm run test:e2e`：16 项通过。
+- 浏览器覆盖 Chromium 桌面与 Pixel 7 移动模拟，含新标题与仓库链接、Pages 深链接刷新、搜索筛选、代码高亮、收藏及语言偏好。
+- 新增旧 `bytebite_preferences` 迁移验收，确认迁移后移除收藏不会在刷新时恢复旧值。
+- 浏览器测试使用 `PLAYWRIGHT_BROWSERS_PATH=/tmp/elsewise-playwright` 的临时 Chromium；其他环境先安装匹配版本的浏览器。
+- 数据同步成功，`src/data/idioms.json` 与任务开始时一致。
+- GitHub 仓库已更名为 `naijoug/elsewise`，本地 origin 已更新；这些本地检查不代表远端新代码已经提交或部署。
+
+## 历史本地验收：2026-09-30
+
+范围：基于 `6425f4e` 的当前工作区（含已有搜索更新提示修改），macOS、Node 22.22.3、npm 10.9.8。
+
+- `npm ci` 成功；安装时 npm 审计报告 0 项已知漏洞。
+- `npm run test:all` 通过：lint、格式、199 个 Vitest 测试、TypeScript、生产构建、产物检查和 9 项 HTTP 检查。
+- 根路径生产构建的 `npm run test:e2e`：14 项通过。
+- `GHP_BASE=/bytebite/ npm run build:production`、404.html 复制和产物检查通过；对应 `test:e2e`：14 项通过。
+- 浏览器覆盖 Chromium 桌面与 Pixel 7 移动模拟，含 Pages HTTP 404 回退；另在本机预览检查首页和语言目录，未发现控制台错误。
+- 数据同步成功，`src/data/idioms.json` 无差异；原有未提交修改保留。
+
+这些结果是本地发布候选版本的验收，不代表远端 Actions 已执行或站点已部署。
+真实域名、远端 Pages 配置及发布后验收仍需在发布时确认；未宣称全浏览器兼容、WCAG 合规或性能指标达标。

@@ -48,6 +48,20 @@ jobs:
       - name: Create SPA fallback (404.html)
         run: cp dist/index.html dist/404.html
 
+      - name: Install browser for release checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify final Pages build in desktop and mobile browsers
+        run: npm run test:e2e
+
+      - name: Upload browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-browser-failures
+          path: test-results/
+          if-no-files-found: ignore
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

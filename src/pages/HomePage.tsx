@@ -1,5 +1,6 @@
 import { useAppContext } from '../contexts';
 import { IdiomList } from '../components/IdiomList';
+import { brand } from '../config/brand';
 
 export function HomePage() {
   const { idioms, loading, error } = useAppContext();
@@ -66,7 +67,7 @@ export function HomePage() {
           编程习语
         </h1>
         <p className="text-sm sm:text-base text-gray-600">
-          通过对比不同编程语言的实现方式，学习和理解编程概念
+          {brand.tagline} 通过对照不同编程语言的实现，学习和理解编程概念。
         </p>
       </header>
 

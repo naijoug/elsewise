@@ -65,6 +65,12 @@ describe('SearchResultSummary', () => {
     expect(view.querySelector('[aria-label="当前搜索和筛选条件"]')).toBeNull();
   });
 
+  it('搜索输入等待防抖结果时展示更新提示', () => {
+    const view = renderSummary({ isUpdating: true });
+
+    expect(view.textContent).toContain('正在更新搜索结果…');
+  });
+
   it('点击清除和单个条件 chip 时触发对应回调', () => {
     const onClearFilters = vi.fn();
     const onRemoveFilterItem = vi.fn();

@@ -1,5 +1,5 @@
 /**
- * ByteBite 主应用组件
+ * Elsewise 主应用组件
  *
  * 这是应用的根组件，负责：
  * - 设置全局状态管理（AppProvider）
@@ -16,7 +16,12 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { AppProvider } from './contexts';
 import { Layout, ErrorBoundary } from './components';
 import { Spinner } from './components/common';
@@ -35,6 +40,9 @@ const FavoritesPage = lazy(() =>
 );
 const LanguagePage = lazy(() =>
   import('./pages/LanguagePage').then((m) => ({ default: m.LanguagePage }))
+);
+const LanguagesPage = lazy(() =>
+  import('./pages/LanguagesPage').then((m) => ({ default: m.LanguagesPage }))
 );
 const NotFoundPage = lazy(() =>
   import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage }))
@@ -56,14 +64,16 @@ function App() {
   return (
     <ErrorBoundary>
       <AppProvider>
-        <Router>
+        <Router basename={import.meta.env.BASE_URL}>
           <Layout>
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/idioms" element={<Navigate to="/" replace />} />
                 <Route path="/idiom/:id" element={<IdiomDetailPage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/language/:id" element={<LanguagePage />} />
+                <Route path="/languages" element={<LanguagesPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>

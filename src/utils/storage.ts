@@ -11,7 +11,7 @@
  * - 优雅降级（如果 Local Storage 不可用）
  * - 提供默认值
  *
- * 存储键：bytebite_preferences
+ * 存储键：elsewise_preferences；首次读取兼容 ByteBite 的旧偏好。
  *
  * @example
  * ```typescript
@@ -29,18 +29,32 @@
 
 import type { UserPreferences } from '../types';
 
-const STORAGE_KEY = 'bytebite_preferences';
+const STORAGE_KEY = 'elsewise_preferences';
+const LEGACY_STORAGE_KEY = 'bytebite_preferences';
 
 /**
  * 默认用户偏好设置
  *
  * 当 Local Storage 中没有保存的偏好或加载失败时使用
  */
-const DEFAULT_PREFERENCES: UserPreferences = {
+const defaultPreferences = (): UserPreferences => ({
   favoriteIdioms: [],
   selectedLanguages: [],
   theme: 'light',
-};
+});
+
+function stringArray(value: unknown): string[] {
+  return Array.isArray(value)
+    ? [
+        ...new Set(
+          value.filter(
+            (item): item is string =>
+              typeof item === 'string' && item.length > 0
+          )
+        ),
+      ]
+    : [];
+}
 
 /**
  * 从 Local Storage 读取用户偏好
@@ -49,15 +63,27 @@ const DEFAULT_PREFERENCES: UserPreferences = {
  */
 export function loadPreferences(): UserPreferences {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const current = localStorage.getItem(STORAGE_KEY);
+    const stored = current ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!stored) {
-      return { ...DEFAULT_PREFERENCES };
+      return defaultPreferences();
     }
-    const parsed = JSON.parse(stored);
-    return { ...DEFAULT_PREFERENCES, ...parsed };
+    const parsed: unknown = JSON.parse(stored);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return defaultPreferences();
+    }
+    const data = parsed as Record<string, unknown>;
+    const preferences: UserPreferences = {
+      favoriteIdioms: stringArray(data.favoriteIdioms),
+      selectedLanguages: stringArray(data.selectedLanguages),
+      theme: data.theme === 'dark' ? 'dark' : 'light',
+    };
+    // Keep the legacy value for rollback. A failed write must not hide favorites.
+    if (current === null) savePreferences(preferences);
+    return preferences;
   } catch (error) {
     console.warn('Failed to load preferences from localStorage:', error);
-    return { ...DEFAULT_PREFERENCES };
+    return defaultPreferences();
   }
 }
 
@@ -80,6 +106,7 @@ export function savePreferences(preferences: UserPreferences): void {
 export function clearPreferences(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
   } catch (error) {
     console.warn('Failed to clear preferences from localStorage:', error);
   }

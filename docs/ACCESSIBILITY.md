@@ -1,10 +1,10 @@
-# ByteBite 可访问性文档
+# Elsewise 可访问性文档
 
 本文档记录可访问性实现意图与验收方法。修改相关 UI 时按需查阅；它不构成当前版本的全站合规报告。
 
 ## 概述
 
-ByteBite 以 WCAG 2.1 AA 为目标。下文功能描述与勾选记录需要结合当前组件复核；达标声明需附日期、提交、检查范围、工具和结果。验证范围见 [TESTING.md](TESTING.md)。
+Elsewise 以 WCAG 2.1 AA 为目标。下文功能描述与勾选记录需要结合当前组件复核；达标声明需附日期、提交、检查范围、工具和结果。验证范围见 [TESTING.md](TESTING.md)。
 
 ## 实现的可访问性功能
 
@@ -255,9 +255,8 @@ ByteBite 以 WCAG 2.1 AA 为目标。下文功能描述与勾选记录需要结�
 
 ## 反馈
 
-如果您在使用 ByteBite 时遇到任何可访问性问题，请通过以下方式联系我们：
+如果您在使用 Elsewise 时遇到任何可访问性问题，请通过以下方式联系我们：
 
-- GitHub Issues
-- 电子邮件: accessibility@bytebite.com
+- [GitHub Issues](https://github.com/naijoug/elsewise/issues)
 
 我们致力于为所有用户提供最佳体验。

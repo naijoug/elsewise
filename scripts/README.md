@@ -8,7 +8,7 @@
 | `npm run pre-deploy` | 版本检查 → production validate → 产物检查；一次构建，失败即停止并输出原因 |
 | `npm run verify-build` | 检查 dist 中非空 HTML/JS/CSS 与两份可解析的非空 JSON 数组 |
 | `npm run test:smoke` | 对运行中的服务进行 HTTP 冒烟检查，默认 localhost:4173 |
-| `npm run test:e2e` | test:smoke 的兼容别名；脚本文件仍为 e2e-test.sh |
+| `npm run test:e2e` | Playwright 桌面/移动端验收已有 dist；serve-build.mjs 模拟 Pages 404 HTML 回退 |
 | `npm run test:all` | pre-deploy → 本地预览 → HTTP 检查 → 清理本次预览进程 |
 
 完整验证范围和能力边界见[验证指南](../docs/TESTING.md)。这些入口按需选择，不要重复串联。
@@ -35,3 +35,7 @@ GitHub Pages 的 404 回退需单独验收。`test:all` 使用本地默认根路
 命令契约维护在 package.json，CI 与本地尽量复用入口。
 涉及流程变更时验证失败会停止、错误日志可见、不会使用过期产物，以及资源缺失确实报错。
 不把 JSON 可解析或 HTTP 200 描述为字段完整、浏览器功能正确或正式环境达标。
+
+浏览器测试需先执行 `npx playwright install chromium`。构建和测试使用一致的 `GHP_BASE`，
+例如 `GHP_BASE=/elsewise/ npm run test:e2e`；它自动启停 127.0.0.1:4176 的测试服务器。
+服务器仅供测试，不作为生产托管方案。Pages 工作流在上传最终产物前运行浏览器门禁。

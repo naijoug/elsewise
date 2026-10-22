@@ -4,7 +4,7 @@
 
 ## 运行方式
 
-ByteBite 是客户端渲染的 SPA。Vite 生成静态资源，浏览器加载 React 后渲染页面；
+Elsewise 是客户端渲染的 SPA。Vite 生成静态资源，浏览器加载 React 后渲染页面；
 构建过程没有逐路由生成 HTML，也没有应用后端或在线代码执行服务。
 
 | 层 | 实现与入口 |
@@ -29,19 +29,27 @@ ByteBite 是客户端渲染的 SPA。Vite 生成静态资源，浏览器加载 R
 搜索覆盖标题、描述、标签、分类、语言名称/ID、实现代码和说明。
 不同筛选组之间是 AND，同组内多选是 OR；结果卡片展示命中原因。
 
+品牌名称、中文名、标语与仓库链接统一维护在 `src/config/brand.ts`。
+HTML 标题读取 `.env.development` / `.env.production` 的 `VITE_APP_TITLE`。
+偏好使用 `elsewise_preferences`；新键不存在时读取并归一化 `bytebite_preferences`，
+再尝试写入新键。迁移写入失败仍返回旧偏好；旧键保留用于回滚，新键始终优先。
+清除偏好会同时移除两个键。迁移仅适用于同源站点，跨域迁移需另行导出与导入。
+
 ## 路由与托管
 
 | 路径 | 页面 |
 | --- | --- |
 | `/` | 习语列表、搜索和筛选 |
 | `/idiom/:id` | 习语详情、实现对比和收藏 |
+| `/languages` | 编程语言目录 |
 | `/language/:id` | 语言信息及相关习语 |
+| `/idioms` | 兼容旧链接，重定向到首页 |
 | `/favorites` | 收藏列表 |
 | `*` | 未找到页面 |
 
 当前自动部署目标是 GitHub Pages；Vercel、Netlify 是可选平台。
-静态资源前缀由 `GHP_BASE` 控制。修改子路径部署时也要核对 BrowserRouter 的路径处理；
-当前 Router 没有配置 basename，复制 404.html 只能提供 HTML 回退，不能证明页面路由正确。
+静态资源、BrowserRouter basename 和错误恢复地址共享 `GHP_BASE` 对应的 `BASE_URL`。
+页内链接使用 React Router，Pages 的深链接由 404.html 回退；发布工作流先验证最终产物的浏览器行为。
 详见[部署指南](DEPLOYMENT.md)。
 
 ## 当前能力与后续方向
@@ -51,3 +59,9 @@ ByteBite 是客户端渲染的 SPA。Vite 生成静态资源，浏览器加载 R
 虚拟滚动、Service Worker、真实用户性能监控也不是当前架构的一部分。
 
 性能指标和 WCAG AA 是验证目标；已存在相关实现不等于全站达标，验证方式见[测试指南](TESTING.md)。
+
+## 启动与发布验证
+
+Prism core 初始化后按依赖顺序加载语言 grammar；使用自动分包，避免把所有 Prism 模块强制合入 vendor 后提前执行副作用。
+无法高亮的代码交给 React 作为纯文本渲染。Local Storage 中的字段会校验和归一化，损坏的偏好不阻断启动。
+浏览器发布测试直接加载 dist，覆盖启动、搜索筛选、代码高亮、收藏持久化、导航和错误恢复。

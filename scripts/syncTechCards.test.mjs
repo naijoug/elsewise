@@ -5,7 +5,7 @@ import path from 'node:path';
 import { generateIdiomsFromHandbook, syncTechCards } from './syncTechCards.mjs';
 
 async function withTempWorkspace(fn) {
-  const root = await mkdtemp(path.join(tmpdir(), 'bytebite-sync-'));
+  const root = await mkdtemp(path.join(tmpdir(), 'elsewise-sync-'));
   try {
     await fn(root);
   } finally {
@@ -20,7 +20,7 @@ async function writeFeature(root, name, content) {
 }
 
 describe('tech-cards handbook sync', () => {
-  it('generates ByteBite idioms from ready YAML feature implementations', async () => {
+  it('generates Elsewise idioms from ready YAML feature implementations', async () => {
     await withTempWorkspace(async (root) => {
       await writeFeature(
         root,
@@ -62,7 +62,7 @@ implementations:
     status: draft
     code: |
       fmt.Sprintf("Hello, %s", name)
-    explanation: 草稿不会进入 ByteBite。
+    explanation: 草稿不会进入 Elsewise。
 `
       );
 
@@ -310,7 +310,7 @@ implementations:
       await expect(
         syncTechCards({
           handbookDir: path.join(root, 'missing-handbook'),
-          bytebiteDir: path.join(root, 'bytebite'),
+          projectDir: path.join(root, 'elsewise'),
           knownLanguageIds: ['python'],
           allowMissingHandbook: true,
         })
@@ -318,7 +318,7 @@ implementations:
     });
   });
 
-  it('preserves legacy ByteBite idioms that have not been migrated yet', async () => {
+  it('preserves legacy Elsewise idioms that have not been migrated yet', async () => {
     await withTempWorkspace(async (root) => {
       await writeFeature(
         root,
@@ -343,10 +343,10 @@ implementations:
     explanation: Python 使用 f-string。
 `
       );
-      const bytebiteDir = path.join(root, 'bytebite');
-      await mkdir(path.join(bytebiteDir, 'src', 'data'), { recursive: true });
+      const projectDir = path.join(root, 'elsewise');
+      await mkdir(path.join(projectDir, 'src', 'data'), { recursive: true });
       await writeFile(
-        path.join(bytebiteDir, 'src', 'data', 'idioms.json'),
+        path.join(projectDir, 'src', 'data', 'idioms.json'),
         JSON.stringify([
           { id: 'legacy-only', title: '旧内容', implementations: [] },
           { id: 'string-interpolation', title: '旧字符串插值', implementations: [] },
@@ -356,13 +356,13 @@ implementations:
 
       await syncTechCards({
         handbookDir: path.join(root, 'handbook'),
-        bytebiteDir,
+        projectDir,
         knownLanguageIds: ['python'],
         preserveLegacy: true,
       });
 
       const generated = JSON.parse(
-        await readFile(path.join(bytebiteDir, 'src', 'data', 'idioms.json'), 'utf8')
+        await readFile(path.join(projectDir, 'src', 'data', 'idioms.json'), 'utf8')
       );
       expect(generated.map((item) => item.id)).toEqual([
         'legacy-only',
@@ -374,10 +374,10 @@ implementations:
     });
   });
 
-  it('keeps existing ByteBite idioms when the optional handbook checkout is unavailable', async () => {
+  it('keeps existing Elsewise idioms when the optional handbook checkout is unavailable', async () => {
     await withTempWorkspace(async (root) => {
-      const bytebiteDir = path.join(root, 'bytebite');
-      const outputPath = path.join(bytebiteDir, 'src', 'data', 'idioms.json');
+      const projectDir = path.join(root, 'elsewise');
+      const outputPath = path.join(projectDir, 'src', 'data', 'idioms.json');
       const existingIdioms = [
         { id: 'legacy-only', title: '旧内容', implementations: [] },
       ];
@@ -386,7 +386,7 @@ implementations:
 
       const idioms = await syncTechCards({
         handbookDir: path.join(root, 'missing-handbook'),
-        bytebiteDir,
+        projectDir,
         knownLanguageIds: ['python'],
         allowMissingHandbook: true,
       });
@@ -396,7 +396,7 @@ implementations:
     });
   });
 
-  it('writes generated idioms JSON to the ByteBite data directory', async () => {
+  it('writes generated idioms JSON to the Elsewise data directory', async () => {
     await withTempWorkspace(async (root) => {
       await writeFeature(
         root,
@@ -422,17 +422,17 @@ implementations:
     explanation: Go 使用显式 error 返回值。
 `
       );
-      const bytebiteDir = path.join(root, 'bytebite');
-      await mkdir(path.join(bytebiteDir, 'src', 'data'), { recursive: true });
+      const projectDir = path.join(root, 'elsewise');
+      await mkdir(path.join(projectDir, 'src', 'data'), { recursive: true });
 
       await syncTechCards({
         handbookDir: path.join(root, 'handbook'),
-        bytebiteDir,
+        projectDir,
         knownLanguageIds: ['go'],
       });
 
       const generated = JSON.parse(
-        await readFile(path.join(bytebiteDir, 'src', 'data', 'idioms.json'), 'utf8')
+        await readFile(path.join(projectDir, 'src', 'data', 'idioms.json'), 'utf8')
       );
       expect(generated).toHaveLength(1);
       expect(generated[0].id).toBe('error-handling');

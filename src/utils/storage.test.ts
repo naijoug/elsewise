@@ -12,7 +12,7 @@
  * - localStorage unavailable (graceful degradation)
  */
 
-import { describe, beforeEach, it, expect, vi } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import {
   loadPreferences,
   savePreferences,
@@ -25,7 +25,10 @@ import {
 } from './storage';
 import type { UserPreferences } from '../types';
 
-const STORAGE_KEY = 'bytebite_preferences';
+const STORAGE_KEY = 'elsewise_preferences';
+const LEGACY_STORAGE_KEY = 'bytebite_preferences';
+
+afterEach(() => vi.restoreAllMocks());
 
 function setStored(value: string | null): void {
   if (value === null) {
@@ -58,6 +61,39 @@ describe('loadPreferences', () => {
     expect(loadPreferences()).toEqual(prefs);
   });
 
+  it('normalizes malformed persisted fields instead of crashing the UI', () => {
+    setStored(
+      JSON.stringify({
+        favoriteIdioms: null,
+        selectedLanguages: [42, 'python', 'python', ''],
+        theme: 'invalid',
+      })
+    );
+    expect(loadPreferences()).toEqual({
+      favoriteIdioms: [],
+      selectedLanguages: ['python'],
+      theme: 'light',
+    });
+  });
+
+  it.each(['null', '42', '[]', '"invalid"'])(
+    'handles a non-object preference value: %s',
+    (stored) => {
+      setStored(stored);
+      expect(loadPreferences()).toEqual({
+        favoriteIdioms: [],
+        selectedLanguages: [],
+        theme: 'light',
+      });
+    }
+  );
+
+  it('does not mutate defaults when a favorite is added before the first save', () => {
+    addFavoriteIdiom('array-map');
+    clearPreferences();
+    expect(loadPreferences().favoriteIdioms).toEqual([]);
+  });
+
   it('merges with defaults for missing fields', () => {
     setStored(JSON.stringify({ favoriteIdioms: ['go-struct'] }));
     const result = loadPreferences();
@@ -83,15 +119,87 @@ describe('loadPreferences', () => {
   });
 
   it('returns defaults when localStorage throws', () => {
-    const original = localStorage.getItem;
-    vi.spyOn(localStorage, 'getItem').mockImplementation(() => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('SecurityError');
     });
     const result = loadPreferences();
     expect(result.favoriteIdioms).toEqual([]);
     expect(result.selectedLanguages).toEqual([]);
     expect(result.theme).toBe('light');
-    localStorage.getItem = original;
+  });
+});
+
+describe('ByteBite preference migration', () => {
+  beforeEach(() => localStorage.clear());
+
+  const legacy: UserPreferences = {
+    favoriteIdioms: ['array-map'],
+    selectedLanguages: ['python', 'rust'],
+    theme: 'dark',
+  };
+
+  it('migrates existing favorites and language choices without removing the backup', () => {
+    localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(legacy));
+    expect(loadPreferences()).toEqual(legacy);
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toEqual(legacy);
+    expect(JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY)!)).toEqual(
+      legacy
+    );
+  });
+
+  it('keeps new preferences authoritative, including an empty favorites list', () => {
+    localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(legacy));
+    const current: UserPreferences = {
+      favoriteIdioms: [],
+      selectedLanguages: ['go'],
+      theme: 'light',
+    };
+    savePreferences(current);
+    expect(loadPreferences()).toEqual(current);
+  });
+
+  it('normalizes legacy fields before saving the migrated preferences', () => {
+    localStorage.setItem(
+      LEGACY_STORAGE_KEY,
+      JSON.stringify({
+        favoriteIdioms: ['array-map', 'array-map', null],
+        selectedLanguages: 42,
+        theme: 'invalid',
+      })
+    );
+    const normalized = {
+      favoriteIdioms: ['array-map'],
+      selectedLanguages: [],
+      theme: 'light',
+    };
+    expect(loadPreferences()).toEqual(normalized);
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toEqual(normalized);
+  });
+
+  it('returns legacy preferences even when migration cannot be saved', () => {
+    localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(legacy));
+    const setItem = vi
+      .spyOn(Storage.prototype, 'setItem')
+      .mockImplementation(() => {
+        throw new Error('QuotaExceededError');
+      });
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      expect(loadPreferences()).toEqual(legacy);
+      expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+    } finally {
+      setItem.mockRestore();
+      warn.mockRestore();
+    }
+  });
+
+  it('clears both keys so legacy favorites cannot reappear', () => {
+    localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(legacy));
+    loadPreferences();
+    clearPreferences();
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+    expect(localStorage.getItem(LEGACY_STORAGE_KEY)).toBeNull();
+    expect(loadPreferences().favoriteIdioms).toEqual([]);
   });
 });
 
@@ -111,8 +219,7 @@ describe('savePreferences', () => {
   });
 
   it('does not throw when localStorage.setItem fails', () => {
-    const original = localStorage.setItem;
-    vi.spyOn(localStorage, 'setItem').mockImplementation(() => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('QuotaExceededError');
     });
     expect(() =>
@@ -122,7 +229,6 @@ describe('savePreferences', () => {
         theme: 'light',
       })
     ).not.toThrow();
-    localStorage.setItem = original;
   });
 });
 
@@ -136,12 +242,10 @@ describe('clearPreferences', () => {
   });
 
   it('does not throw when localStorage.removeItem fails', () => {
-    const original = localStorage.removeItem;
-    vi.spyOn(localStorage, 'removeItem').mockImplementation(() => {
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
       throw new Error('SecurityError');
     });
     expect(() => clearPreferences()).not.toThrow();
-    localStorage.removeItem = original;
   });
 });
 

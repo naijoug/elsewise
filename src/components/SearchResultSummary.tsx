@@ -7,6 +7,8 @@ export interface SearchResultSummaryProps {
   totalCount: number;
   /** Whether there is any active search query or filter. */
   hasActiveFilters: boolean;
+  /** Whether the visible result count is waiting for debounced search input. */
+  isUpdating?: boolean;
   /** Human-readable labels for active search/filter criteria. */
   activeFilterItems: ActiveFilterSummaryItem[];
   /** Clears all active search and filter criteria. */
@@ -19,6 +21,7 @@ export function SearchResultSummary({
   resultCount,
   totalCount,
   hasActiveFilters,
+  isUpdating = false,
   activeFilterItems,
   onClearFilters,
   onRemoveFilterItem,
@@ -37,6 +40,9 @@ export function SearchResultSummary({
           个习语
           {totalCount !== resultCount && (
             <span className="text-gray-400"> / 共 {totalCount} 个</span>
+          )}
+          {isUpdating && (
+            <span className="ml-2 text-blue-600">正在更新搜索结果…</span>
           )}
         </p>
         {hasActiveFilters && (

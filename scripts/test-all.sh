@@ -9,7 +9,7 @@ fi
 
 npm run pre-deploy
 
-preview_log=$(mktemp "${TMPDIR:-/tmp}/bytebite-preview.XXXXXX")
+preview_log=$(mktemp "${TMPDIR:-/tmp}/elsewise-preview.XXXXXX")
 preview_pid=""
 cleanup() {
   if [ -n "$preview_pid" ]; then

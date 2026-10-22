@@ -36,7 +36,7 @@ npm exec -- tsc -b
 | `npm run verify-build` | 检查已有 dist 的 HTML、JS、CSS 和两份非空 JSON 数组，不重新构建 |
 | `npm run test:all` | pre-deploy → 启动本地预览 → HTTP 冒烟检查 → 关闭本次启动的进程 |
 | `npm run test:smoke` | 检查已运行的预览服务器，默认 `http://localhost:4173` |
-| `npm run test:e2e` | test:smoke 的兼容别名，不是浏览器端到端测试 |
+| `npm run test:e2e` | Playwright 对已有 dist 执行 Chromium 桌面/移动端端到端测试，自动启停本地测试服务器 |
 
 build 可能重写 `src/data/idioms.json`；确认生成差异属于当前任务。源仓库缺失时会回退，
 所以 validate 通过也不能证明数据已经更新。详见[数据同步边界](DATA_FORMAT.md#来源与同步边界)。
@@ -46,7 +46,8 @@ build 可能重写 `src/data/idioms.json`；确认生成差异属于当前任务
 - 单元与组件测试使用 Vitest、jsdom 和 React DOM；复用 [renderComponent.tsx](../src/test/renderComponent.tsx)，未引入 React Testing Library。
 - 同步器测试使用临时目录和自建 fixture，并在结束后清理，不改真实 handbook。
 - HTTP 冒烟脚本检查状态码、HTML 标记、静态资源和 SPA 回退。它不执行浏览器交互，不能证明搜索、收藏和语言切换正确。
-- HTTP 检查默认期待 SPA 路由返回 200，适用于本地预览或配置了 rewrite 的托管。GitHub Pages 的 404 回退可能返回 404，需单独进行浏览器验收。
+- HTTP 检查默认期待 SPA 路由返回 200，适用于本地预览或配置了 rewrite 的托管。浏览器测试服务器模拟 Pages 深链接返回 HTTP 404 并提供 HTML 回退，检查应用实际渲染与交互。它不能替代上线后的真实域名验收。
+- Playwright 测试覆盖生产启动、资源加载、搜索筛选、全部在用语言的高亮、收藏及语言偏好持久化、导航/深链接刷新、损坏偏好和数据失败重试。CI 测根路径，Pages 发布前测实际部署前缀。
 - 当前未配置覆盖率 provider 或覆盖率门槛；不宣称 80% 覆盖率。保留的 `test:coverage` 命令需要先安装与 Vitest 版本匹配的 provider 才能使用，不属于当前门禁。
 - WCAG 达标和性能目标需要对应测量，不能从单元测试、HTTP 响应时间或构建体积推断。
 
@@ -55,3 +56,11 @@ build 可能重写 `src/data/idioms.json`；确认生成差异属于当前任务
 交付时说明执行的命令、通过/失败情况和没有验证的部分。区分既有失败与本次改动导致的失败。
 浏览器、性能或可访问性报告应记录提交、日期、环境、目标 URL/页面和结果。
 文档中的旧测试数量和构建大小只代表记录时的状态，不要求每次改动刷新历史记录。
+
+## 生产浏览器验收
+
+首次安装浏览器：`npx playwright install chromium`（Linux CI 使用 `--with-deps`）。
+先执行一次 `npm run pre-deploy`，再执行 `npm run test:e2e`；后者只验证已有 dist，不重新构建。
+子路径部署在这两个命令前均设置同一个 `GHP_BASE=/elsewise/`；Pages 的完整示例见部署指南。
+测试端口为 127.0.0.1:4176，不复用其他进程。失败截图和 trace 保存在被 Git 忽略的 `test-results/`。
+`test:smoke` 保持 HTTP 检查用途；旧的 `test:e2e -- URL` 用法应改为 `test:smoke -- URL`。

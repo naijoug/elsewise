@@ -24,7 +24,7 @@
  */
 
 import { useMemo, memo } from 'react';
-import * as Prism from 'prismjs';
+import Prism from 'prismjs';
 import type { Implementation, Language } from '../types';
 import { Card } from './common';
 
@@ -90,8 +90,6 @@ export const CodeComparison = memo(function CodeComparison({
       if (grammar) {
         const highlighted = Prism.highlight(impl.code, grammar, prismLang);
         newHighlightedCode.set(impl.languageId, highlighted);
-      } else {
-        newHighlightedCode.set(impl.languageId, impl.code);
       }
     });
 
@@ -142,10 +140,14 @@ export const CodeComparison = memo(function CodeComparison({
               <code
                 className={`language-${getPrismLanguage(impl.languageId)}`}
                 style={{ fontSize: 'inherit' }}
-                dangerouslySetInnerHTML={{
-                  __html: highlightedCode.get(impl.languageId) || impl.code,
-                }}
-              />
+                dangerouslySetInnerHTML={
+                  highlightedCode.has(impl.languageId)
+                    ? { __html: highlightedCode.get(impl.languageId)! }
+                    : undefined
+                }
+              >
+                {highlightedCode.has(impl.languageId) ? undefined : impl.code}
+              </code>
             </pre>
           </div>
 

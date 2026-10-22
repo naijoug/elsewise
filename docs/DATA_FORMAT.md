@@ -31,10 +31,10 @@ CLI 的边界如下：
 - 旧 JSON 中未匹配到生成 ID 的条目会保留。因此删除 YAML 或修改 ID 不会自动删除旧快照条目；删除内容时需明确处理保留策略并检查差异。
 - handbook 缺失但存在非空快照时，输出 `keeping existing src/data/idioms.json` 警告并沿用快照。
 - handbook 缺失且没有可用快照时失败。回退仅检查快照是否为非空数组，不做完整字段验证。
-- `Synced N ByteBite idioms` 的 N 是合并后的总数，可能包含旧条目，不能当作本次新增或从 YAML 生成的数量。
+- `Synced N Elsewise idioms` 的 N 是合并后的总数，可能包含旧条目，不能当作本次新增或从 YAML 生成的数量。
 - `build`、`build:preview`、`build:production`、`validate`、`pre-deploy` 会通过构建链调用同步，可能改写 JSON。
 
-UI 开发和只克隆 ByteBite 的 CI 可以使用已提交快照。内容任务需要可用的 YAML 主数据；
+UI 开发和只克隆 Elsewise 的 CI 可以使用已提交快照。内容任务需要可用的 YAML 主数据；
 不能把回退或构建成功报告为主数据已更新。修改源内容后，应核对输出条目的代码与字段，并分别提交源仓库和本仓库的相关差异。
 
 ## 编辑一个习语

@@ -1,20 +1,27 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { brand } from '../../config/brand';
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const navigation = [
-    { name: '首页', href: '/' },
-    { name: '习语列表', href: '/idioms' },
+    { name: '习语列表', href: '/' },
     { name: '语言', href: '/languages' },
     { name: '收藏', href: '/favorites' },
   ];
 
   const isActive = (href: string) => {
     if (href === '/') {
-      return location.pathname === '/';
+      return (
+        location.pathname === '/' || location.pathname.startsWith('/idiom/')
+      );
+    }
+    if (href === '/languages') {
+      return (
+        location.pathname === href || location.pathname.startsWith('/language/')
+      );
     }
     return location.pathname.startsWith(href);
   };
@@ -31,7 +38,7 @@ export const Header = () => {
               to="/"
               className="flex items-center px-2 text-xl font-bold text-blue-600 hover:text-blue-700"
             >
-              ByteBite
+              {brand.displayName}
             </Link>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-4">
               {navigation.map((item) => (

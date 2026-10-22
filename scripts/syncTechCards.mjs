@@ -128,8 +128,8 @@ function compareImplementationsByLanguage(knownLanguageIds) {
   };
 }
 
-export async function loadKnownLanguageIds(bytebiteDir) {
-  const languagesPath = path.join(bytebiteDir, 'src', 'data', 'languages.json');
+export async function loadKnownLanguageIds(projectDir) {
+  const languagesPath = path.join(projectDir, 'src', 'data', 'languages.json');
   const languages = JSON.parse(await readFile(languagesPath, 'utf8'));
   return languages.map((language) => language.id);
 }
@@ -202,24 +202,24 @@ function mergeWithLegacyIdioms(generatedIdioms, legacyIdioms) {
 
 export async function syncTechCards({
   handbookDir,
-  bytebiteDir,
+  projectDir,
   knownLanguageIds,
   preserveLegacy = false,
   allowMissingHandbook = false,
 }) {
-  const outputPath = path.join(bytebiteDir, 'src', 'data', 'idioms.json');
+  const outputPath = path.join(projectDir, 'src', 'data', 'idioms.json');
   const featuresDir = path.join(handbookDir, 'data', 'features');
   if (allowMissingHandbook && !(await directoryExists(featuresDir))) {
     const existingIdioms = await loadExistingIdioms(outputPath);
     if (existingIdioms.length === 0) {
       throw new Error(
-        `Tech cards handbook not found at ${featuresDir}, and no existing ByteBite idioms were found at ${outputPath}`
+        `Tech cards handbook not found at ${featuresDir}, and no existing Elsewise idioms were found at ${outputPath}`
       );
     }
     return existingIdioms;
   }
 
-  const languageIds = knownLanguageIds ?? await loadKnownLanguageIds(bytebiteDir);
+  const languageIds = knownLanguageIds ?? await loadKnownLanguageIds(projectDir);
   const generatedIdioms = await generateIdiomsFromHandbook({ handbookDir, knownLanguageIds: languageIds });
   const idioms = preserveLegacy
     ? mergeWithLegacyIdioms(generatedIdioms, await loadExistingIdioms(outputPath))
@@ -231,15 +231,15 @@ export async function syncTechCards({
 
 async function main() {
   const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-  const bytebiteDir = path.resolve(scriptDir, '..');
+  const projectDir = path.resolve(scriptDir, '..');
   const handbookDir = path.resolve(
-    process.env.TECH_CARDS_HANDBOOK_DIR ?? path.join(bytebiteDir, '..', 'books', 'tech-cards-handbook')
+    process.env.TECH_CARDS_HANDBOOK_DIR ?? path.join(projectDir, '..', 'books', 'tech-cards-handbook')
   );
   const featuresDir = path.join(handbookDir, 'data', 'features');
   const usedExistingIdioms = !(await directoryExists(featuresDir));
   const idioms = await syncTechCards({
     handbookDir,
-    bytebiteDir,
+    projectDir,
     preserveLegacy: true,
     allowMissingHandbook: true,
   });
@@ -251,7 +251,7 @@ async function main() {
     return;
   }
 
-  console.log(`Synced ${idioms.length} ByteBite idioms from ${path.relative(bytebiteDir, handbookDir)}`);
+  console.log(`Synced ${idioms.length} Elsewise idioms from ${path.relative(projectDir, handbookDir)}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

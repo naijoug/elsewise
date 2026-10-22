@@ -18,7 +18,7 @@ afterEach(async () => {
 });
 
 async function workspace() {
-  const root = await mkdtemp(path.join(tmpdir(), 'bytebite-verification-'));
+  const root = await mkdtemp(path.join(tmpdir(), 'elsewise-verification-'));
   workspaces.push(root);
   return root;
 }
@@ -39,7 +39,7 @@ function run(root, script, env = {}) {
 }
 
 async function buildFixture(root) {
-  await put(root, 'dist/index.html', '<html><body>ByteBite</body></html>');
+  await put(root, 'dist/index.html', '<html><body>Elsewise</body></html>');
   await put(root, 'dist/assets/app-test.js', 'export {};');
   await put(root, 'dist/assets/app-test.css', 'body { margin: 0; }');
   await put(root, 'dist/assets/idioms-test.json', '[{"id":"array-map"}]');
@@ -98,8 +98,8 @@ async function commandFixture(root) {
     root,
     'bin/npm',
     `#!/bin/bash
-printf '%s:%s\\n' "\${VITE_ENV:-unset}" "$*" >> "$BYTEBITE_TEST_LOG"
-if [ "$*" = "run validate" ] && [ "\${BYTEBITE_FAIL_VALIDATE:-}" = "1" ]; then
+printf '%s:%s\\n' "\${VITE_ENV:-unset}" "$*" >> "$ELSEWISE_TEST_LOG"
+if [ "$*" = "run validate" ] && [ "\${ELSEWISE_FAIL_VALIDATE:-}" = "1" ]; then
   echo "fixture validation failed" >&2
   exit 7
 fi
@@ -109,7 +109,7 @@ fi
   return {
     PATH: `${path.join(root, 'bin')}${path.delimiter}${process.env.PATH}`,
     VITE_ENV: '',
-    BYTEBITE_TEST_LOG: path.join(root, 'commands.log'),
+    ELSEWISE_TEST_LOG: path.join(root, 'commands.log'),
   };
 }
 
@@ -118,7 +118,7 @@ describe('pre-deploy orchestration', () => {
     const root = await workspace();
     const env = await commandFixture(root);
     expect(run(root, 'pre-deploy-check.sh', env).status).toBe(0);
-    expect(await readFile(env.BYTEBITE_TEST_LOG, 'utf8')).toBe(
+    expect(await readFile(env.ELSEWISE_TEST_LOG, 'utf8')).toBe(
       'production:run validate\nunset:run verify-build\n'
     );
   });
@@ -128,11 +128,11 @@ describe('pre-deploy orchestration', () => {
     const env = await commandFixture(root);
     const result = run(root, 'pre-deploy-check.sh', {
       ...env,
-      BYTEBITE_FAIL_VALIDATE: '1',
+      ELSEWISE_FAIL_VALIDATE: '1',
     });
     expect(result.status).toBe(7);
     expect(result.stderr).toContain('fixture validation failed');
-    expect(await readFile(env.BYTEBITE_TEST_LOG, 'utf8')).toBe(
+    expect(await readFile(env.ELSEWISE_TEST_LOG, 'utf8')).toBe(
       'production:run validate\n'
     );
   });
