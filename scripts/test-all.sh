@@ -22,8 +22,8 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-# Start Vite directly so the tracked PID owns the preview server.
-./node_modules/.bin/vite preview --host 127.0.0.1 > "$preview_log" 2>&1 &
+# Start the static host directly so the tracked PID owns the server.
+PORT=4173 node scripts/serve-build.mjs > "$preview_log" 2>&1 &
 preview_pid=$!
 ready=false
 for attempt in {1..50}; do
@@ -32,7 +32,7 @@ for attempt in {1..50}; do
     cat "$preview_log" >&2
     exit 1
   fi
-  if grep -q "Local:" "$preview_log" && curl --silent --fail --max-time 1 http://127.0.0.1:4173/ > /dev/null; then
+  if grep -q "Static build server ready" "$preview_log" && curl --silent --fail --max-time 1 http://127.0.0.1:4173/ > /dev/null; then
     ready=true
     break
   fi

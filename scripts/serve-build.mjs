@@ -31,10 +31,24 @@ createServer(async (request, response) => {
     }
     let status = 200;
     try {
+      if ((await stat(file)).isDirectory()) {
+        if (!pathname.endsWith('/')) {
+          response
+            .writeHead(301, {
+              Location:
+                pathname +
+                '/' +
+                new URL(request.url, 'http://localhost').search,
+            })
+            .end();
+          return;
+        }
+        file = resolve(file, 'index.html');
+      }
       if (!(await stat(file)).isFile()) throw new Error('Not a file');
     } catch {
       status = 404;
-      // Pages gets this exact fallback file in the deployment workflow.
+      // Astro emits a real 404 page; known routes have their own static HTML.
       file = resolve(root, '404.html');
       try {
         await stat(file);
@@ -50,4 +64,6 @@ createServer(async (request, response) => {
   } catch {
     response.writeHead(500).end('Unable to serve build');
   }
-}).listen(4176, '127.0.0.1');
+}).listen(Number(process.env.PORT || 4176), '127.0.0.1', () =>
+  console.log('Static build server ready')
+);

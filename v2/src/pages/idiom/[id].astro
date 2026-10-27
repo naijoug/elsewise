@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DetailControls from '../../components/DetailControls';
+import CopyCode from '../../components/CopyCode';
+import { idioms, languages, highlight } from '../../lib/content';
+export function getStaticPaths() { return idioms.map(idiom => ({ params: { id: idiom.id }, props: { idiom } })); }
+const { idiom } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const options = idiom.implementations.map(implementation => ({ id: implementation.languageId, name: languages.find(language => language.id === implementation.languageId)!.name }));
+const difficulty = { beginner: '入门', intermediate: '进阶', advanced: '高级' };
+---
+<Layout title={idiom.title} description={idiom.description}>
+  <a class="back-link" href={`${base}/`}>← 全部习语</a>
+  <section class="intro"><p class="eyebrow">{idiom.category} · {difficulty[idiom.difficulty]}</p><h1>{idiom.title}</h1><p>{idiom.description}</p><div class="badges">{[...idiom.paradigms, ...idiom.tags].map(tag => <span class="badge">{tag}</span>)}</div></section>
+  <DetailControls idiomId={idiom.id} options={options} client:load />
+  <p class="notice">这里只列出已收录的实现；未收录不代表语言不支持此特性。输出为资料中的静态示例，未在此页面执行。</p>
+  <noscript><p class="notice">当前显示全部语言。启用 JavaScript 后可选择语言、收藏和复制代码。</p></noscript>
+  <div class="code-grid" data-code-grid>
+    {idiom.implementations.map(implementation => {
+      const language = languages.find(language => language.id === implementation.languageId)!;
+      const codeId = `code-${idiom.id}-${language.id}`;
+      return <article class="implementation" data-language-card={language.id} aria-labelledby={`heading-${language.id}`}>
+        <header class="implementation-header"><h2 id={`heading-${language.id}`}><a href={`${base}/language/${language.id}/`}>{language.name}</a></h2><CopyCode targetId={codeId} client:load /></header>
+        <pre tabindex="0" aria-label={`${language.name} 示例代码`}><code id={codeId} class={`language-${language.id}`} set:html={highlight(implementation.code, language.id)} /></pre>
+        <div class="implementation-body"><h3>实现说明</h3><p>{implementation.explanation}</p>
+          {implementation.output !== undefined && <section><h3>预期输出（静态示例）</h3><pre tabindex="0"><code>{implementation.output}</code></pre></section>}
+          {implementation.errorOutput !== undefined && <section><h3>错误输出（静态示例）</h3><pre tabindex="0"><code>{implementation.errorOutput}</code></pre></section>}
+          {implementation.designRationale && <section><h3>设计思路</h3><p>{implementation.designRationale}</p></section>}
+          {implementation.pros?.length ? <section><h3>优点</h3><ul>{implementation.pros.map(item => <li>{item}</li>)}</ul></section> : null}
+          {implementation.cons?.length ? <section><h3>权衡与限制</h3><ul>{implementation.cons.map(item => <li>{item}</li>)}</ul></section> : null}
+          {implementation.references?.length ? <section><h3>参考资料</h3><ul>{implementation.references.map(reference => <li><a href={reference.url} target="_blank" rel="noopener noreferrer">{reference.title}<span class="sr-only">（新窗口）</span> ↗</a></li>)}</ul></section> : null}
+        </div>
+      </article>;
+    })}
+  </div>
+</Layout>

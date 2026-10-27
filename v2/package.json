@@ -1,0 +1,17 @@
+{
+  "name": "elsewise-static",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "@astrojs/react": "7.0.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "prismjs": "1.30.0"
+  }
+}

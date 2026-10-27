@@ -7,7 +7,8 @@
 
 ## 项目边界
 
-Elsewise 是 React + TypeScript 的客户端 SPA，使用静态 JSON 和浏览器 Local Storage。
+Elsewise 使用 Astro 静态生成页面、React 局部交互与 TypeScript，内容来自静态 JSON，偏好保存在浏览器 Local Storage。
+`v2/` 是生产应用；`src/` 保留内容、类型、存储兼容工具与旧实现回归，不再是生产页面入口。
 当前功能是习语浏览、搜索筛选、语言对比和收藏；在线执行代码、账户、AI 解释属于路线图。
 运行环境使用 Node 22.x（最低 22.12.0），包管理器使用 npm 和已提交的 package-lock.json。
 

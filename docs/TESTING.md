@@ -1,3 +1,13 @@
+# 第二代验证入口
+
+`npm run pre-deploy` 是生产入口：Node22检查、原代码lint/格式/单元回归、`npm run test:v2`、静态构建及产物校验。CI/Pages继续执行 `npm run test:e2e` 的desktop/mobile两项目；已更新为静态路由200、独立404、延迟索引、偏好迁移、多语言与无JS正文。旧SPA的全量数据失败场景改为搜索索引失败重试。
+
+`build-manifest.json`可核对发布SHA。任何测试数字以当次日志为准；旧版本通过记录不算重建后的验收。
+
+以下原实现测试说明保留作维护参考。
+
+---
+
 # 验证指南
 
 本地按改动范围选择检查；CI 保留 lint、格式、全部 Vitest 测试和构建门禁。

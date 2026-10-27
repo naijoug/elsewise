@@ -1,251 +1,318 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-
 const idioms = JSON.parse(
   readFileSync(new URL('../src/data/idioms.json', import.meta.url))
 );
 const languages = JSON.parse(
   readFileSync(new URL('../src/data/languages.json', import.meta.url))
 );
-const base = process.env.GHP_BASE || '/';
-
+const base = (process.env.GHP_BASE || '/').replace(/\/$/, '') + '/';
+const cards = (page) =>
+  page.getByRole('list', { name: '编程习语列表' }).getByRole('listitem');
+async function hydrated(page) {
+  await page.waitForFunction(() =>
+    Array.from(document.querySelectorAll('astro-island[client="load"]')).every(
+      (island) => !island.hasAttribute('ssr')
+    )
+  );
+}
+async function open(page, path = './') {
+  const response = await page.goto(path);
+  await hydrated(page);
+  return response;
+}
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', (error) => {
     throw error;
   });
 });
 
-test('production entry boots, searches and filters real data', async ({
+test('static entry has no full content or highlighter payload; search and combined filters work', async ({
   page,
 }) => {
-  const failedAssets = [];
+  const requests = [];
+  const failures = [];
+  page.on('request', (request) => requests.push(request.url()));
   page.on('response', (response) => {
-    if (response.url().includes('/assets/') && !response.ok())
-      failedAssets.push(response.url());
+    if (response.url().includes('/_astro/') && !response.ok())
+      failures.push(response.url());
   });
-  await page.goto('./');
-  await expect(page).toHaveTitle('Elsewise · 异曲 - 编程语言对比学习平台');
+  const response = await open(page);
+  expect(response.status()).toBe(200);
+  await expect(page).toHaveTitle('编程习语 · Elsewise · 异曲');
+  await expect(cards(page)).toHaveCount(idioms.length);
   await expect(
-    page.getByRole('navigation', { name: '主导航' }).getByRole('link', {
-      name: 'Elsewise · 异曲',
-      exact: true,
-    })
+    page.getByRole('link', { name: 'Elsewise · 异曲', exact: true })
   ).toBeVisible();
   await expect(
-    page.getByRole('link', { name: '在新窗口中打开 GitHub', exact: true })
+    page.getByRole('link', { name: '在新窗口中打开 GitHub' })
   ).toHaveAttribute('href', 'https://github.com/naijoug/elsewise');
+  expect(
+    requests.some((url) =>
+      /search-index|idioms.*\.json|prism|highlighter/i.test(url)
+    )
+  ).toBe(false);
+  const initialHTML = await response.text();
+  expect(initialHTML).not.toContain('&quot;implementations&quot;');
+  expect(initialHTML).not.toContain('code-array-map-javascript');
+  await page.getByRole('searchbox', { name: '搜索习语' }).fill('数组映射');
+  await expect(cards(page)).toHaveCount(1);
   await expect(
-    page.getByRole('heading', { name: '编程习语', exact: true })
-  ).toBeVisible();
-  const cards = page
-    .getByRole('list', { name: '编程习语列表', exact: true })
-    .getByRole('article');
-  await expect(cards).toHaveCount(idioms.length);
-  await page.getByRole('searchbox').fill('数组映射');
-  await expect(cards).toHaveCount(1);
-  await page
-    .getByRole('button', { name: '清除所有搜索和筛选条件', exact: true })
-    .click();
-  await expect(cards).toHaveCount(idioms.length);
-  await page.getByRole('button', { name: '显示筛选面板' }).click();
-  await page
-    .getByRole('checkbox', { name: '筛选语言：Python', exact: true })
-    .check();
-  await page
-    .getByRole('checkbox', { name: '筛选难度：初级', exact: true })
-    .check();
-  const filtered = idioms.filter(
-    (i) =>
-      i.difficulty === 'beginner' &&
-      i.implementations.some((x) => x.languageId === 'python')
+    page.getByText('正在加载代码搜索索引，先显示摘要匹配…')
+  ).toHaveCount(0);
+  expect(requests.some((url) => url.endsWith('/search-index.json'))).toBe(true);
+  await page.getByRole('button', { name: '重置', exact: true }).click();
+  await expect(cards(page)).toHaveCount(idioms.length);
+  await page.locator('.filter-panel summary').click();
+  await page.getByRole('checkbox', { name: 'Python', exact: true }).check();
+  await page.getByRole('checkbox', { name: '初级', exact: true }).check();
+  const expected = idioms.filter(
+    (item) =>
+      item.difficulty === 'beginner' &&
+      item.implementations.some((impl) => impl.languageId === 'python')
   );
-  await expect(cards).toHaveCount(filtered.length);
-  await page.getByRole('searchbox').fill('no-such-idiom-release-test');
-  await expect(page.getByText('未找到习语', { exact: true })).toBeVisible();
-  expect(failedAssets).toEqual([]);
+  await expect(cards(page)).toHaveCount(expected.length);
+  await page
+    .getByRole('searchbox', { name: '搜索习语' })
+    .fill('no-such-idiom-release-test');
+  await expect(cards(page)).toHaveCount(0);
+  await expect(
+    page.getByText('没有匹配结果。试试清空条件，或换一个关键词。')
+  ).toBeVisible();
+  expect(failures).toEqual([]);
 });
 
-test('detail survives a direct 404 fallback and refresh, with accurate highlighted code', async ({
+test('search index failure preserves summaries and retry restores code search', async ({
   page,
 }) => {
-  const idiom = idioms.find((i) => i.id === 'array-map');
-  const response = await page.goto('idiom/array-map');
-  expect(response.status()).toBe(404);
+  await page.route('**/search-index.json', (route) =>
+    route.fulfill({ status: 503, body: 'Unavailable' })
+  );
+  await open(page);
+  await expect(cards(page)).toHaveCount(idioms.length);
+  const term = 'numbers.map(n => n * 2)';
+  await page.getByRole('searchbox', { name: '搜索习语' }).fill(term);
+  await expect(page.getByRole('alert')).toContainText('代码搜索暂不可用');
+  await page.unroute('**/search-index.json');
+  await page.getByRole('button', { name: '重试', exact: true }).click();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(cards(page).filter({ hasText: '数组映射' })).toHaveCount(1);
+  await expect(page.getByLabel('搜索命中').first()).toContainText('代码');
+});
+
+test('detail is direct HTTP 200, pre-highlighted source survives refresh and multiple language selection', async ({
+  page,
+}) => {
+  const idiom = idioms.find((item) => item.id === 'array-map');
+  const response = await open(page, 'idiom/array-map/');
+  expect(response.status()).toBe(200);
+  expect(await response.text()).toContain('code-array-map-javascript');
   await expect(
     page.getByRole('heading', { name: idiom.title, exact: true })
   ).toBeVisible();
-  await page.getByRole('button', { name: /选择语言/ }).click();
-  await page.getByRole('option', { name: /^PHP / }).click();
-  await page.getByRole('option', { name: /^C\+\+ / }).click();
+  for (const name of ['PHP', 'C++'])
+    await page.getByRole('button', { name, exact: true }).click();
   for (const id of ['javascript', 'python', 'php', 'cpp']) {
-    const code = page.locator(`code.language-${id}`);
-    await expect(code).toHaveText(
-      idiom.implementations.find((i) => i.languageId === id).code
+    const code = page.locator(`#code-array-map-${id}`);
+    await expect(code).toBeVisible();
+    expect(await code.textContent()).toBe(
+      idiom.implementations.find((impl) => impl.languageId === id).code
     );
     expect(await code.locator('.token').count()).toBeGreaterThan(0);
   }
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('listbox')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: /选择语言/ })).toBeFocused();
   await page.reload();
-  await expect(page.locator('code.language-php')).toBeVisible();
-  await expect(page.locator('code.language-cpp')).toBeVisible();
+  await hydrated(page);
+  await expect(page.locator('#code-array-map-php')).toBeVisible();
+  await expect(page.locator('#code-array-map-cpp')).toBeVisible();
 });
 
-test('favorites persist across reload and can be removed', async ({ page }) => {
-  await page.goto('idiom/array-map');
-  await page.getByRole('button', { name: '添加收藏', exact: true }).click();
+test('favorites persist, appear in their dedicated scope, and stay removed', async ({
+  page,
+}) => {
+  await open(page, 'idiom/array-map/');
+  await page.getByRole('button', { name: '☆ 收藏习语', exact: true }).click();
   await page.reload();
+  await hydrated(page);
   await expect(
-    page.getByRole('button', { name: '取消收藏', exact: true })
+    page.getByRole('button', { name: '★ 已收藏', exact: true })
   ).toBeVisible();
   await page
-    .getByRole('navigation', { name: '快速链接' })
-    .getByRole('link', { name: '我的收藏' })
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '收藏', exact: true })
     .click();
-  await expect(page).toHaveURL(new RegExp(`${base}favorites$`));
-  await page.getByRole('link', { name: /查看 数组映射 的详细信息/ }).click();
-  await page.getByRole('button', { name: '取消收藏', exact: true }).click();
-  await page.goto('favorites');
-  await expect(
-    page.getByRole('link', { name: /查看 数组映射 的详细信息/ })
-  ).toHaveCount(0);
+  await hydrated(page);
+  expect(new URL(page.url()).pathname).toBe(`${base}favorites/`);
+  await expect(cards(page)).toHaveCount(1);
+  await page.getByRole('button', { name: '重置', exact: true }).click();
+  await expect(cards(page)).toHaveCount(1);
+  await cards(page)
+    .getByRole('link', { name: /数组映射/ })
+    .click();
+  await hydrated(page);
+  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
+  await open(page, 'favorites/');
+  await expect(cards(page)).toHaveCount(0);
 });
 
-test('navigation, language directory, legacy route and 404 recovery stay inside the base', async ({
+test('language directory, deep links, legacy query/hash redirect and 404 stay inside base', async ({
   page,
-  isMobile,
 }) => {
-  await page.goto('./');
-  const nav = page.getByRole('navigation', { name: '主导航' });
-  if (isMobile) await nav.getByRole('button', { name: '打开主菜单' }).click();
-  await nav.getByRole('link', { name: '语言', exact: true }).click();
-  await expect(
-    page.getByRole('heading', { name: '编程语言', exact: true })
-  ).toBeVisible();
-  const directory = page.getByRole('list', { name: '编程语言目录' });
-  await expect(directory.getByRole('link')).toHaveCount(languages.length);
-  await directory.getByRole('link', { name: 'Python', exact: true }).click();
-  await expect(page).toHaveURL(new RegExp(`${base}language/python$`));
+  await open(page);
+  await page
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '语言', exact: true })
+    .click();
+  await hydrated(page);
+  await expect(page.locator('.language-list > li')).toHaveCount(
+    languages.length
+  );
+  await page
+    .locator('.language-list')
+    .getByRole('link', { name: 'Python', exact: true })
+    .click();
+  await hydrated(page);
+  expect(new URL(page.url()).pathname).toBe(`${base}language/python/`);
   await expect(
     page.getByRole('heading', { name: 'Python', exact: true })
   ).toBeVisible();
-  await page.reload();
-  await expect(
-    page.getByRole('heading', { name: 'Python', exact: true })
-  ).toBeVisible();
+  expect((await page.reload()).status()).toBe(200);
+  await hydrated(page);
+  await expect(cards(page)).toHaveCount(
+    idioms.filter((item) =>
+      item.implementations.some((impl) => impl.languageId === 'python')
+    ).length
+  );
   const hrefs = await page
     .locator('a[href^="/"]')
     .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
   expect(hrefs.every((href) => href.startsWith(base))).toBe(true);
-  await page.goto('idioms');
-  await expect(
-    page.getByRole('heading', { name: '编程习语', exact: true })
-  ).toBeVisible();
-  await page.goto('not-a-real-page');
-  await expect(page.getByRole('heading', { name: '页面未找到' })).toBeVisible();
-  await page.getByRole('link', { name: '返回首页', exact: true }).click();
-  await expect(page).toHaveURL(new RegExp(`${base}$`));
-  await page.goto('idiom/missing-idiom');
-  await page.getByRole('button', { name: '返回首页', exact: true }).click();
-  await expect(
-    page.getByRole('heading', { name: '编程习语', exact: true })
-  ).toBeVisible();
-  await expect(page).toHaveURL(new RegExp(`${base}$`));
+  await open(page, 'idioms/?q=python#saved');
+  await expect.poll(() => new URL(page.url()).pathname).toBe(base);
+  expect(new URL(page.url()).search).toBe('?q=python');
+  expect(new URL(page.url()).hash).toBe('#saved');
+  for (const missing of ['not-a-real-page', 'idiom/missing-idiom/']) {
+    const response = await open(page, missing);
+    expect(response.status()).toBe(404);
+    await expect(
+      page.getByRole('heading', { name: '这个页面暂时找不到。' })
+    ).toBeVisible();
+    await page.getByRole('link', { name: '浏览习语', exact: true }).click();
+    await hydrated(page);
+    expect(new URL(page.url()).pathname).toBe(base);
+  }
 });
 
-test('existing ByteBite favorites migrate and stay removed after a reload', async ({
+test('ByteBite preferences migrate without losing legacy data or resurrecting removed favorites', async ({
   page,
 }) => {
-  await page.goto('./');
-  await page.evaluate(() => {
+  await open(page);
+  const legacy = {
+    favoriteIdioms: ['array-map'],
+    selectedLanguages: ['python', 'rust'],
+    theme: 'dark',
+  };
+  await page.evaluate((value) => {
     localStorage.clear();
-    localStorage.setItem(
-      'bytebite_preferences',
-      JSON.stringify({
-        favoriteIdioms: ['array-map'],
-        selectedLanguages: ['python', 'rust'],
-        theme: 'light',
-      })
-    );
-  });
-  await page.goto('idiom/array-map');
+    localStorage.setItem('bytebite_preferences', JSON.stringify(value));
+  }, legacy);
+  await open(page, 'idiom/array-map/');
   await expect(
-    page.getByRole('button', { name: '取消收藏', exact: true })
+    page.getByRole('button', { name: '★ 已收藏', exact: true })
   ).toBeVisible();
-  await expect(page.locator('code.language-python')).toBeVisible();
-  await expect(page.locator('code.language-rust')).toBeVisible();
+  await expect(page.locator('#code-array-map-python')).toBeVisible();
+  await expect(page.locator('#code-array-map-rust')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   expect(
     await page.evaluate(() =>
       JSON.parse(localStorage.getItem('elsewise_preferences'))
     )
-  ).toEqual({
-    favoriteIdioms: ['array-map'],
-    selectedLanguages: ['python', 'rust'],
-    theme: 'light',
-  });
-  await page.getByRole('button', { name: '取消收藏', exact: true }).click();
+  ).toEqual(legacy);
+  expect(
+    await page.evaluate(() =>
+      JSON.parse(localStorage.getItem('bytebite_preferences'))
+    )
+  ).toEqual(legacy);
+  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
   await page.reload();
+  await hydrated(page);
   await expect(
-    page.getByRole('button', { name: '添加收藏', exact: true })
+    page.getByRole('button', { name: '☆ 收藏习语', exact: true })
   ).toBeVisible();
 });
 
-test('invalid saved preferences do not crash startup', async ({ page }) => {
+test('invalid saved preferences do not crash static pages or hydration', async ({
+  page,
+}) => {
   await page.addInitScript(() =>
     localStorage.setItem(
       'elsewise_preferences',
       JSON.stringify({ favoriteIdioms: null, selectedLanguages: 42 })
     )
   );
-  await page.goto('./');
-  await expect(
-    page.getByRole('heading', { name: '编程习语', exact: true })
-  ).toBeVisible();
-  await page.goto('idiom/array-map');
-  await expect(page.locator('code.language-python')).toBeVisible();
+  await open(page);
+  await expect(cards(page)).toHaveCount(idioms.length);
+  await open(page, 'idiom/array-map/');
+  await expect(page.locator('#code-array-map-python')).toBeVisible();
 });
 
-test('data loading failure offers a working retry', async ({ page }) => {
-  await page.route('**/assets/idioms-*.json', (route) =>
-    route.fulfill({ status: 503, body: 'Unavailable' })
-  );
-  await page.goto('./');
-  await expect(
-    page.getByRole('heading', { name: '数据加载失败' })
-  ).toBeVisible();
-  await page.unroute('**/assets/idioms-*.json');
-  await page.getByRole('button', { name: '重试', exact: true }).click();
-  await expect(
-    page.getByRole('heading', { name: '编程习语', exact: true })
-  ).toBeVisible();
-});
-
-test('every shipped language grammar renders source without losing angle brackets', async ({
+test('dark and light stay synchronized through back navigation and reload', async ({
   page,
 }) => {
+  await open(page);
+  await page.getByRole('button', { name: '切换明暗主题' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await cards(page).first().getByRole('link').click();
+  await hydrated(page);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.getByRole('button', { name: '切换明暗主题' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.goBack();
+  await hydrated(page);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.reload();
+  await hydrated(page);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+});
+
+test('copy sends exact visible source to the clipboard', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await open(page, 'idiom/array-map/');
+  const implementation = page.locator('[data-language-card="javascript"]');
+  await implementation
+    .getByRole('button', { name: '复制代码', exact: true })
+    .click();
+  const expected = idioms
+    .find((item) => item.id === 'array-map')
+    .implementations.find((impl) => impl.languageId === 'javascript').code;
+  await expect
+    .poll(() => page.evaluate(() => navigator.clipboard.readText()))
+    .toBe(expected);
+});
+
+test('every shipped implementation preserves exact highlighted source and mobile width', async ({
+  page,
+}) => {
+  test.setTimeout(120000);
   await page.addInitScript(
     (ids) =>
       localStorage.setItem(
         'elsewise_preferences',
         JSON.stringify({ selectedLanguages: ids })
       ),
-    languages.map((l) => l.id)
+    languages.map((language) => language.id)
   );
-  for (const id of [
-    'array-map',
-    'null-safety',
-    'async-await',
-    'builder-pattern',
-  ]) {
-    const idiom = idioms.find((i) => i.id === id);
-    await page.goto(`idiom/${id}`);
+  for (const idiom of idioms) {
+    await open(page, `idiom/${idiom.id}/`);
     await expect(
       page.getByRole('heading', { name: idiom.title, exact: true })
     ).toBeVisible();
     for (const impl of idiom.implementations) {
-      const code = page.locator(`code.language-${impl.languageId}`);
-      await expect(code).toHaveText(impl.code);
+      const code = page.locator(`#code-${idiom.id}-${impl.languageId}`);
+      await expect(code).toBeVisible();
+      expect(await code.textContent()).toBe(impl.code);
       expect(await code.locator('.token').count()).toBeGreaterThan(0);
     }
     expect(
@@ -253,5 +320,30 @@ test('every shipped language grammar renders source without losing angle bracket
         () => document.documentElement.scrollWidth <= window.innerWidth
       )
     ).toBe(true);
+  }
+});
+
+test('without JavaScript, complete detail source and links remain available', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    const response = await page.goto(new URL('idiom/array-map/', baseURL).href);
+    expect(response.status()).toBe(200);
+    const idiom = idioms.find((item) => item.id === 'array-map');
+    await expect(
+      page.getByRole('heading', { name: idiom.title, exact: true })
+    ).toBeVisible();
+    for (const impl of idiom.implementations) {
+      const code = page.locator(`#code-${idiom.id}-${impl.languageId}`);
+      await expect(code).toBeVisible();
+      expect(await code.textContent()).toBe(impl.code);
+    }
+    await page.getByRole('link', { name: '← 全部习语', exact: true }).click();
+    await expect(cards(page)).toHaveCount(idioms.length);
+  } finally {
+    await context.close();
   }
 });

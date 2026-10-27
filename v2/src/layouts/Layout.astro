@@ -1,0 +1,36 @@
+---
+import '../styles.css';
+import { brand } from '../../../src/config/brand';
+import ThemeToggle from '../components/ThemeToggle';
+interface Props { title: string; description?: string }
+const { title, description = '选择编程习语，对比不同语言的实现方式。' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const links = [{href: `${base}/`, title: '习语'}, {href: `${base}/languages/`, title: '语言'}, {href: `${base}/favorites/`, title: '收藏'}];
+---
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · {brand.displayName}</title>
+    <script is:inline>
+      try {
+        const stored = localStorage.getItem('elsewise_preferences') ?? localStorage.getItem('bytebite_preferences');
+        const preferences = stored ? JSON.parse(stored) : null;
+        document.documentElement.dataset.theme = preferences?.theme === 'dark' ? 'dark' : 'light';
+      } catch { /* Storage restrictions must not prevent reading. */ }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳转到主内容</a>
+    <header class="site-header">
+      <a class="brand" href={`${base}/`} aria-label={brand.displayName}>{brand.displayName}<span>{brand.tagline}</span></a>
+      <nav aria-label="主导航">{links.map(link => <a href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>{link.title}</a>)}</nav>
+      <a class="repository-link" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label="在新窗口中打开 GitHub">GitHub ↗</a>
+      <ThemeToggle client:load />
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer">用不同的语言，理解共同的编程思想。收藏和偏好仅保存在此浏览器。</footer>
+  </body>
+</html>

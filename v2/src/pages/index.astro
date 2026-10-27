@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Catalog from '../components/Catalog';
+import { catalog, languages } from '../lib/content';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Layout title="编程习语">
+  <section class="intro"><p class="eyebrow">ONE IDEA · MANY LANGUAGES</p><h1>同一个想法，不同的写法。</h1><p>从一个特性或习语出发，选择多种语言，并排理解它们的实现。</p></section>
+  <Catalog summaries={catalog} languages={languages} base={base} client:load />
+</Layout>

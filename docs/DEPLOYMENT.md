@@ -6,8 +6,8 @@
 ## 环境与数据
 
 - Node 22.x，最低 22.12.0；版本线见 `.nvmrc`，支持范围见 `package.json` 的 engines。
-- 使用 `npm ci` 安装已锁定的依赖。
-- 发布文件来自 `dist/`，由 rolldown-vite 构建。
+- 使用 `npm ci` 安装已锁定的依赖；根 postinstall 会对独立 `v2/package-lock.json` 执行 npm ci。
+- 发布文件来自 `dist/`，由 `v2/` 中的 Astro 静态生成。
 - 习语来源、`TECH_CARDS_HANDBOOK_DIR`、同步回退和生成文件提交规则见[数据指南](DATA_FORMAT.md)。
 
 只克隆 Elsewise 的构建可使用已提交快照。若本次发布包含习语更新，必须在可用的源目录同步后检查并提交 JSON，
@@ -36,7 +36,7 @@ npm run preview
 1. checkout 本仓库，使用 `.nvmrc` 指定的 Node 版本线安装依赖。
 2. 普通仓库根据仓库名设置 `GHP_BASE=/<仓库名>/`；用户/组织主页仓库使用 `/`。
 3. 运行 production 环境的完整预部署检查和构建。
-4. 复制 `dist/index.html` 为 `dist/404.html`，用 Chromium 验收最终产物的桌面和移动端交互及 404 回退。
+4. 保留 Astro 生成的独立 `404.html`，绝不能用首页覆盖；Chromium 验收静态深链、桌面和移动端交互。
 5. 浏览器测试通过后上传，并通过 Pages Action 发布。
 
 仓库 Settings → Pages 的构建来源需设为 GitHub Actions，并允许工作流使用 Pages 和 OIDC 权限。
@@ -65,20 +65,22 @@ GitHub 仓库旧链接与 Pages 旧站点是不同资源，不应依赖旧 Pages
 
 ```bash
 GHP_BASE=/elsewise/ npm run pre-deploy
-cp dist/index.html dist/404.html
 npx playwright install chromium
 GHP_BASE=/elsewise/ npm run test:e2e
 GHP_BASE=/elsewise/ npm run preview
 ```
 
-资源前缀、BrowserRouter 的 basename 和错误页返回首页地址统一来自构建时的 `BASE_URL`。
+资源前缀和静态页面链接统一来自构建时的 `BASE_URL`；生产不再使用 BrowserRouter。
 预览与浏览器测试必须传入与构建一致的 `GHP_BASE`；`test:e2e` 使用已有产物，不重新构建。
-发布前应在目标路径检查首页、详情、收藏和直接刷新。GitHub Pages 的 404 回退可能返回 HTTP 404，
-与本地 preview 的 200 rewrite 不同。
+发布前应在目标路径检查首页、详情、收藏和直接刷新。已知详情路由直接返回静态 HTML（200，缺少尾斜杠由宿主重定向）；未知路由使用独立404页面（404）。
 
 [ci.yml](../.github/workflows/ci.yml) 在 main/develop 推送和对应 PR 时检查 lint、格式、测试、构建、输出文件和桌面/移动端浏览器交互。
 PR 使用 preview 环境构建并上传 artifact，不会创建在线预览站点或发布预览链接。
 CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布产物的检查为准。
+
+## 历史可选托管说明（Astro 迁移后未重新验收）
+
+以下 Vercel/Netlify 旧 SPA 配置不属于本次已验收发布范围；不要据此声称可直接发布第二代。
 
 ## Vercel 可选方案
 
@@ -128,3 +130,7 @@ CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布
 `git revert <commit>` 是撤销一个提交，不等同于将整个站点恢复到该提交状态。
 Vercel/Netlify 可使用平台历史部署回滚，并核对仓库状态以免下一次发布覆盖。
 回滚范围和发布目标按用户已授权的操作执行。
+
+## 发布身份与静态产物
+
+`dist/build-manifest.json` 包含 version=2、当前 GitHub Actions 的 GITHUB_SHA、base、所有静态内容路由与实现数量。上线后须对照该 commit 与 Actions 成功运行，而不是仅确认仓库已推送。`npm run verify-build` 只检查输出，避免源文件存在掩盖缺失产物。

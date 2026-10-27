@@ -45,9 +45,6 @@ jobs:
           VITE_ENV: production
           GHP_BASE: ${{ env.GHP_BASE }}
 
-      - name: Create SPA fallback (404.html)
-        run: cp dist/index.html dist/404.html
-
       - name: Install browser for release checks
         run: npx playwright install --with-deps chromium
 
