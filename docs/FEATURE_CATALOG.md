@@ -1,3 +1,5 @@
+> 2026-10-27 更新：生产界面现为任务优先的对照文档，不再显示 common/shared/specific 范围筛选和特色徽章；这些字段仅保留为内容兼容元数据。原 16 条概念保留 ID，新增 4 个实用任务与 48 个实现，合计 20/108。英文翻译层与目录分组见 `v2/src/lib/localized-content.ts`，完整边界见 [发布记录](releases/2026-10-27-comparison-docs.md)。下文是上一版数据契约，涉及旧 UI 的描述不代表当前界面。
+
 # 语言特性地图：内容与验收契约
 
 新增权威内容是本仓库 `v2/src/data/features.json`；不是对外部 tech-cards-handbook 的迁移，也不覆盖旧生成快照 `src/data/idioms.json`。旧习语沿用原同步流程，关联通过稳定 idiom ID 建立。

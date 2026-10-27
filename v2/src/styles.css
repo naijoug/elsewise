@@ -784,3 +784,10 @@ main {max-width:1520px;padding:32px 32px 64px;}
  .doc-context{margin:10px 0 14px;font-size:12px;}
 }
 @media(max-width:850px){.detail-controls h2{display:none;}}
+.language-reference{margin:16px 0 24px;border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:14px;}
+.language-reference summary{cursor:pointer;font-weight:600;min-height:28px;}
+.language-reference dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;}
+.language-reference dd{margin:0;}.language-reference .muted{font-size:12px;}
+@media(max-width:600px){.language-reference dl{grid-template-columns:1fr;gap:4px;}.language-reference dd{margin-bottom:10px;}}
+.footer-repository{display:none;}
+@media(max-width:850px){.footer-repository{display:block;margin-top:12px;min-height:44px;}}

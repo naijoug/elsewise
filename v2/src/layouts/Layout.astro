@@ -30,6 +30,6 @@ const links = [{href: `${base}/`, title: en?'Docs':'文档'}, {href: `${base}/id
       <div class="header-tools"><a class="locale-switch" href={alternate} lang={en?'zh-CN':'en'} aria-label={en?'Switch to Chinese':'切换至英文'}>{en?'中文':'English'}</a><ThemeToggle locale={locale} client:load /><a class="repository-link" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></div>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
-    <footer class="site-footer">{en?'One task, many languages. Learning records and favorites stay in this browser.':'同一个任务，不同语言的做法。学习记录与收藏仅保存在当前浏览器。'}</footer>
+    <footer class="site-footer">{en?'One task, many languages. Learning records and favorites stay in this browser.':'同一个任务，不同语言的做法。学习记录与收藏仅保存在当前浏览器。'}<a class="footer-repository" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></footer>
   </body>
 </html>

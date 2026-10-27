@@ -32,11 +32,18 @@ async function hydrated(page) {
 }
 async function expandLanguagePicker(page) {
   const picker = page.locator('details.language-picker');
-  await expect(picker.locator('summary')).toBeVisible();
+  // Desktop keeps the picker open and hides its disclosure summary.
+  // Only a closed picker needs the visible mobile disclosure control.
   if (!(await picker.evaluate((element) => element.open))) {
+    await expect(picker.locator('summary')).toBeVisible();
     await picker.locator('summary').click();
   }
   await expect(picker).toHaveAttribute('open', '');
+  const availableLanguage = picker
+    .locator('.language-options button:not([disabled])')
+    .first();
+  await expect(availableLanguage).toBeVisible();
+  await expect(availableLanguage).toBeEnabled();
   return picker;
 }
 
@@ -236,6 +243,13 @@ test('language directory, deep links, direct catalog query/hash and 404 stay ins
   ).toBeVisible();
   expect((await page.reload()).status()).toBe(200);
   await hydrated(page);
+  await page.locator('.language-reference summary').click();
+  await expect(page.locator('.language-reference')).toContainText(
+    languages.find((item) => item.id === 'python').version
+  );
+  await expect(page.locator('.language-reference')).toContainText(
+    '资料记录版本'
+  );
   await expect(cards(page)).toHaveCount(
     idioms.filter((item) =>
       item.implementations.some((impl) => impl.languageId === 'python')
@@ -523,8 +537,17 @@ test('documents retain learning/favorites, related idioms and language navigatio
       .getByRole('link', { name: '依赖注入', exact: true })
   ).toBeVisible();
   await open(page, 'language/rust/');
+  // Language-directory links include the document title AND its summary.
+  const ownershipLink = page.locator(
+    '.docs-directory a[href$="/feature/rust-ownership/"]'
+  );
+  await expect(ownershipLink).toBeVisible();
+  await expect(ownershipLink).toContainText('Rust 所有权');
+  await ownershipLink.click();
+  await hydrated(page);
+  expect(new URL(page.url()).pathname).toBe(`${base}feature/rust-ownership/`);
   await expect(
-    page.getByRole('link', { name: 'Rust 所有权', exact: true })
+    page.getByRole('heading', { level: 1, name: 'Rust 所有权', exact: true })
   ).toBeVisible();
 });
 
