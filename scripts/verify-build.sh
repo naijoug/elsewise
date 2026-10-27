@@ -20,9 +20,17 @@ try {
   if (typeof manifest.commit !== 'string' || !/^[a-f0-9]{40}$/i.test(manifest.commit)) throw new Error('Invalid build manifest commit');
   if (typeof manifest.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/?)*$/.test(manifest.base)) throw new Error('Invalid build manifest base');
   ids(manifest.features, 'features');
+  ids(manifest.idioms, 'idioms'); ids(manifest.languages, 'languages');
+  for (const prefix of ['', 'en/']) {
+    for (const id of manifest.features) requireFile(`dist/${prefix}feature/${id}/index.html`);
+    for (const id of manifest.idioms) requireFile(`dist/${prefix}idiom/${id}/index.html`);
+    for (const id of manifest.languages) requireFile(`dist/${prefix}language/${id}/index.html`);
+    for (const file of ['index.html','idioms/index.html','languages/index.html','favorites/index.html','search-index.json']) requireFile(`dist/${prefix}${file}`);
+  }
+  const englishSearch = json('dist/en/search-index.json');
+  if (englishSearch.length !== manifest.idioms.length) throw new Error('English search index count mismatch');
   requireFile('dist/features/index.html');
   for (const id of manifest.features) requireFile(`dist/feature/${id}/index.html`);
-  ids(manifest.idioms, 'idioms'); ids(manifest.languages, 'languages');
   if (!Number.isInteger(manifest.implementations) || manifest.implementations < manifest.idioms.length) throw new Error('Invalid build manifest implementations');
   for (const file of ['index.html', 'languages/index.html', 'favorites/index.html', 'idioms/index.html', '404.html']) requireFile(`dist/${file}`);
   for (const id of manifest.idioms) requireFile(`dist/idiom/${id}/index.html`);

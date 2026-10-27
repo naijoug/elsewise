@@ -1,3 +1,4 @@
+import { text, type Locale } from '../lib/ui-i18n';
 import { useEffect, useState } from 'react';
 import { usePreferences } from '../lib/preferences';
 import { useLearned } from '../lib/learned';
@@ -20,22 +21,34 @@ const fields = [
 ] as const;
 type SearchField = (typeof fields)[number][0];
 type SearchEntry = { id: string; fields: Record<SearchField, string[]> };
-const difficulty: Record<string, string> = {
-  beginner: '初级',
-  intermediate: '中级',
-  advanced: '高级',
-};
+
 export default function Catalog({
   summaries,
   languages = [],
   base,
   initialFavoritesOnly = false,
+  locale = 'zh',
 }: {
   summaries: Summary[];
   languages?: { id: string; name: string }[];
   base: string;
   initialFavoritesOnly?: boolean;
+  locale?: Locale;
 }) {
+  const difficulty: Record<string, string> = {
+    beginner: text(locale, '初级', 'Beginner'),
+    intermediate: text(locale, '中级', 'Intermediate'),
+    advanced: text(locale, '高级', 'Advanced'),
+  };
+  const fieldLabels: Record<SearchField, string> = {
+    title: text(locale, '标题', 'Title'),
+    description: text(locale, '描述', 'Description'),
+    category: text(locale, '分类', 'Category'),
+    tags: text(locale, '标签', 'Tags'),
+    languages: text(locale, '语言', 'Languages'),
+    code: text(locale, '代码', 'Code'),
+    explanation: text(locale, '说明', 'Explanation'),
+  };
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [sort, setSort] = useState<Sort>('original');
@@ -93,7 +106,7 @@ export default function Catalog({
               value.toLocaleLowerCase().includes(term)
             )
           )
-          .map(([, label]) => label)
+          .map(([field]) => fieldLabels[field])
       : [];
   };
   const results = filterSummaries(summaries, filters, sort).filter(
@@ -117,7 +130,7 @@ export default function Catalog({
   const groups: [keyof Filters, string, { id: string; name: string }[]][] = [
     [
       'categories',
-      '分类',
+      text(locale, '分类', 'Category'),
       [...new Set(summaries.map((item) => item.category))].map((id) => ({
         id,
         name: id,
@@ -125,7 +138,7 @@ export default function Catalog({
     ],
     [
       'paradigms',
-      '范式',
+      text(locale, '范式', 'Paradigm'),
       [...new Set(summaries.flatMap((item) => item.paradigms))].map((id) => ({
         id,
         name: id,
@@ -133,12 +146,12 @@ export default function Catalog({
     ],
     [
       'difficulty',
-      '难度',
+      text(locale, '难度', 'Difficulty'),
       Object.entries(difficulty).map(([id, name]) => ({ id, name })),
     ],
     [
       'languages',
-      '语言',
+      text(locale, '语言', 'Languages'),
       [...new Set(summaries.flatMap((item) => item.languageIds))].map((id) => ({
         id,
         name: languageName(id),
@@ -154,13 +167,13 @@ export default function Catalog({
     }));
   }
   return (
-    <section aria-label="习语目录">
+    <section aria-label={text(locale, '习语目录', 'Idiom catalog')}>
       <div className="toolbar">
         <input
           className="search"
           type="search"
-          aria-label="搜索习语"
-          placeholder="搜索特性、实现代码或语言…"
+          aria-label={text(locale, '搜索习语', 'Search idioms')}
+          placeholder={text(locale, '搜索特性、实现代码或语言…', 'Search features, code, or languages…')}
           value={query}
           onChange={(event) => {
             setError(false);
@@ -168,16 +181,16 @@ export default function Catalog({
           }}
         />
         <label>
-          排序{' '}
+          {text(locale, '排序', 'Sort')}{' '}
           <select
-            aria-label="排序"
+            aria-label={text(locale, '排序', 'Sort')}
             value={sort}
             onChange={(event) => setSort(event.target.value as Sort)}
           >
-            <option value="original">原始顺序</option>
-            <option value="title">名称</option>
-            <option value="difficulty">难度由低到高</option>
-            <option value="implementations">实现数量</option>
+            <option value="original">{text(locale, '原始顺序', 'Original order')}</option>
+            <option value="title">{text(locale, '名称', 'Name')}</option>
+            <option value="difficulty">{text(locale, '难度由低到高', 'Difficulty: easy to hard')}</option>
+            <option value="implementations">{text(locale, '实现数量', 'Implementation count')}</option>
           </select>
         </label>
         <button
@@ -185,7 +198,7 @@ export default function Catalog({
           aria-pressed={initialFavoritesOnly || favoritesOnly}
           onClick={() => setFavoritesOnly(!favoritesOnly)}
         >
-          只看收藏
+          {text(locale, '只看收藏', 'Favorites only')}
         </button>
         <button
           onClick={() => {
@@ -197,15 +210,15 @@ export default function Catalog({
             setError(false);
           }}
         >
-          重置
+          {text(locale, '重置', 'Reset')}
         </button>
       </div>
-      <div className="learning-filter" role="group" aria-label="学习状态">
+      <div className="learning-filter" role="group" aria-label={text(locale, '学习状态', 'Learning status')}>
         {(
           [
-            ['all', '全部'],
-            ['unlearned', '未学会'],
-            ['learned', '已学会'],
+            ['all', text(locale, '全部', 'All')],
+            ['unlearned', text(locale, '未学会', 'Not learned')],
+            ['learned', text(locale, '已学会', 'Learned')],
           ] as const
         ).map(([id, label]) => (
           <button
@@ -218,16 +231,16 @@ export default function Catalog({
           </button>
         ))}
         <span>
-          本目录已学会{' '}
+          {text(locale, '本目录已学会', 'Learned in this catalog')}{' '}
           {summaries.filter((item) => learned.includes(item.id)).length} /{' '}
           {summaries.length}
         </span>
       </div>
-      <LearnedNotice />
+      <LearnedNotice locale={locale} />
       <details className="filter-panel">
-        <summary>筛选条件（{Object.values(filters).flat().length}）</summary>
+        <summary>{text(locale, `筛选条件（${Object.values(filters).flat().length}）`, `Filters (${Object.values(filters).flat().length})`)}</summary>
         <p>
-          同组多选满足任一项，不同组同时满足。语言筛选表示已收录实现，不表示语言支持边界。
+          {text(locale, '同组多选满足任一项，不同组同时满足。语言筛选表示已收录实现，不表示语言支持边界。', 'Match any option within a group and all selected groups. Language filters reflect included implementations, not language capability limits.')}
         </p>
         <div className="filter-groups">
           {groups.map(([key, title, options]) => (
@@ -248,12 +261,12 @@ export default function Catalog({
         </div>
       </details>
       {!!Object.values(filters).flat().length && (
-        <div className="active-filters" aria-label="已选条件">
+        <div className="active-filters" aria-label={text(locale, '已选条件', 'Active filters')}>
           {groups.flatMap(([key, title, options]) =>
             filters[key].map((value) => (
               <button
                 key={`${key}:${value}`}
-                aria-label={`移除${title}：${options.find((option) => option.id === value)?.name || value}`}
+                aria-label={`${text(locale, '移除', 'Remove ')}${title}: ${options.find((option) => option.id === value)?.name || value}`}
                 onClick={() => toggle(key, value)}
               >
                 {options.find((option) => option.id === value)?.name || value} ×
@@ -263,46 +276,46 @@ export default function Catalog({
         </div>
       )}
       {term && !index && !error && (
-        <p role="status">正在加载代码搜索索引，先显示摘要匹配…</p>
+        <p role="status">{text(locale, '正在加载代码搜索索引，先显示摘要匹配…', 'Loading code search. Showing summary matches for now…')}</p>
       )}
       {term && error && (
         <p role="alert">
-          代码搜索暂不可用，当前仅匹配摘要。
+          {text(locale, '代码搜索暂不可用，当前仅匹配摘要。', 'Code search is temporarily unavailable. Only summaries are being matched.')}
           <button
             onClick={() => {
               setError(false);
               setRetry((value) => value + 1);
             }}
           >
-            重试
+            {text(locale, '重试', 'Retry')}
           </button>
         </p>
       )}
-      <p role="status">{results.length} 个习语</p>
-      <div className="catalog" role="list" aria-label="编程习语列表">
+      <p role="status">{text(locale, `${results.length} 个习语`, `${results.length} idioms`)}</p>
+      <div className="catalog" role="list" aria-label={text(locale, '编程习语列表', 'Programming idioms')}>
         {results.map((item) => (
           <article className="card" role="listitem" key={item.id}>
             <h2>
               <a href={`${base}/idiom/${encodeURIComponent(item.id)}/`}>
                 {item.title}
                 {favorites.includes(item.id) && (
-                  <span aria-label="已收藏"> ★</span>
+                  <span aria-label={text(locale, '已收藏', 'Favorited')}> ★</span>
                 )}
               </a>
             </h2>
-            <LearnedButton id={item.id} title={item.title} />
+            <LearnedButton id={item.id} title={item.title} locale={locale} />
             <p>{item.description}</p>
             {term && (
-              <p aria-label="搜索命中">
+              <p aria-label={text(locale, '搜索命中', 'Search matches')}>
                 {index
-                  ? `命中：${matchingLabels(item.id).join('、')}`
-                  : '摘要匹配'}
+                  ? `${text(locale, '命中：', 'Matches: ')}${matchingLabels(item.id).join(locale === 'zh' ? '、' : ', ')}`
+                  : text(locale, '摘要匹配', 'Summary match')}
               </p>
             )}
             <div className="metadata">
               <span className="badge">{item.category}</span>
               <span className="badge">{difficulty[item.difficulty]}</span>
-              <span className="badge">{item.languageIds.length} 种实现</span>
+              <span className="badge">{text(locale, `${item.languageIds.length} 种实现`, `${item.languageIds.length} implementations`)}</span>
               {item.languageIds.map((id) => (
                 <span className="badge" key={id}>
                   {languageName(id)}
@@ -318,7 +331,7 @@ export default function Catalog({
         ))}
       </div>
       {!results.length && (
-        <p className="notice">没有匹配结果。试试清空条件，或换一个关键词。</p>
+        <p className="notice">{text(locale, '没有匹配结果。试试清空条件，或换一个关键词。', 'No matches. Clear the filters or try another keyword.')}</p>
       )}
     </section>
   );

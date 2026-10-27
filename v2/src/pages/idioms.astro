@@ -1,14 +1,4 @@
 ---
-import Layout from '../layouts/Layout.astro';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import Page from '../templates/CollectionPage.astro';
 ---
-<Layout title="全部习语"><h1>全部习语</h1><p>习语目录已移至首页。</p><a id="idioms-home" class="button-link" href={`${base}/`}>进入习语目录</a><noscript><p>请使用上方链接继续浏览。</p></noscript></Layout>
-<script>
-  const link = document.getElementById('idioms-home');
-  if (link instanceof HTMLAnchorElement) {
-    const target = new URL(link.href);
-    target.search = window.location.search;
-    target.hash = window.location.hash;
-    window.location.replace(target.href);
-  }
-</script>
+<Page kind="idioms" />

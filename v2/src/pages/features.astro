@@ -1,13 +1,4 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import FeatureCatalog from '../components/FeatureCatalog';
-import { features, featureSummaries } from '../lib/feature-content';
-import { languages } from '../lib/content';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import Page from '../templates/IndexPage.astro';
 ---
-<Layout title="语言特性地图" description="从共同概念出发，对照12种语言的机制、差异和官方文档。">
-  <section class="intro"><p class="eyebrow">LANGUAGE FEATURE MAP</p><h1>把语言特性放在一起理解。</h1><p>先选一个概念，再选择多门语言对照。原生机制、惯用替代和不适用会分别说明；没有收录绝不等于语言不支持。</p></section>
-  <details class="card"><summary>标签怎么理解？本轮读了哪些资料？</summary><p>比较范围是本站现有的12门语言，不是世界上所有语言。“跨语言通用”指本轮已逐门整理的共同编程概念，不表示语义相同；“部分语言共有”指具体原生机制只覆盖其中一部分，其余列出替代或边界。“语言特色”是重点讲解某门语言的惯用机制，不是“全球独有”。</p><p>本批按指定章节核对了12门语言，并非读完全部手册；资料记录基线不等于当前最新版本。代码为独立编写的说明性片段，不是在线执行结果，也不保证可脱离上下文直接编译。</p><ul>{languages.map(language => { const entry = features.flatMap(feature => feature.entries).find(item => item.languageId === language.id); return <li><a href={`${base}/language/${language.id}/`}>{language.name}</a>：{entry?.baseline}；可在各详情的逐语言来源中查看本次核对章节。</li>; })}</ul></details>
-  <FeatureCatalog features={featureSummaries} languages={languages} base={base} client:load />
-  <noscript><ul>{features.map(feature => <li><a href={`${base}/feature/${feature.id}/`}>{feature.title}</a></li>)}</ul></noscript>
-</Layout>
+<Page />

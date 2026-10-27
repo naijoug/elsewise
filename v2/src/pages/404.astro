@@ -1,5 +1,9 @@
 ---
-import Layout from '../layouts/Layout.astro';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import Page from '../templates/NotFoundPage.astro';
 ---
-<Layout title="页面未找到"><section class="intro"><p class="eyebrow">404</p><h1>这个页面暂时找不到。</h1><p>链接可能已经变更。你可以返回习语目录，或从语言开始探索。</p><div class="actions"><a class="button-link" href={`${base}/`}>浏览习语</a><a class="button-link" href={`${base}/languages/`}>浏览语言</a></div></section></Layout>
+<Page />
+<script>
+// Pages serves this same fallback for unknown routes. Keep an English URL in English.
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+if(window.location.pathname.startsWith(`${base}/en/`)) window.location.replace(`${base}/en/404/`);
+</script>

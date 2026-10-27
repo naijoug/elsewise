@@ -1,29 +1,7 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import DetailControls from '../../components/DetailControls';
-import CopyCode from '../../components/CopyCode';
-import { features } from '../../lib/feature-content';
-import { languages, idioms, highlight } from '../../lib/content';
-import { featureKey, scopeLabels, statusLabels } from '../../lib/features';
-export function getStaticPaths() { return features.map(feature => ({ params: { id: feature.id }, props: { feature } })); }
-const { feature } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const options = feature.entries.map(entry => ({ id: entry.languageId, name: languages.find(language => language.id === entry.languageId)!.name }));
+import Page from '../../templates/DocumentPage.astro';
+import {features} from '../../lib/feature-content';
+export function getStaticPaths() { return features.map(item=>({params:{id:item.id}})); }
+const {id}=Astro.params;
 ---
-<Layout title={feature.title} description={feature.description}>
-  <a class="back-link" href={`${base}/features/`}>← 语言特性地图</a>
-  <section class="intro"><p class="eyebrow">一个概念 · 不同机制</p><h1>{feature.title}</h1><p>{feature.description}</p><div class="badges"><a class="badge" href={`${base}/features/`}>{scopeLabels[feature.scope]}</a>{feature.tags.map(tag => <span class="badge">{tag}</span>)}</div><p class="notice">{feature.scopeNote}</p></section>
-  <DetailControls idiomId={featureKey(feature.id)} subject="特性" options={options} client:load />
-  <p class="notice">以下版本是本条资料的适用基线，不代表最新版本。示例为说明性代码片段，未在页面运行。未列出的语言为尚未收录，不据此判断支持情况。</p>
-  <div class="code-grid" data-code-grid>{feature.entries.map(entry => {
-    const language = languages.find(item => item.id === entry.languageId)!;
-    const codeId = `feature-code-${feature.id}-${language.id}`;
-    return <article class="implementation" data-language-card={language.id} aria-labelledby={`heading-${language.id}`}>
-      <header class="implementation-header"><div><h2 id={`heading-${language.id}`}><a href={`${base}/language/${language.id}/`}>{language.name}</a></h2><span class="badge">{statusLabels[entry.status]}</span></div>{entry.code && <CopyCode targetId={codeId} client:load />}</header>
-      <div class="implementation-body"><p class="muted">资料基线：{entry.baseline}</p><p>{entry.summary}</p><p class="muted">{entry.versionNotes}</p></div>
-      {entry.code && <pre tabindex="0" aria-label={`${language.name} 特性示例`}><code id={codeId} class={`language-${language.id}`} set:html={highlight(entry.code, language.id)} /></pre>}
-      <div class="implementation-body"><h3>文档依据与核查章节</h3><ul>{entry.sources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title} ↗<span class="sr-only">（新窗口）</span></a><p class="muted">{source.section} · 核查 {source.checkedAt}</p></li>)}</ul></div>
-    </article>;
-  })}</div>
-  <section class="feature-related"><h2>关联着看</h2><p class="muted">这些是有助于理解的相关概念，不表示机制等同或相互包含。</p><div class="chips">{feature.related.map(id => <a class="button-link" href={`${base}/feature/${id}/`}>{features.find(item => item.id === id)!.title}</a>)}{feature.idiomIds.map(id => <a class="button-link" href={`${base}/idiom/${id}/`}>习语：{idioms.find(item => item.id === id)!.title}</a>)}</div></section>
-</Layout>
+<Page id={id!}  />

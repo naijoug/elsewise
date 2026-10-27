@@ -1,0 +1,1900 @@
+{
+  "idioms": {
+    "array-map": {
+      "title": "Array mapping",
+      "description": "Transform each array element with a function to produce a new array.",
+      "category": "Data processing",
+      "tags": [
+        "Arrays",
+        "Transformation",
+        "Higher-order functions"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use the built-in map method to transform an array.",
+          "output": "[2, 4, 6, 8, 10]",
+          "designRationale": "JavaScript's map method is central to functional programming, returning a new array without modifying the original.",
+          "pros": [
+            "Concise",
+            "Immutability",
+            "Method chaining"
+          ],
+          "references": [
+            {
+              "title": "Array.prototype.map()",
+              "url": "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map"
+            }
+          ]
+        },
+        "python": {
+          "explanation": "Use a list comprehension to transform an array.",
+          "output": "[2, 4, 6, 8, 10]",
+          "designRationale": "Python list comprehensions are the most Pythonic approach and are more intuitive than map.",
+          "pros": [
+            "Readable",
+            "Good performance",
+            "Concise"
+          ]
+        },
+        "go": {
+          "explanation": "Go has no built-in map function; implement the transformation explicitly with a for loop.",
+          "output": "[2 4 6 8 10]",
+          "designRationale": "Go emphasizes explicitness and simplicity, avoiding excessive abstraction.",
+          "pros": [
+            "High performance",
+            "Clear code"
+          ],
+          "cons": [
+            "Longer code",
+            "Requires manual management"
+          ]
+        },
+        "rust": {
+          "explanation": "Use the iterator map method and collect to gather the results.",
+          "output": "[2, 4, 6, 8, 10]",
+          "designRationale": "Rust iterators are zero-cost abstractions, with the same compiled performance as handwritten loops.",
+          "pros": [
+            "Zero-cost abstraction",
+            "Type safety",
+            "Lazy evaluation"
+          ]
+        },
+        "ruby": {
+          "explanation": "Use map with a block to transform the elements.",
+          "output": "[2, 4, 6, 8, 10]",
+          "designRationale": "Ruby block syntax makes higher-order function calls natural and elegant.",
+          "pros": [
+            "Elegant syntax",
+            "Concise",
+            "Expressive"
+          ]
+        },
+        "php": {
+          "explanation": "Use the built-in array_map function with an arrow function to transform an array.",
+          "output": "Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )",
+          "designRationale": "Arrow functions in PHP 7.4+ make callbacks more compact; array_map returns a new array without modifying the original.",
+          "pros": [
+            "Built-in higher-order functions",
+            "Preserves keys for a single array",
+            "Compact syntax"
+          ],
+          "references": [
+            {
+              "title": "array_map - PHP Manual",
+              "url": "https://www.php.net/manual/en/function.array-map.php"
+            }
+          ]
+        },
+        "cpp": {
+          "explanation": "Use std::transform with a lambda to map each element of a container.",
+          "output": "2 4 6 8 10",
+          "designRationale": "STL algorithms with lambdas are the modern approach since C++11 and allow extensive compiler optimization.",
+          "pros": [
+            "Zero-cost abstraction",
+            "Type safety",
+            "Works with any container or iterator"
+          ],
+          "cons": [
+            "Requires preallocating the target container or using back_inserter"
+          ],
+          "references": [
+            {
+              "title": "std::transform - cppreference",
+              "url": "https://en.cppreference.com/w/cpp/algorithm/transform"
+            }
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "error-handling": {
+      "title": "Error handling",
+      "description": "Handle operations that may fail and make callers explicitly address failure paths.",
+      "category": "Error handling",
+      "tags": [
+        "Errors",
+        "Exceptions",
+        "Result"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "JavaScript commonly uses try/catch to catch exceptions thrown synchronously or within async/await.",
+          "designRationale": "The exception model keeps the normal path short, but failures must be handled explicitly at call boundaries.",
+          "pros": [
+            "Consistent syntax",
+            "Works well with async/await"
+          ],
+          "cons": [
+            "Error types can become implicit"
+          ]
+        },
+        "go": {
+          "explanation": "Go returns error as an ordinary value; callers must check it explicitly and preserve context.",
+          "designRationale": "Explicit error returns put failure paths in the control flow, emphasizing readability and contextual wrapping.",
+          "pros": [
+            "Clear control flow",
+            "Easy accumulation of error context"
+          ],
+          "cons": [
+            "More boilerplate"
+          ]
+        },
+        "rust": {
+          "explanation": "Rust uses Result<T, E> to represent success values and failure reasons in the type system; ? propagates errors.",
+          "designRationale": "Result exposes potentially failing functions in their signatures, so callers cannot ignore the failure branch.",
+          "pros": [
+            "Compile-time enforcement",
+            "Clear success and failure states"
+          ]
+        },
+        "java": {
+          "explanation": "Java represents failures with exceptions, releases resources with try-with-resources, and exposes failure boundaries with throws.",
+          "designRationale": "Checked exceptions bring some failure paths into method signatures, while resource-management syntax reduces missed close operations.",
+          "pros": [
+            "Clear exception hierarchy",
+            "Automatic resource management"
+          ],
+          "cons": [
+            "More boilerplate"
+          ]
+        },
+        "php": {
+          "explanation": "PHP uses throw and try/catch to express exceptional paths; typed exceptions allow precise catching.",
+          "output": "divisor cannot be zero",
+          "designRationale": "Throwing exceptions for unrecoverable situations or violated preconditions avoids mixing success and failure in return values.",
+          "pros": [
+            "Explicit call boundaries",
+            "Handling by exception type"
+          ]
+        }
+      },
+      "paradigms": [
+        "Procedural",
+        "Functional"
+      ]
+    },
+    "string-interpolation": {
+      "title": "String interpolation",
+      "description": "Embed variable or expression values in strings without sacrificing readability through scattered concatenation.",
+      "category": "String processing",
+      "tags": [
+        "Strings",
+        "Formatting",
+        "Templates"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "JavaScript uses template literals and ${...} to embed variables or expressions.",
+          "output": "Hello, Alice! You are 30 years old.",
+          "designRationale": "Template literals put text and expressions in one literal, making them more suitable than concatenation for text with multiple variables.",
+          "pros": [
+            "Readable",
+            "Multiline string support"
+          ],
+          "references": [
+            {
+              "title": "Template literals - MDN",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals"
+            }
+          ]
+        },
+        "python": {
+          "explanation": "Python uses f-strings to embed variables and expressions in strings.",
+          "output": "Hello, Alice! You are 30 years old.",
+          "designRationale": "f-strings are the most direct string-formatting approach in Python 3, with clear expression placement.",
+          "pros": [
+            "Concise",
+            "Direct expression evaluation"
+          ],
+          "references": [
+            {
+              "title": "Formatted string literals - Python Docs",
+              "url": "https://docs.python.org/3/reference/lexical_analysis.html#f-strings"
+            }
+          ]
+        },
+        "go": {
+          "explanation": "Go has no built-in string interpolation syntax; fmt.Sprintf is commonly used for formatting.",
+          "output": "Hello, Alice! You are 30 years old.",
+          "designRationale": "Go chooses explicit formatting functions to clarify formatting controls and their correspondence with parameter types.",
+          "pros": [
+            "Explicit formatting control",
+            "Built into the standard library"
+          ],
+          "cons": [
+            "Placeholder and argument order must be kept in sync manually"
+          ]
+        },
+        "swift": {
+          "explanation": "Swift uses \\(...) to insert variables or expressions into strings.",
+          "output": "Hello, Alice! You are 30 years old.",
+          "designRationale": "Swift interpolation combines with strongly typed expressions to keep UI text and debugging output readable.",
+          "pros": [
+            "Intuitive syntax",
+            "Supports arbitrary expressions"
+          ]
+        }
+      },
+      "paradigms": [
+        "Procedural"
+      ]
+    },
+    "array-filter": {
+      "title": "Array filtering",
+      "description": "Filter array elements by a condition and return a new array of matching elements.",
+      "category": "Data processing",
+      "tags": [
+        "Arrays",
+        "Filtering",
+        "Higher-order functions"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use filter to select even numbers.",
+          "output": "[2, 4, 6]",
+          "designRationale": "filter returns a new array and preserves the original, following functional programming principles.",
+          "pros": [
+            "Concise",
+            "Immutability",
+            "Chainable"
+          ]
+        },
+        "python": {
+          "explanation": "Use a list comprehension with a conditional expression to filter elements.",
+          "output": "[2, 4, 6]",
+          "designRationale": "List comprehensions are Python's most idiomatic filtering approach.",
+          "pros": [
+            "Readable",
+            "Excellent performance",
+            "Concise"
+          ]
+        },
+        "rust": {
+          "explanation": "Use the iterator filter method to select elements.",
+          "output": "[2, 4, 6]",
+          "designRationale": "Rust iterators provide zero-cost abstractions, with the same compiled performance as handwritten loops.",
+          "pros": [
+            "Zero-cost abstraction",
+            "Type safety",
+            "Lazy evaluation"
+          ]
+        },
+        "kotlin": {
+          "explanation": "Use the higher-order filter function with a lambda expression.",
+          "output": "[2, 4, 6]",
+          "designRationale": "Kotlin collection operators are concise and type-safe.",
+          "pros": [
+            "Concise",
+            "Type safety",
+            "Expressive"
+          ]
+        },
+        "php": {
+          "explanation": "array_filter selects elements by a predicate; array_values resets numeric indices.",
+          "output": "Array ( [0] => 2 [1] => 4 [2] => 6 )",
+          "designRationale": "array_filter preserves original keys by default; combine it with array_values when contiguous indices are needed.",
+          "pros": [
+            "Clear semantics",
+            "Supports complex predicates"
+          ],
+          "cons": [
+            "Preserving keys by default can cause surprises"
+          ]
+        },
+        "cpp": {
+          "explanation": "Use std::copy_if with back_inserter to append matching elements to the target container.",
+          "output": "2 4 6 ",
+          "designRationale": "C++20 ranges also allow numbers | views::filter(...), a more declarative form.",
+          "pros": [
+            "Consistent with STL generic algorithms",
+            "Efficient"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "pattern-matching": {
+      "title": "Pattern matching",
+      "description": "Branch on the structure and contents of a value.",
+      "category": "Control flow",
+      "tags": [
+        "Patterns",
+        "Matching",
+        "Branching"
+      ],
+      "implementations": {
+        "rust": {
+          "explanation": "Use a match expression to pattern-match an enum.",
+          "code": "enum Message {\n    Quit,\n    Move { x: i32, y: i32 },\n    Write(String),\n}\n\nfn process(msg: Message) {\n    match msg {\n        Message::Quit => println!(\"Quit\"),\n        Message::Move { x, y } => println!(\"Move to ({}, {})\", x, y),\n        Message::Write(text) => println!(\"Write: {}\", text),\n    }\n}",
+          "designRationale": "Rust pattern matching is exhaustive; the compiler ensures all cases are handled.",
+          "pros": [
+            "Type safety",
+            "Exhaustiveness checking",
+            "Expressive"
+          ]
+        },
+        "swift": {
+          "explanation": "Use a switch statement to pattern-match an enum.",
+          "code": "enum Message {\n    case quit\n    case move(x: Int, y: Int)\n    case write(String)\n}\n\nfunc process(_ msg: Message) {\n    switch msg {\n    case .quit:\n        print(\"Quit\")\n    case .move(let x, let y):\n        print(\"Move to (\\(x), \\(y))\")\n    case .write(let text):\n        print(\"Write: \\(text)\")\n    }\n}",
+          "designRationale": "Swift switch must cover all cases, providing compile-time safety guarantees.",
+          "pros": [
+            "Type safety",
+            "Exhaustiveness checking",
+            "Clear syntax"
+          ]
+        },
+        "python": {
+          "explanation": "Python 3.10+ supports structural pattern matching.",
+          "code": "from dataclasses import dataclass\nfrom typing import Union\n\n@dataclass\nclass Quit: pass\n\n@dataclass\nclass Move:\n    x: int\n    y: int\n\n@dataclass\nclass Write:\n    text: str\n\nMessage = Union[Quit, Move, Write]\n\ndef process(msg: Message):\n    match msg:\n        case Quit():\n            print(\"Quit\")\n        case Move(x, y):\n            print(f\"Move to ({x}, {y})\")\n        case Write(text):\n            print(f\"Write: {text}\")",
+          "designRationale": "Python pattern matching provides more powerful branching.",
+          "pros": [
+            "Expressive",
+            "Readable",
+            "Supports complex patterns"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "null-safety": {
+      "title": "Null safety",
+      "description": "Safely handle potentially absent values to avoid null pointer exceptions.",
+      "category": "Type system",
+      "tags": [
+        "Null",
+        "Option",
+        "Maybe"
+      ],
+      "implementations": {
+        "rust": {
+          "explanation": "Use Option to explicitly represent a value that may be absent.",
+          "code": "fn find_user(id: u32) -> Option<String> {\n    if id == 1 {\n        Some(String::from(\"Alice\"))\n    } else {\n        None\n    }\n}\n\nfn main() {\n    match find_user(1) {\n        Some(name) => println!(\"User found: {}\", name),\n        None => println!(\"User not found\"),\n    }\n}",
+          "designRationale": "Rust has no null; Option requires handling the absent-value case.",
+          "pros": [
+            "Compile-time checking",
+            "No null pointer exceptions",
+            "Type safety"
+          ]
+        },
+        "kotlin": {
+          "explanation": "Use nullable types and the safe-call operator.",
+          "code": "fun findUser(id: Int): String? {\n    return if (id == 1) \"Alice\" else null\n}\n\nfun main() {\n    val user = findUser(1)\n    println(user?.uppercase() ?: \"User not found\")\n}",
+          "designRationale": "Kotlin's type system distinguishes nullable and non-nullable types, providing compile-time null safety.",
+          "pros": [
+            "Type safety",
+            "Concise syntax",
+            "Compile-time checking"
+          ]
+        },
+        "swift": {
+          "explanation": "Use Optional and if let binding.",
+          "code": "func findUser(id: Int) -> String? {\n    return id == 1 ? \"Alice\" : nil\n}\n\nif let user = findUser(1) {\n    print(\"User found: \\(user)\")\n} else {\n    print(\"User not found\")\n}",
+          "designRationale": "Swift's Optional type provides compile-time null-safety guarantees.",
+          "pros": [
+            "Type safety",
+            "Compile-time checking",
+            "Clear syntax"
+          ]
+        },
+        "typescript": {
+          "explanation": "Use a union type to represent a value that may be null.",
+          "code": "function findUser(id: number): string | null {\n  return id === 1 ? 'Alice' : null;\n}\n\nconst user = findUser(1);\nif (user !== null) {\n  console.log(`User found: ${user}`);\n} else {\n  console.log('User not found');\n}",
+          "designRationale": "TypeScript's strict null-checking mode provides compile-time null safety.",
+          "pros": [
+            "Type checking",
+            "Gradual adoption",
+            "JavaScript compatibility"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "async-await": {
+      "title": "Async/await",
+      "description": "Express asynchronous flows in a form close to sequential code, avoiding deeply nested callbacks.",
+      "category": "Asynchronous programming",
+      "tags": [
+        "async",
+        "await",
+        "Asynchronous"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "JavaScript uses async to declare a function returning a Promise and await to pause until the Promise settles.",
+          "designRationale": "async/await rewrites Promise chains into control structures closer to synchronous flows.",
+          "pros": [
+            "Readable",
+            "try/catch can handle await failures"
+          ]
+        },
+        "python": {
+          "explanation": "Python uses async def to define a coroutine and await to wait for another coroutine or awaitable to complete.",
+          "output": "{'id': 'u1'}",
+          "designRationale": "asyncio lets high-latency I/O share an event loop; asyncio.run connects it to synchronous code at the entry point.",
+          "pros": [
+            "Suitable for highly concurrent I/O",
+            "Control flow resembles synchronous code"
+          ],
+          "cons": [
+            "Cannot freely nest asyncio.run within an existing event loop"
+          ]
+        },
+        "csharp": {
+          "explanation": "C# uses async Task<T> to express an asynchronous return value and await to wait for the Task to complete.",
+          "designRationale": "The Task model gives asynchronous operations types; async/await combines naturally with exception propagation and generic return values.",
+          "pros": [
+            "Explicit return type",
+            "Deep integration with .NET asynchronous libraries"
+          ]
+        },
+        "swift": {
+          "explanation": "Swift uses async throws to mark functions that are asynchronous and may fail; try await expresses both waiting and error propagation.",
+          "designRationale": "Swift puts both asynchrony and errors in function signatures, making waiting and failure points clear to callers.",
+          "pros": [
+            "Explicit suspension points",
+            "Combines naturally with throws error handling"
+          ]
+        }
+      },
+      "paradigms": [
+        "Concurrent",
+        "Event-driven"
+      ]
+    },
+    "destructuring": {
+      "title": "Destructuring assignment",
+      "description": "Extract values from arrays or objects and assign them to variables.",
+      "category": "Syntax features",
+      "tags": [
+        "Destructuring",
+        "Assignment",
+        "Patterns"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use object and array destructuring syntax.",
+          "output": "Alice 30\n1 2 [3, 4, 5]",
+          "designRationale": "Destructuring makes code more concise and avoids repeated property access.",
+          "pros": [
+            "Concise",
+            "Readable",
+            "Supports default values"
+          ]
+        },
+        "python": {
+          "explanation": "Use tuple unpacking and extended unpacking.",
+          "output": "Alice 30\n1 2 [3, 4, 5]",
+          "designRationale": "Python unpacking syntax is concise and intuitive, and is a core language feature.",
+          "pros": [
+            "Concise",
+            "Natural",
+            "Supports extended unpacking"
+          ]
+        },
+        "rust": {
+          "explanation": "Use struct and slice pattern matching.",
+          "designRationale": "Rust pattern matching provides powerful destructuring.",
+          "pros": [
+            "Type safety",
+            "Exhaustiveness checking",
+            "Expressive"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "closure": {
+      "title": "Closures",
+      "description": "Create anonymous functions that can capture outer variables.",
+      "category": "Functional programming",
+      "tags": [
+        "Closures",
+        "Higher-order functions",
+        "Scope"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "A closure captures the outer count variable to create private state.",
+          "output": "1\n2",
+          "designRationale": "JavaScript closures are a core mechanism for data encapsulation and modularity.",
+          "pros": [
+            "Data encapsulation",
+            "State retention",
+            "Flexible"
+          ]
+        },
+        "python": {
+          "explanation": "Use nonlocal to modify an outer variable.",
+          "output": "1\n2",
+          "designRationale": "Python closures need a nonlocal declaration to modify outer variables.",
+          "pros": [
+            "Concise",
+            "Flexible",
+            "Supports decorators"
+          ]
+        },
+        "rust": {
+          "explanation": "Use move to transfer ownership into the closure.",
+          "designRationale": "Rust closures follow ownership rules to ensure memory safety.",
+          "pros": [
+            "Memory safety",
+            "Zero-cost abstraction",
+            "Type inference"
+          ]
+        },
+        "swift": {
+          "explanation": "Closures automatically capture outer variables.",
+          "output": "1\n2",
+          "designRationale": "Swift closures have concise syntax and automatically manage captured variables.",
+          "pros": [
+            "Concise",
+            "Automatic memory management",
+            "Type safety"
+          ]
+        },
+        "php": {
+          "explanation": "PHP closures explicitly capture outer variables with use; & captures by reference.",
+          "output": "1 2 3",
+          "designRationale": "Explicit use clarifies capture semantics and avoids unintentionally carrying extensive context.",
+          "pros": [
+            "Explicit capture semantics",
+            "Closure is a first-class object"
+          ],
+          "cons": [
+            "Slightly more verbose than JS/Python"
+          ]
+        },
+        "cpp": {
+          "explanation": "A lambda captures by value with [count]; mutable allows the captured copy to be modified.",
+          "output": "1 2 3",
+          "designRationale": "C++ lambdas explicitly control capture by value or reference to avoid dangling references.",
+          "pros": [
+            "Control over capture mode",
+            "Can be inlined by the compiler"
+          ],
+          "cons": [
+            "std::function incurs type-erasure overhead"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "iterator-pattern": {
+      "title": "Iterator pattern",
+      "description": "Traverse collection elements without exposing their internal representation.",
+      "category": "Design patterns",
+      "tags": [
+        "Iterators",
+        "Traversal",
+        "Collections"
+      ],
+      "implementations": {
+        "python": {
+          "explanation": "Implement __iter__ and __next__ to create an iterator.",
+          "output": "5\n4\n3\n2\n1",
+          "designRationale": "Python's iterator protocol allows objects to be used in for loops.",
+          "pros": [
+            "Memory efficient",
+            "Lazy evaluation",
+            "Consistent interface"
+          ]
+        },
+        "rust": {
+          "explanation": "Implement the Iterator trait.",
+          "output": "5\n4\n3\n2\n1",
+          "designRationale": "Rust iterators are zero-cost abstractions with a rich set of combinators.",
+          "pros": [
+            "Zero-cost abstraction",
+            "Type safety",
+            "Highly composable"
+          ]
+        },
+        "java": {
+          "explanation": "Implement the Iterable and Iterator interfaces.",
+          "designRationale": "Java's iterator pattern is central to its collections framework.",
+          "pros": [
+            "Type safety",
+            "Standard interface",
+            "Widely supported"
+          ]
+        },
+        "cpp": {
+          "explanation": "STL containers expose a common begin()/end() interface; range-for is syntactic sugar for it.",
+          "output": "1 2 3 4 5 \n1 2 3 4 5 ",
+          "designRationale": "Iterators are the core STL abstraction decoupling containers from algorithms.",
+          "pros": [
+            "Container-independent",
+            "Supports random-access, bidirectional, and forward categories"
+          ],
+          "references": [
+            {
+              "title": "Iterator library - cppreference",
+              "url": "https://en.cppreference.com/w/cpp/iterator"
+            }
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented",
+        "Functional"
+      ]
+    },
+    "decorator-pattern": {
+      "title": "Decorator pattern",
+      "description": "Dynamically add responsibilities or functionality to an object.",
+      "category": "Design patterns",
+      "tags": [
+        "Decorators",
+        "Metaprogramming",
+        "AOP"
+      ],
+      "implementations": {
+        "python": {
+          "explanation": "Apply a decorator with @ syntax.",
+          "output": "slow_function elapsed: 1.0001 seconds",
+          "code": "import time\n\ndef timing_decorator(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f\"{func.__name__} elapsed: {end - start:.4f} seconds\")\n        return result\n    return wrapper\n\n@timing_decorator\ndef slow_function():\n    time.sleep(1)\n    return \"Done\"\n\nslow_function()",
+          "designRationale": "Python decorators are syntactic sugar that makes code more concise and elegant.",
+          "pros": [
+            "Concise",
+            "Reusable",
+            "Does not intrude on original code"
+          ]
+        },
+        "typescript": {
+          "explanation": "Use TypeScript decorator syntax.",
+          "code": "function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function(...args: any[]) {\n    console.log(`Calling ${propertyKey}, arguments:`, args);\n    return originalMethod.apply(this, args);\n  };\n  return descriptor;\n}\n\nclass Calculator {\n  @log\n  add(a: number, b: number) {\n    return a + b;\n  }\n}",
+          "designRationale": "TypeScript decorators provide metaprogramming capabilities, commonly used in framework development.",
+          "pros": [
+            "Type safety",
+            "Metaprogramming",
+            "Framework support"
+          ]
+        },
+        "java": {
+          "explanation": "Implement a decorator by wrapping an object.",
+          "code": "// Implement a decorator using the proxy pattern\ninterface Service {\n    void execute();\n}\n\nclass RealService implements Service {\n    public void execute() {\n        System.out.println(\"Run service\");\n    }\n}\n\nclass LoggingDecorator implements Service {\n    private Service service;\n    \n    public LoggingDecorator(Service service) {\n        this.service = service;\n    }\n    \n    public void execute() {\n        System.out.println(\"Start execution\");\n        service.execute();\n        System.out.println(\"Execution complete\");\n    }\n}",
+          "designRationale": "Java uses interfaces and composition to implement the decorator pattern.",
+          "pros": [
+            "Flexible",
+            "Follows the open-closed principle",
+            "Type safety"
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented"
+      ]
+    },
+    "immutability": {
+      "title": "Immutability",
+      "description": "Create data structures that cannot be modified to avoid side effects.",
+      "category": "Functional programming",
+      "tags": [
+        "Immutable",
+        "Pure functions",
+        "Side effects"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use spread syntax to create new objects and arrays.",
+          "output": "{ name: 'Alice', age: 30 }\n{ name: 'Alice', age: 31 }\n[1, 2, 3]\n[1, 2, 3, 4]",
+          "designRationale": "Immutability makes code more predictable and easier to debug and test.",
+          "pros": [
+            "Predictability",
+            "Thread safety",
+            "Easy to debug"
+          ]
+        },
+        "rust": {
+          "explanation": "Rust is immutable by default; mut must be declared explicitly.",
+          "output": "[1, 2, 3]\n[1, 2, 3, 4]",
+          "designRationale": "Rust is immutable by default, encouraging safe programming practices.",
+          "pros": [
+            "Safe by default",
+            "Compile-time checking",
+            "Zero cost"
+          ]
+        },
+        "kotlin": {
+          "explanation": "Use the copy method of a data class to create a modified copy.",
+          "output": "Person(name=Alice, age=30)\nPerson(name=Alice, age=31)",
+          "designRationale": "Kotlin data classes provide convenient operations on immutable data.",
+          "pros": [
+            "Concise",
+            "Type safety",
+            "Built-in support"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "method-chaining": {
+      "title": "Method chaining",
+      "description": "Call multiple methods in sequence, with each method returning the object itself.",
+      "category": "Syntax features",
+      "tags": [
+        "Method chaining",
+        "Fluent API",
+        "Builder"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Array methods return new arrays, allowing method chaining.",
+          "output": "24",
+          "designRationale": "Method chaining clarifies data transformation flows and makes code more expressive.",
+          "pros": [
+            "Readable",
+            "Concise",
+            "Functional style"
+          ]
+        },
+        "python": {
+          "explanation": "Each method returns self to enable chaining.",
+          "output": "SELECT * FROM users WHERE age > 18",
+          "designRationale": "The Builder pattern constructs complex objects through method chaining.",
+          "pros": [
+            "Flexible",
+            "Readable",
+            "Easy to extend"
+          ]
+        },
+        "rust": {
+          "explanation": "Iterator methods return new iterators, allowing method chaining.",
+          "output": "24",
+          "designRationale": "Rust iterator chains are zero-cost abstractions.",
+          "pros": [
+            "Zero-cost abstraction",
+            "Type safety",
+            "Lazy evaluation"
+          ]
+        },
+        "php": {
+          "explanation": "Each method returns $this; a self type hint helps the IDE infer the return type correctly.",
+          "output": "SELECT * FROM users WHERE age > 18",
+          "designRationale": "Laravel's Eloquent / Query Builder exemplifies this pattern.",
+          "pros": [
+            "Fluent calls",
+            "Readable"
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented",
+        "Functional"
+      ]
+    },
+    "dependency-injection": {
+      "title": "Dependency injection",
+      "description": "Pass dependencies in from outside rather than creating them internally.",
+      "category": "Design patterns",
+      "tags": [
+        "Dependency injection",
+        "IoC",
+        "Decoupling"
+      ],
+      "implementations": {
+        "typescript": {
+          "explanation": "Inject dependencies through the constructor.",
+          "code": "interface Logger {\n  log(message: string): void;\n}\n\nclass ConsoleLogger implements Logger {\n  log(message: string) {\n    console.log(message);\n  }\n}\n\nclass UserService {\n  constructor(private logger: Logger) {}\n  \n  createUser(name: string) {\n    this.logger.log(`Create user: ${name}`);\n    // User creation logic\n  }\n}\n\nconst logger = new ConsoleLogger();\nconst userService = new UserService(logger);",
+          "designRationale": "Dependency injection makes code easier to test and maintain.",
+          "pros": [
+            "Testability",
+            "Decoupling",
+            "Flexible"
+          ]
+        },
+        "java": {
+          "explanation": "Inject dependencies through the constructor.",
+          "code": "public interface Logger {\n    void log(String message);\n}\n\npublic class ConsoleLogger implements Logger {\n    public void log(String message) {\n        System.out.println(message);\n    }\n}\n\npublic class UserService {\n    private final Logger logger;\n    \n    public UserService(Logger logger) {\n        this.logger = logger;\n    }\n    \n    public void createUser(String name) {\n        logger.log(\"Create user: \" + name);\n    }\n}",
+          "designRationale": "Java DI frameworks such as Spring widely use this pattern.",
+          "pros": [
+            "Testability",
+            "Decoupling",
+            "Framework support"
+          ]
+        },
+        "python": {
+          "explanation": "Inject dependencies through the constructor.",
+          "code": "from abc import ABC, abstractmethod\n\nclass Logger(ABC):\n    @abstractmethod\n    def log(self, message: str):\n        pass\n\nclass ConsoleLogger(Logger):\n    def log(self, message: str):\n        print(message)\n\nclass UserService:\n    def __init__(self, logger: Logger):\n        self.logger = logger\n    \n    def create_user(self, name: str):\n        self.logger.log(f\"Create user: {name}\")\n\nlogger = ConsoleLogger()\nuser_service = UserService(logger)",
+          "designRationale": "Python duck typing makes DI more flexible.",
+          "pros": [
+            "Flexible",
+            "Easy to test",
+            "Decoupling"
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented"
+      ]
+    },
+    "lazy-evaluation": {
+      "title": "Lazy evaluation",
+      "description": "Delay computation until its result is actually needed.",
+      "category": "Performance optimization",
+      "tags": [
+        "Lazy",
+        "Generators",
+        "Performance"
+      ],
+      "implementations": {
+        "python": {
+          "explanation": "Use a generator for lazy evaluation.",
+          "output": "0 1 1 2 3 5 8 13 21 34",
+          "designRationale": "Generators produce values on demand, saving memory.",
+          "pros": [
+            "Memory efficient",
+            "Supports infinite sequences",
+            "Good performance"
+          ]
+        },
+        "rust": {
+          "explanation": "Iterator chains are lazy and execute only when collect is called.",
+          "output": "[4, 16, 36, 64, 100]",
+          "designRationale": "Rust iterators are lazy by default, improving performance.",
+          "pros": [
+            "Zero-cost abstraction",
+            "Memory efficient",
+            "Composable"
+          ]
+        },
+        "javascript": {
+          "explanation": "Use a generator function for lazy evaluation.",
+          "output": "0\n1\n1\n2\n3\n5\n8\n13\n21\n34",
+          "designRationale": "Generator functions provide lazy computation.",
+          "pros": [
+            "Memory efficient",
+            "Supports infinite sequences",
+            "Pause and resume"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "builder-pattern": {
+      "title": "Builder pattern",
+      "description": "Build complex objects step by step using a fluent interface.",
+      "category": "Design patterns",
+      "tags": [
+        "Builder",
+        "Construction",
+        "Fluent API"
+      ],
+      "implementations": {
+        "java": {
+          "explanation": "Use an inner Builder class to construct immutable objects.",
+          "designRationale": "The Builder pattern suits objects with many optional parameters.",
+          "pros": [
+            "Readable",
+            "Immutability",
+            "Flexible"
+          ]
+        },
+        "rust": {
+          "explanation": "Use a Builder struct and method chaining.",
+          "designRationale": "Rust's Builder pattern uses the ownership system to ensure type safety.",
+          "pros": [
+            "Type safety",
+            "Zero cost",
+            "Expressive"
+          ]
+        },
+        "typescript": {
+          "explanation": "Use a Builder class and method chaining.",
+          "designRationale": "TypeScript's Builder pattern provides type-safe object construction.",
+          "pros": [
+            "Type safety",
+            "Readable",
+            "Flexible"
+          ]
+        },
+        "cpp": {
+          "explanation": "Return *this for chained configuration; build() && restricts the call to an rvalue context to ensure a single consumption.",
+          "output": "thin/tomato/cheese",
+          "designRationale": "C++ has no named parameters; Builder makes construction of multi-field objects more readable.",
+          "pros": [
+            "Avoids long parameter lists",
+            "Easy to enforce required fields"
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented"
+      ]
+    },
+    "memoization": {
+      "title": "Memoization",
+      "description": "Cache function results to avoid repeated computation.",
+      "category": "Performance optimization",
+      "tags": [
+        "Caching",
+        "Optimization",
+        "Dynamic programming"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use Map to cache function results.",
+          "output": "102334155",
+          "designRationale": "Memoization reduces exponential time complexity to linear.",
+          "pros": [
+            "Significant performance improvement",
+            "Transparent",
+            "Easy to implement"
+          ]
+        },
+        "python": {
+          "explanation": "Use the functools.lru_cache decorator.",
+          "output": "102334155",
+          "designRationale": "The Python standard library provides an efficient LRU cache implementation.",
+          "pros": [
+            "Built-in support",
+            "Simple",
+            "Efficient"
+          ]
+        },
+        "rust": {
+          "explanation": "Implement memoization with HashMap.",
+          "output": "102334155",
+          "designRationale": "Rust requires explicit cache management but provides zero-cost abstractions.",
+          "pros": [
+            "Type safety",
+            "Zero cost",
+            "Controllable"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "pipeline-pattern": {
+      "title": "Pipeline pattern",
+      "description": "Process data through a series of transformation functions.",
+      "category": "Functional programming",
+      "tags": [
+        "Pipelines",
+        "Composition",
+        "Data flow"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use reduce to implement a function pipeline.",
+          "output": "64",
+          "designRationale": "The pipeline pattern makes data transformation flows clear and readable.",
+          "pros": [
+            "Readable",
+            "Composable",
+            "Functional"
+          ]
+        },
+        "rust": {
+          "explanation": "Use trait extension methods to implement a pipeline.",
+          "output": "64",
+          "designRationale": "Rust's trait system supports elegant method chaining.",
+          "pros": [
+            "Type safety",
+            "Zero cost",
+            "Extensible"
+          ]
+        },
+        "python": {
+          "explanation": "Use reduce and lambda to implement a pipeline.",
+          "output": "64",
+          "designRationale": "Python's functional features support the pipeline pattern.",
+          "pros": [
+            "Concise",
+            "Flexible",
+            "Composable"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional"
+      ]
+    },
+    "observer-pattern": {
+      "title": "Observer pattern",
+      "description": "Define a one-to-many dependency between objects and notify all observers when an object changes state.",
+      "category": "Design patterns",
+      "tags": [
+        "Observers",
+        "Events",
+        "Publish-subscribe"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Implement a simple event emitter.",
+          "output": "Received: Hello",
+          "code": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n  \n  on(event, listener) {\n    if (!this.events[event]) {\n      this.events[event] = [];\n    }\n    this.events[event].push(listener);\n  }\n  \n  emit(event, ...args) {\n    if (this.events[event]) {\n      this.events[event].forEach(listener => listener(...args));\n    }\n  }\n}\n\nconst emitter = new EventEmitter();\nemitter.on('data', data => console.log('Received:', data));\nemitter.emit('data', 'Hello');",
+          "designRationale": "JavaScript's event-driven model widely uses the observer pattern.",
+          "pros": [
+            "Decoupling",
+            "Flexible",
+            "Works well with asynchronous code"
+          ]
+        },
+        "java": {
+          "explanation": "Use interfaces to implement the observer pattern.",
+          "code": "import java.util.*;\n\ninterface Observer {\n    void update(String message);\n}\n\nclass Subject {\n    private List<Observer> observers = new ArrayList<>();\n    \n    public void attach(Observer observer) {\n        observers.add(observer);\n    }\n    \n    public void notifyObservers(String message) {\n        for (Observer observer : observers) {\n            observer.update(message);\n        }\n    }\n}\n\nclass ConcreteObserver implements Observer {\n    private String name;\n    \n    public ConcreteObserver(String name) {\n        this.name = name;\n    }\n    \n    public void update(String message) {\n        System.out.println(name + \" Received: \" + message);\n    }\n}",
+          "designRationale": "Java's observer pattern is a classic implementation of a GoF design pattern.",
+          "pros": [
+            "Type safety",
+            "Decoupling",
+            "Standard pattern"
+          ]
+        },
+        "python": {
+          "explanation": "Use classes to implement the observer pattern.",
+          "output": "Observer 1 Received: Hello\nObserver 2 Received: Hello",
+          "code": "class Subject:\n    def __init__(self):\n        self._observers = []\n    \n    def attach(self, observer):\n        self._observers.append(observer)\n    \n    def notify(self, message):\n        for observer in self._observers:\n            observer.update(message)\n\nclass Observer:\n    def __init__(self, name):\n        self.name = name\n    \n    def update(self, message):\n        print(f\"{self.name} Received: {message}\")\n\nsubject = Subject()\nobserver1 = Observer(\"Observer 1\")\nobserver2 = Observer(\"Observer 2\")\nsubject.attach(observer1)\nsubject.attach(observer2)\nsubject.notify(\"Hello\")",
+          "designRationale": "Python duck typing makes the observer pattern more flexible.",
+          "pros": [
+            "Concise",
+            "Flexible",
+            "Easy to implement"
+          ]
+        },
+        "php": {
+          "explanation": "Constrain observers with an interface; the subject keeps a list of observers and broadcasts events.",
+          "output": "[Logger] user.created",
+          "designRationale": "The PHP standard library also provides SplSubject/SplObserver, but custom interfaces often offer more control.",
+          "pros": [
+            "Decouples publishers and subscribers",
+            "Easy to add different listeners"
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented",
+        "Event-driven"
+      ]
+    },
+    "singleton-pattern": {
+      "title": "Singleton pattern",
+      "description": "Ensure a class has only one instance and provide a global access point.",
+      "category": "Design patterns",
+      "tags": [
+        "Singleton",
+        "Global state",
+        "Creational patterns"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Store the sole instance in a static property.",
+          "output": "true",
+          "designRationale": "JavaScript singletons are implemented through closures or static properties.",
+          "pros": [
+            "Simple",
+            "Global access",
+            "Lazy initialization"
+          ]
+        },
+        "java": {
+          "explanation": "Use double-checked locking to implement a thread-safe singleton.",
+          "designRationale": "Java singletons must account for thread safety and lazy initialization.",
+          "pros": [
+            "Thread safety",
+            "Lazy initialization",
+            "Good performance"
+          ]
+        },
+        "python": {
+          "explanation": "Use __new__ to control instance creation.",
+          "output": "True",
+          "designRationale": "Python singletons can be implemented with __new__ or decorators.",
+          "pros": [
+            "Concise",
+            "Pythonic",
+            "Flexible"
+          ]
+        },
+        "rust": {
+          "explanation": "Use lazy_static and Mutex to implement a thread-safe singleton.",
+          "designRationale": "Rust singletons must account for ownership and thread safety.",
+          "pros": [
+            "Thread safety",
+            "Type safety",
+            "Zero cost"
+          ]
+        },
+        "php": {
+          "explanation": "A private constructor and a static method provide a single instance; ??= simplifies first-time initialization.",
+          "output": "[LOG] hello",
+          "designRationale": "A traditional singleton suffices in PHP's single-process model; modern practice favors management through a dependency injection container.",
+          "pros": [
+            "Simple implementation",
+            "Convenient calls"
+          ],
+          "cons": [
+            "Difficult to replace with mocks, making testing harder"
+          ]
+        },
+        "cpp": {
+          "explanation": "Meyers Singleton: a function-local static variable guarantees thread-safe lazy initialization since C++11.",
+          "output": "[LOG] hello",
+          "designRationale": "Disabling copy construction and assignment prevents accidental copies of the singleton.",
+          "pros": [
+            "Thread-safe since C++11",
+            "Lazy initialization",
+            "No manual locking required"
+          ],
+          "cons": [
+            "Destruction order is difficult to control"
+          ]
+        }
+      },
+      "paradigms": [
+        "Object-oriented"
+      ]
+    },
+    "recursion": {
+      "title": "Recursion",
+      "description": "Solve a problem by having a function call itself.",
+      "category": "Algorithms",
+      "tags": [
+        "Recursion",
+        "Divide and conquer",
+        "Algorithms"
+      ],
+      "implementations": {
+        "javascript": {
+          "explanation": "Use recursion to calculate a factorial.",
+          "output": "120",
+          "designRationale": "Recursion breaks a problem into smaller subproblems.",
+          "pros": [
+            "Concise",
+            "Expressive",
+            "Suitable for tree structures"
+          ]
+        },
+        "python": {
+          "explanation": "Use recursion to calculate a factorial.",
+          "output": "120",
+          "designRationale": "Python limits recursion depth; stack overflow must be considered.",
+          "pros": [
+            "Concise",
+            "Readable"
+          ],
+          "cons": [
+            "Recursion depth limit",
+            "Performance overhead"
+          ]
+        },
+        "rust": {
+          "explanation": "Use pattern matching and recursion.",
+          "output": "120",
+          "designRationale": "Rust recursion can be optimized by the compiler into tail recursion.",
+          "pros": [
+            "Type safety",
+            "Optimizable",
+            "Expressive"
+          ]
+        },
+        "go": {
+          "explanation": "Use recursion to calculate a factorial.",
+          "output": "120",
+          "designRationale": "Go supports recursion but does not perform tail-call optimization.",
+          "pros": [
+            "Concise",
+            "Clear"
+          ],
+          "cons": [
+            "No tail-call optimization",
+            "Stack space limit"
+          ]
+        },
+        "cpp": {
+          "explanation": "Classic recursive factorial; the compiler can optimize tail-recursive cases into loops when optimization is enabled.",
+          "output": "3628800",
+          "designRationale": "C++ does not guarantee tail-call optimization; deep recursion still risks stack overflow.",
+          "pros": [
+            "Code closely follows the mathematical definition"
+          ],
+          "cons": [
+            "Limited stack depth",
+            "No TCO guarantee"
+          ]
+        }
+      },
+      "paradigms": [
+        "Functional",
+        "Procedural"
+      ]
+    }
+  },
+  "languages": {
+    "javascript": {
+      "description": "A lightweight, interpreted programming language used primarily for web development.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional",
+        "Event-driven"
+      ],
+      "features": [
+        "Prototypal inheritance",
+        "Closures",
+        "Asynchronous programming",
+        "Dynamic typing",
+        "First-class functions"
+      ]
+    },
+    "typescript": {
+      "description": "A superset of JavaScript that adds a static type system.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional"
+      ],
+      "features": [
+        "Static type checking",
+        "Interfaces and type aliases",
+        "Generics",
+        "Decorators",
+        "Advanced type inference"
+      ]
+    },
+    "python": {
+      "description": "A high-level, general-purpose programming language that emphasizes code readability.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional",
+        "Procedural"
+      ],
+      "features": [
+        "Concise syntax",
+        "Rich standard library",
+        "Dynamic typing",
+        "List comprehensions",
+        "Decorators"
+      ]
+    },
+    "go": {
+      "description": "A statically typed, compiled language developed by Google, focused on simplicity and concurrency.",
+      "paradigms": [
+        "Concurrent",
+        "Procedural"
+      ],
+      "features": [
+        "Goroutine concurrency",
+        "Channel communication",
+        "Implicit interface implementation",
+        "Garbage collection",
+        "Fast compilation"
+      ]
+    },
+    "rust": {
+      "description": "A systems programming language focused on safety, concurrency, and performance.",
+      "paradigms": [
+        "Functional",
+        "Concurrent",
+        "Procedural"
+      ],
+      "features": [
+        "Ownership system",
+        "Zero-cost abstraction",
+        "Memory safety",
+        "No data races",
+        "Pattern matching"
+      ]
+    },
+    "java": {
+      "description": "A widely used object-oriented programming language that emphasizes cross-platform portability.",
+      "paradigms": [
+        "Object-oriented"
+      ],
+      "features": [
+        "JVM",
+        "Strong type system",
+        "Garbage collection",
+        "Rich ecosystem",
+        "Enterprise support"
+      ]
+    },
+    "csharp": {
+      "description": "A modern object-oriented programming language developed by Microsoft for the .NET platform.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional",
+        "Event-driven"
+      ],
+      "features": [
+        "LINQ queries",
+        "Asynchronous programming",
+        "Properties and events",
+        "Generics",
+        "Garbage collection"
+      ]
+    },
+    "ruby": {
+      "description": "A dynamic, open-source programming language focused on simplicity and productivity.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional"
+      ],
+      "features": [
+        "Elegant syntax",
+        "Metaprogramming",
+        "Blocks and iterators",
+        "Mixin modules",
+        "Duck typing"
+      ]
+    },
+    "php": {
+      "description": "A server-side scripting language widely used for web development.",
+      "paradigms": [
+        "Object-oriented",
+        "Procedural"
+      ],
+      "features": [
+        "HTML embedding",
+        "Rich web framework ecosystem",
+        "Database integration",
+        "Dynamic typing",
+        "Namespaces"
+      ]
+    },
+    "swift": {
+      "description": "A modern programming language developed by Apple for iOS and macOS development.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional",
+        "Protocol-oriented"
+      ],
+      "features": [
+        "Type safety",
+        "Optional types",
+        "Protocol extensions",
+        "Value types first",
+        "Automatic reference counting"
+      ]
+    },
+    "kotlin": {
+      "description": "A modern programming language developed by JetBrains, fully interoperable with Java.",
+      "paradigms": [
+        "Object-oriented",
+        "Functional"
+      ],
+      "features": [
+        "Null safety",
+        "Extension functions",
+        "Coroutines",
+        "Data classes",
+        "Smart casts"
+      ]
+    },
+    "cpp": {
+      "description": "A high-performance, general-purpose programming language supporting low-level memory operations.",
+      "paradigms": [
+        "Object-oriented",
+        "Procedural",
+        "Generic programming"
+      ],
+      "features": [
+        "Manual memory management",
+        "Template metaprogramming",
+        "Multiple inheritance",
+        "RAII",
+        "Zero-overhead abstractions"
+      ]
+    }
+  },
+  "features": {
+    "inheritance": {
+      "title": "Class inheritance and composition",
+      "description": "Compare subclass reuse and overriding; where class inheritance is absent, show alternative structures such as composition.",
+      "tags": [
+        "Object-oriented",
+        "Inheritance",
+        "Composition"
+      ],
+      "scopeNote": "Compares native mechanisms and alternatives in this catalog; a mechanism being inapplicable does not mean that object-oriented programming or code reuse is unsupported.",
+      "entries": {
+        "javascript": {
+          "summary": "Classes use extends to establish superclass and prototype relationships; subclasses can define their own methods.",
+          "versionNotes": "The baseline is ECMAScript 2023, citing the fixed-version specification. The generics entry shows runtime-generic methods, not static type parameters.",
+          "baseline": "ECMAScript 2023"
+        },
+        "typescript": {
+          "summary": "extends creates a subclass inheriting superclass members; TypeScript also checks the declared types.",
+          "versionNotes": "The baseline is TypeScript 5.3, and the selected syntax is compatible with it. Sources use the continuously updated official Handbook; closures cite the older official Functions chapter. Static contracts must be distinguished from runtime behavior.",
+          "baseline": "TypeScript 5.3"
+        },
+        "python": {
+          "summary": "A subclass specifies its base class in its definition and can override methods; Python also supports multiple base classes.",
+          "versionNotes": "The baseline is Python 3.12; the def keep[T] syntax in the example requires 3.12. Protocol comes from the standard library, and type annotations are generally checked by external type-checking tools.",
+          "baseline": "Python 3.12"
+        },
+        "ruby": {
+          "summary": "A subclass specifies its superclass with <, can override inherited methods, and can call the superclass implementation with super.",
+          "versionNotes": "The baseline is Ruby 3.2, citing the corresponding official documentation. The generics entry demonstrates reuse with dynamic collections, not static type parameter declarations.",
+          "baseline": "Ruby 3.2"
+        },
+        "java": {
+          "summary": "A class inherits one superclass through extends and can override instance methods that permit overriding.",
+          "versionNotes": "Based on the Java 21 JLS. All snippets use syntax supported by this baseline; this does not imply that the features were introduced in Java 21.",
+          "baseline": "Java 21"
+        },
+        "csharp": {
+          "summary": "A class has only one direct base class; virtual methods allow derived classes to override them with override.",
+          "versionNotes": "C# 12 is the compatibility baseline. Microsoft Learn documentation is continuously updated; no newer-version or preview syntax is used.",
+          "baseline": "C# 12"
+        },
+        "kotlin": {
+          "summary": "Classes and members are final by default; open permits inheritance or overriding, and override explicitly overrides a member.",
+          "versionNotes": "Kotlin 1.9 is the compatibility baseline. The official documentation is continuously updated; JVM-default compiler options from later versions are not used.",
+          "baseline": "Kotlin 1.9"
+        },
+        "php": {
+          "summary": "A class inherits one superclass through extends and can override eligible inherited public or protected methods, excluding final methods.",
+          "versionNotes": "PHP 8.3 is the compatibility baseline; later features such as PHP 8.4 interface properties are not used. The absence of native generics is established from the type system and type declaration documentation, not inferred solely from examples.",
+          "baseline": "PHP 8.3"
+        },
+        "go": {
+          "summary": "There is no class inheritance or type inheritance hierarchy. Composition and embedding commonly provide behavior reuse; methods and interfaces still support object-oriented design.",
+          "versionNotes": "The specification is pinned to go1.21.0. Independent method type parameters, range over integers or functions, and Go 1.22 loop-variable semantics are excluded.",
+          "baseline": "Go 1.21"
+        },
+        "rust": {
+          "summary": "A struct cannot inherit the fields and methods of another struct. Composition and trait default methods commonly provide code reuse; methods and visibility can still encapsulate data.",
+          "versionNotes": "The baseline is Rust 1.75, edition 2021. The current official Rust Book was consulted; entries use only features already supported in 1.75, excluding edition 2024 changes and later APIs. The web tool could not read the version 1.75 book URL.",
+          "baseline": "Rust 1.75, edition 2021"
+        },
+        "cpp": {
+          "summary": "A class can derive from one or more base classes; access specifiers control accessibility.",
+          "versionNotes": "Based on the C++20 N4861 working draft, checked against the source at the n4861 tag in the cplusplus/draft repository. The HTML transcription is used only to locate clauses. The working draft is not the officially published ISO standard; later features from the latest draft are excluded.",
+          "baseline": "C++20"
+        },
+        "swift": {
+          "summary": "A class can inherit one superclass and explicitly override members with override; structs and enums do not participate in class inheritance.",
+          "versionNotes": "The baseline is Swift 5.9. The current official Swift language book source was consulted; examples use only features already supported in 5.9, excluding later Swift 6 concurrency or ownership extensions. Because the web page body requires JavaScript, the official swiftlang/swift-book source was read instead.",
+          "baseline": "Swift 5.9"
+        }
+      }
+    },
+    "polymorphism": {
+      "title": "Polymorphism and behavioral contracts",
+      "description": "Use the same call with different implementations: distinguish interfaces, protocols, traits, and dynamic duck typing.",
+      "tags": [
+        "Object-oriented",
+        "Interfaces",
+        "Protocols",
+        "Duck typing"
+      ],
+      "scopeNote": "Compares native mechanisms and alternatives in this catalog; a mechanism being inapplicable does not mean that object-oriented programming or code reuse is unsupported.",
+      "entries": {
+        "javascript": {
+          "summary": "Callers invoke same-named object methods by convention for runtime polymorphism; this demonstrates a dynamic protocol, not a static interface declaration.",
+          "versionNotes": "The baseline is ECMAScript 2023, citing the fixed-version specification. The generics entry shows runtime-generic methods, not static type parameters.",
+          "baseline": "ECMAScript 2023"
+        },
+        "typescript": {
+          "summary": "interface describes a static contract, and implements checks whether a class satisfies it; this clause does not change type inference for methods in the class.",
+          "versionNotes": "The baseline is TypeScript 5.3, and the selected syntax is compatible with it. Sources use the continuously updated official Handbook; closures cite the older official Functions chapter. Static contracts must be distinguished from runtime behavior.",
+          "baseline": "TypeScript 5.3"
+        },
+        "python": {
+          "summary": "The standard-library typing.Protocol describes structural contracts for static checking; ordinary type annotations do not enforce method signatures at runtime.",
+          "versionNotes": "The baseline is Python 3.12; the def keep[T] syntax in the example requires 3.12. Protocol comes from the standard library, and type annotations are generally checked by external type-checking tools.",
+          "baseline": "Python 3.12"
+        },
+        "ruby": {
+          "summary": "Callers invoke same-named methods by convention for duck-typed polymorphism; a module can share method implementations but is not a static interface contract.",
+          "versionNotes": "The baseline is Ruby 3.2, citing the corresponding official documentation. The generics entry demonstrates reuse with dynamic collections, not static type parameter declarations.",
+          "baseline": "Ruby 3.2"
+        },
+        "java": {
+          "summary": "Classes explicitly implement interface contracts, allowing types to follow the same contract without inheriting the same application-specific base class.",
+          "versionNotes": "Based on the Java 21 JLS. All snippets use syntax supported by this baseline; this does not imply that the features were introduced in Java 21.",
+          "baseline": "Java 21"
+        },
+        "csharp": {
+          "summary": "Both class and struct can implement multiple interface contracts.",
+          "versionNotes": "C# 12 is the compatibility baseline. Microsoft Learn documentation is continuously updated; no newer-version or preview syntax is used.",
+          "baseline": "C# 12"
+        },
+        "kotlin": {
+          "summary": "A class can implement multiple interfaces; interfaces can provide method implementations but cannot store instance state.",
+          "versionNotes": "Kotlin 1.9 is the compatibility baseline. The official documentation is continuously updated; JVM-default compiler options from later versions are not used.",
+          "baseline": "Kotlin 1.9"
+        },
+        "php": {
+          "summary": "A class explicitly implements one or more interfaces with implements, fulfilling their shared contracts through public methods.",
+          "versionNotes": "PHP 8.3 is the compatibility baseline; later features such as PHP 8.4 interface properties are not used. The absence of native generics is established from the type system and type declaration documentation, not inferred solely from examples.",
+          "baseline": "PHP 8.3"
+        },
+        "go": {
+          "summary": "Interface values support dynamic method dispatch; a concrete type implicitly implements an interface when it has the required method set.",
+          "versionNotes": "The specification is pinned to go1.21.0. Independent method type parameters, range over integers or functions, and Go 1.22 loop-variable semantics are excluded.",
+          "baseline": "Go 1.21"
+        },
+        "rust": {
+          "summary": "A trait defines shared behavior. Generic trait bounds support static dispatch; for suitable traits, references such as &dyn Trait support runtime dispatch.",
+          "versionNotes": "The baseline is Rust 1.75, edition 2021. The current official Rust Book was consulted; entries use only features already supported in 1.75, excluding edition 2024 changes and later APIs. The web tool could not read the version 1.75 book URL.",
+          "baseline": "Rust 1.75, edition 2021"
+        },
+        "cpp": {
+          "summary": "Virtual functions support dynamic dispatch. An abstract class with pure virtual functions can express an interface without a separate interface keyword.",
+          "versionNotes": "Based on the C++20 N4861 working draft, checked against the source at the n4861 tag in the cplusplus/draft repository. The HTML transcription is used only to locate clauses. The working draft is not the officially published ISO standard; later features from the latest draft are excluded.",
+          "baseline": "C++20"
+        },
+        "swift": {
+          "summary": "Protocols declare requirements that types must satisfy; classes, structs, and enums can conform. Protocol extensions can provide reusable implementations.",
+          "versionNotes": "The baseline is Swift 5.9. The current official Swift language book source was consulted; examples use only features already supported in 5.9, excluding later Swift 6 concurrency or ownership extensions. Because the web page body requires JavaScript, the official swiftlang/swift-book source was read instead.",
+          "baseline": "Swift 5.9"
+        }
+      }
+    },
+    "generics": {
+      "title": "Generics and type parameters",
+      "description": "Compare generic mechanisms that preserve type relationships and the limits of value reuse in dynamic languages.",
+      "tags": [
+        "Type system",
+        "Generics",
+        "Type parameters"
+      ],
+      "scopeNote": "Compares native mechanisms and alternatives in this catalog; a mechanism being inapplicable does not mean that object-oriented programming or code reuse is unsupported.",
+      "entries": {
+        "javascript": {
+          "summary": "Generic reuse here means runtime-generic algorithms: Array.prototype.map can be applied to array-like objects, rather than declaring static type parameters.",
+          "versionNotes": "The baseline is ECMAScript 2023, citing the fixed-version specification. The generics entry shows runtime-generic methods, not static type parameters.",
+          "baseline": "ECMAScript 2023"
+        },
+        "typescript": {
+          "summary": "Type parameters relate input and output types, allowing the same function to work with multiple types.",
+          "versionNotes": "The baseline is TypeScript 5.3, and the selected syntax is compatible with it. Sources use the continuously updated official Handbook; closures cite the older official Functions chapter. Static contracts must be distinguished from runtime behavior.",
+          "baseline": "TypeScript 5.3"
+        },
+        "python": {
+          "summary": "Python 3.12 type parameter syntax can declare generic functions; type relationships in annotations are checked by type tools, not enforced on runtime arguments.",
+          "versionNotes": "The baseline is Python 3.12; the def keep[T] syntax in the example requires 3.12. Protocol comes from the standard library, and type annotations are generally checked by external type-checking tools.",
+          "baseline": "Python 3.12"
+        },
+        "ruby": {
+          "summary": "Runtime collection algorithms can be reused with different object types: Array can contain elements of different types, and map calls a block for each element. This is not a static type parameter declaration.",
+          "versionNotes": "The baseline is Ruby 3.2, citing the corresponding official documentation. The generics entry demonstrates reuse with dynamic collections, not static type parameter declarations.",
+          "baseline": "Ruby 3.2"
+        },
+        "java": {
+          "summary": "Classes and methods can declare type parameters; different parameterizations of the same generic class share a runtime class.",
+          "versionNotes": "Based on the Java 21 JLS. All snippets use syntax supported by this baseline; this does not imply that the features were introduced in Java 21.",
+          "baseline": "Java 21"
+        },
+        "csharp": {
+          "summary": "Type parameters support statically checked generic code and retain runtime type information.",
+          "versionNotes": "C# 12 is the compatibility baseline. Microsoft Learn documentation is continuously updated; no newer-version or preview syntax is used.",
+          "baseline": "C# 12"
+        },
+        "kotlin": {
+          "summary": "Classes and functions support type parameters; in and out express declaration-site variance.",
+          "versionNotes": "Kotlin 1.9 is the compatibility baseline. The official documentation is continuously updated; JVM-default compiler options from later versions are not used.",
+          "baseline": "Kotlin 1.9"
+        },
+        "php": {
+          "summary": "PHP 8.3 does not support native parameterized generics. The mixed example only demonstrates dynamic reuse; it does not express a generic constraint requiring the input and return value to have the same type. PHPDoc static-analysis annotations are also outside the native type system.",
+          "versionNotes": "PHP 8.3 is the compatibility baseline; later features such as PHP 8.4 interface properties are not used. The absence of native generics is established from the type system and type declaration documentation, not inferred solely from examples.",
+          "baseline": "PHP 8.3"
+        },
+        "go": {
+          "summary": "Functions and types can declare constrained type parameters. Go 1.21 methods cannot declare additional independent type parameters.",
+          "versionNotes": "The specification is pinned to go1.21.0. Independent method type parameters, range over integers or functions, and Go 1.22 loop-variable semantics are excluded.",
+          "baseline": "Go 1.21"
+        },
+        "rust": {
+          "summary": "Functions, structs, and other constructs can use type parameters; trait bounds specify the operations a type must provide.",
+          "versionNotes": "The baseline is Rust 1.75, edition 2021. The current official Rust Book was consulted; entries use only features already supported in 1.75, excluding edition 2024 changes and later APIs. The web tool could not read the version 1.75 book URL.",
+          "baseline": "Rust 1.75, edition 2021"
+        },
+        "cpp": {
+          "summary": "Templates define families of related functions or types; C++20 also supports constraints and concepts.",
+          "versionNotes": "Based on the C++20 N4861 working draft, checked against the source at the n4861 tag in the cplusplus/draft repository. The HTML transcription is used only to locate clauses. The working draft is not the officially published ISO standard; later features from the latest draft are excluded.",
+          "baseline": "C++20"
+        },
+        "swift": {
+          "summary": "Generic functions and types use type parameters and can constrain them to specify required behavior.",
+          "versionNotes": "The baseline is Swift 5.9. The current official Swift language book source was consulted; examples use only features already supported in 5.9, excluding later Swift 6 concurrency or ownership extensions. Because the web page body requires JavaScript, the official swiftlang/swift-book source was read instead.",
+          "baseline": "Swift 5.9"
+        }
+      }
+    },
+    "closures": {
+      "title": "Closures and captures",
+      "description": "Functions carry their defining environment; compare capture, mutation of outer variables, and lifetime constraints.",
+      "tags": [
+        "Functions",
+        "Closures",
+        "Scope"
+      ],
+      "scopeNote": "Compares the same concept across the 12 languages in this catalog; semantics and constraints are not necessarily identical.",
+      "entries": {
+        "javascript": {
+          "summary": "Function expressions retain their lexical environment at definition time; outer parameters remain accessible after the outer call returns.",
+          "versionNotes": "The baseline is ECMAScript 2023, citing the fixed-version specification. The generics entry shows runtime-generic methods, not static type parameters.",
+          "baseline": "ECMAScript 2023"
+        },
+        "typescript": {
+          "summary": "As in JavaScript, functions can capture variables from outer scopes; type annotations provide static descriptions.",
+          "versionNotes": "The baseline is TypeScript 5.3, and the selected syntax is compatible with it. Sources use the continuously updated official Handbook; closures cite the older official Functions chapter. Static contracts must be distinguished from runtime behavior.",
+          "baseline": "TypeScript 5.3"
+        },
+        "python": {
+          "summary": "Nested functions and lambdas can reference variables from an outer scope.",
+          "versionNotes": "The baseline is Python 3.12; the def keep[T] syntax in the example requires 3.12. Protocol comes from the standard library, and type annotations are generally checked by external type-checking tools.",
+          "baseline": "Python 3.12"
+        },
+        "ruby": {
+          "summary": "A Proc object retains the context in which it was created; a lambda can use local variables from its enclosing method.",
+          "versionNotes": "The baseline is Ruby 3.2, citing the corresponding official documentation. The generics entry demonstrates reuse with dynamic collections, not static type parameter declarations.",
+          "baseline": "Ruby 3.2"
+        },
+        "java": {
+          "summary": "A lambda targets a functional interface; captured local variables must be final or effectively final.",
+          "versionNotes": "Based on the Java 21 JLS. All snippets use syntax supported by this baseline; this does not imply that the features were introduced in Java 21.",
+          "baseline": "Java 21"
+        },
+        "csharp": {
+          "summary": "A lambda can be converted to a delegate and can retain and modify captured outer variables.",
+          "versionNotes": "C# 12 is the compatibility baseline. Microsoft Learn documentation is continuously updated; no newer-version or preview syntax is used.",
+          "baseline": "C# 12"
+        },
+        "kotlin": {
+          "summary": "A lambda has a function type and can read or modify captured outer variables.",
+          "versionNotes": "Kotlin 1.9 is the compatibility baseline. The official documentation is continuously updated; JVM-default compiler options from later versions are not used.",
+          "baseline": "Kotlin 1.9"
+        },
+        "php": {
+          "summary": "Anonymous functions explicitly capture outer local variables with use; & denotes capture by reference.",
+          "versionNotes": "PHP 8.3 is the compatibility baseline; later features such as PHP 8.4 interface properties are not used. The absence of native generics is established from the type system and type declaration documentation, not inferred solely from examples.",
+          "baseline": "PHP 8.3"
+        },
+        "go": {
+          "summary": "Function literals can capture surrounding variables; the closure and enclosing function share those variables.",
+          "versionNotes": "The specification is pinned to go1.21.0. Independent method type parameters, range over integers or functions, and Go 1.22 loop-variable semantics are excluded.",
+          "baseline": "Go 1.21"
+        },
+        "rust": {
+          "summary": "Closures are anonymous callable values that can capture values from their defining environment.",
+          "versionNotes": "The baseline is Rust 1.75, edition 2021. The current official Rust Book was consulted; entries use only features already supported in 1.75, excluding edition 2024 changes and later APIs. The web tool could not read the version 1.75 book URL.",
+          "baseline": "Rust 1.75, edition 2021"
+        },
+        "cpp": {
+          "summary": "A lambda expression creates a closure object; its capture list specifies which surrounding values or references to retain.",
+          "versionNotes": "Based on the C++20 N4861 working draft, checked against the source at the n4861 tag in the cplusplus/draft repository. The HTML transcription is used only to locate clauses. The working draft is not the officially published ISO standard; later features from the latest draft are excluded.",
+          "baseline": "C++20"
+        },
+        "swift": {
+          "summary": "Closure expressions are callable values that can capture surrounding constants and variables; parameter types can usually be inferred from context.",
+          "versionNotes": "The baseline is Swift 5.9. The current official Swift language book source was consulted; examples use only features already supported in 5.9, excluding later Swift 6 concurrency or ownership extensions. Because the web page body requires JavaScript, the official swiftlang/swift-book source was read instead.",
+          "baseline": "Swift 5.9"
+        }
+      }
+    },
+    "javascript-generators": {
+      "title": "JavaScript generators",
+      "description": "Pause and resume computation with yield to produce iteration values on demand.",
+      "tags": [
+        "Iteration",
+        "Lazy computation"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "javascript": {
+          "summary": "Generator functions use function* and yield to provide values incrementally through an iterator.",
+          "versionNotes": "The baseline is ECMAScript 2023, citing the fixed-version specification. The generics entry shows runtime-generic methods, not static type parameters.",
+          "baseline": "ECMAScript 2023"
+        }
+      }
+    },
+    "typescript-discriminated-unions": {
+      "title": "TypeScript discriminated unions",
+      "description": "Distinguish variants and narrow types using a shared literal tag.",
+      "tags": [
+        "Type system",
+        "Union types"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "typescript": {
+          "summary": "A union type uses a shared literal property as its discriminant, enabling control-flow type narrowing.",
+          "versionNotes": "The baseline is TypeScript 5.3, and the selected syntax is compatible with it. Sources use the continuously updated official Handbook; closures cite the older official Functions chapter. Static contracts must be distinguished from runtime behavior.",
+          "baseline": "TypeScript 5.3"
+        }
+      }
+    },
+    "python-comprehensions": {
+      "title": "Python list comprehensions",
+      "description": "Generate lists by combining expressions, iteration, and filtering.",
+      "tags": [
+        "Collections",
+        "Iteration"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "python": {
+          "summary": "A list comprehension combines an expression, iteration clauses, and optional filters to construct a new list.",
+          "versionNotes": "The baseline is Python 3.12; the def keep[T] syntax in the example requires 3.12. Protocol comes from the standard library, and type annotations are generally checked by external type-checking tools.",
+          "baseline": "Python 3.12"
+        }
+      }
+    },
+    "ruby-open-classes": {
+      "title": "Ruby open classes",
+      "description": "Add methods to existing class definitions and understand open classes and the boundaries of modification.",
+      "tags": [
+        "Object-oriented",
+        "Metaprogramming"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "ruby": {
+          "summary": "A class can be reopened to add methods; the official documentation recommends reopening only classes you own.",
+          "versionNotes": "The baseline is Ruby 3.2, citing the corresponding official documentation. The generics entry demonstrates reuse with dynamic collections, not static type parameter declarations.",
+          "baseline": "Ruby 3.2"
+        }
+      }
+    },
+    "java-checked-exceptions": {
+      "title": "Java checked exceptions",
+      "description": "Make some error-handling obligations part of compile-time checking by catching or declaring exceptions.",
+      "tags": [
+        "Error handling",
+        "Type system"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "java": {
+          "summary": "A distinctive feature in this comparison: checked exceptions must be caught or declared with throws; unchecked exceptions are not subject to this requirement.",
+          "versionNotes": "Based on the Java 21 JLS. All snippets use syntax supported by this baseline; this does not imply that the features were introduced in Java 21.",
+          "baseline": "Java 21"
+        }
+      }
+    },
+    "csharp-events": {
+      "title": "C# events",
+      "description": "Publishers control notification triggering; subscribers register handlers through events.",
+      "tags": [
+        "Events",
+        "Delegates"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "csharp": {
+          "summary": "A distinctive feature in this comparison: event exposes subscription externally, while the publisher controls notification triggering.",
+          "versionNotes": "C# 12 is the compatibility baseline. Microsoft Learn documentation is continuously updated; no newer-version or preview syntax is used.",
+          "baseline": "C# 12"
+        }
+      }
+    },
+    "kotlin-delegated-properties": {
+      "title": "Kotlin delegated properties",
+      "description": "Delegate property reads and writes to another object; the example demonstrates lazy.",
+      "tags": [
+        "Properties",
+        "Delegation",
+        "Lazy computation"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "kotlin": {
+          "summary": "A distinctive feature in this comparison: by delegates property access to another object; the standard-library lazy computes and caches a value on first access.",
+          "versionNotes": "Kotlin 1.9 is the compatibility baseline. The official documentation is continuously updated; JVM-default compiler options from later versions are not used.",
+          "baseline": "Kotlin 1.9"
+        }
+      }
+    },
+    "php-traits": {
+      "title": "PHP trait composition",
+      "description": "Compose method implementations into classes, distinguishing this from interface contracts and class inheritance.",
+      "tags": [
+        "Object-oriented",
+        "Composition"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "php": {
+          "summary": "A distinctive feature in this comparison: a trait composes reusable implementations into a class; it is not an interface contract and cannot be instantiated independently.",
+          "versionNotes": "PHP 8.3 is the compatibility baseline; later features such as PHP 8.4 interface properties are not used. The absence of native generics is established from the type system and type declaration documentation, not inferred solely from examples.",
+          "baseline": "PHP 8.3"
+        }
+      }
+    },
+    "go-goroutines-channels": {
+      "title": "Go goroutines and channels",
+      "description": "Pass data using concurrent execution units and typed channels.",
+      "tags": [
+        "Concurrency",
+        "Communication"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "go": {
+          "summary": "A go statement starts concurrent execution; channels with element types pass values between goroutines.",
+          "versionNotes": "The specification is pinned to go1.21.0. Independent method type parameters, range over integers or functions, and Go 1.22 loop-variable semantics are excluded.",
+          "baseline": "Go 1.21"
+        }
+      }
+    },
+    "rust-ownership": {
+      "title": "Rust ownership",
+      "description": "Express value ownership, moves, and lifetimes through compile-time rules.",
+      "tags": [
+        "Memory management",
+        "Resource lifetimes"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "rust": {
+          "summary": "The compiler checks ownership rules to manage resource lifetimes. Moving a non-Copy value transfers ownership, after which the original binding can no longer use that value.",
+          "versionNotes": "The baseline is Rust 1.75, edition 2021. The current official Rust Book was consulted; entries use only features already supported in 1.75, excluding edition 2024 changes and later APIs. The web tool could not read the version 1.75 book URL.",
+          "baseline": "Rust 1.75, edition 2021"
+        }
+      }
+    },
+    "cpp-raii": {
+      "title": "C++ RAII resource management",
+      "description": "Tie resource release to object destruction; the example uses unique_ptr.",
+      "tags": [
+        "Memory management",
+        "Resource lifetimes"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "cpp": {
+          "summary": "RAII uses construction and destruction to tie resource management to object lifetimes. A local unique_ptr is destroyed when it leaves scope, releasing the object it owns.",
+          "versionNotes": "Based on the C++20 N4861 working draft, checked against the source at the n4861 tag in the cplusplus/draft repository. The HTML transcription is used only to locate clauses. The working draft is not the officially published ISO standard; later features from the latest draft are excluded.",
+          "baseline": "C++20"
+        }
+      }
+    },
+    "swift-optionals": {
+      "title": "Swift optionals",
+      "description": "Explicitly represent potentially missing values in types and unwrap them safely through optional binding.",
+      "tags": [
+        "Type system",
+        "Null safety"
+      ],
+      "scopeNote": "Provides a closer look at representative syntax in this language; this does not claim that no other language supports the feature.",
+      "entries": {
+        "swift": {
+          "summary": "T? represents either a T value or an absent value. Optional binding unwraps only when a value is present, avoiding forced unwrapping.",
+          "versionNotes": "The baseline is Swift 5.9. The current official Swift language book source was consulted; examples use only features already supported in 5.9, excluding later Swift 6 concurrency or ownership extensions. Because the web page body requires JavaScript, the official swiftlang/swift-book source was read instead.",
+          "baseline": "Swift 5.9"
+        }
+      }
+    }
+  }
+}

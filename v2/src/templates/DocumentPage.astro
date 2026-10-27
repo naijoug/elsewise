@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DocsNav from '../components/DocsNav.astro';
+import DetailControls from '../components/DetailControls';
+import CopyCode from '../components/CopyCode';
+import {content,modules,routeBase,type Locale} from '../lib/localized-content';
+import {highlight} from '../lib/content';
+interface Props {id:string;locale?:Locale}
+const {id,locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);
+const {features,languages}=content(locale);const doc=features.find(f=>f.id===id)!;
+const module=modules.find(m=>m.ids.includes(id));
+const labels=en?{native:'Built-in / standard library',idiomatic:'Library / idiomatic approach','not-applicable':'Not applicable',undocumented:'Not yet documented'}:{native:'原生机制 / 标准库',idiomatic:'库 / 惯用实现','not-applicable':'不适用',undocumented:'尚未收录'};
+---
+<Layout title={doc.title} description={doc.description} locale={locale}>
+<div class="docs-workspace"><DocsNav locale={locale} active={id}/><div class="docs-article">
+  <header class="document-heading"><p class="eyebrow">{module?.[locale]}</p><h1>{doc.title}</h1><p>{doc.description}</p></header>
+  <DetailControls idiomId={`feature:${id}`} subject={en?'document':'文档'} options={doc.entries.map(e=>({id:e.languageId,name:languages.find(l=>l.id===e.languageId)!.name}))} locale={locale} client:load />
+  <p class="doc-context">{en?'Examples have not been run here. An implementation not yet provided does not mean the language lacks support.':'示例未在此执行；尚未提供的实现不代表语言不支持。'}</p>
+  <noscript><p>{en?'All implementations are visible without JavaScript. Enable it to select languages and save progress.':'未启用 JavaScript 时显示全部实现；启用后可选择语言与保存学习记录。'}</p></noscript>
+  <div class="code-grid" data-code-grid>{doc.entries.map(entry=>{const language=languages.find(l=>l.id===entry.languageId)!;const codeId=`code-${id}-${language.id}`;return <article class="implementation" data-language-card={language.id} aria-labelledby={`heading-${language.id}`}>
+    <header class="implementation-header"><h2 id={`heading-${language.id}`}><a href={`${base}/language/${language.id}/`}>{language.name}</a></h2>{entry.code&&<CopyCode targetId={codeId} locale={locale} client:load />}</header>
+    <div class="implementation-body"><p class="runtime-label">{entry.baseline}</p><p>{entry.summary}</p><p class="muted support-note">{labels[entry.status]}</p></div>
+    {entry.code&&<pre tabindex="0" aria-label={`${language.name} ${en?'example code':'示例代码'}`}><code id={codeId} class={`language-${language.id}`} set:html={highlight(entry.code,language.id)}/></pre>}
+    <div class="implementation-body"><h3>{en?'Environment & boundaries':'环境与边界'}</h3><p>{entry.versionNotes}</p><details class="source-details"><summary>{en?'Sources and documentation':'来源与文档'} ({entry.sources.length})</summary><ul>{entry.sources.map(source=><li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span class="sr-only">{en?' (new window)':'（新窗口）'}</span> ↗</a><p class="muted">{en?'Reviewed':'核查于'} {source.checkedAt}</p></li>)}</ul></details></div>
+  </article>})}</div>
+  <section class="related-docs"><h2>{en?'Continue reading':'继续阅读'}</h2><ul>{doc.related.map(id=>features.find(f=>f.id===id)!).map(f=><li><a href={`${base}/feature/${f.id}/`}>{f.title}</a></li>)}{doc.idiomIds.map(id=><li><a href={`${base}/idiom/${id}/`}>{content(locale).idioms.find(i=>i.id===id)!.title}</a></li>)}</ul></section>
+</div></div>
+</Layout>

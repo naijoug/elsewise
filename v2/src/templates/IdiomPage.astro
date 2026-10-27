@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DetailControls from '../components/DetailControls';
+import CopyCode from '../components/CopyCode';
+import {content,routeBase,type Locale} from '../lib/localized-content';
+import {highlight} from '../lib/content';
+interface Props {id:string;locale?:Locale}
+const {id,locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);const {idioms,languages,features}=content(locale);const idiom=idioms.find(i=>i.id===id)!;
+const options=idiom.implementations.map(i=>({id:i.languageId,name:languages.find(l=>l.id===i.languageId)!.name}));
+---
+<Layout title={idiom.title} description={idiom.description} locale={locale}>
+<a class="back-link" href={`${base}/idioms/`}>← {en?'Patterns & idioms':'模式与习语'}</a>
+<header class="document-heading"><p class="eyebrow">{idiom.category}</p><h1>{idiom.title}</h1><p>{idiom.description}</p></header>
+<DetailControls idiomId={id} options={options} locale={locale} client:load />
+<p class="doc-context">{en?'Only collected implementations are listed; absence does not mean unsupported. Outputs are static examples, not execution results.':'这里只列出已收录实现，未收录不代表不支持。输出为静态示例，不是现场执行结果。'}</p>
+<noscript><p>{en?'All implementations are shown. Enable JavaScript to choose languages and save progress.':'当前显示全部实现。启用 JavaScript 后可选择语言和保存学习记录。'}</p></noscript>
+<div class="code-grid" data-code-grid>{idiom.implementations.map(implementation=>{const language=languages.find(l=>l.id===implementation.languageId)!;const codeId=`code-${id}-${language.id}`;return <article class="implementation" data-language-card={language.id} aria-labelledby={`heading-${language.id}`}><header class="implementation-header"><h2 id={`heading-${language.id}`}><a href={`${base}/language/${language.id}/`}>{language.name}</a></h2><CopyCode targetId={codeId} locale={locale} client:load /></header><pre tabindex="0" aria-label={`${language.name} ${en?'example code':'示例代码'}`}><code id={codeId} class={`language-${language.id}`} set:html={highlight(implementation.code,language.id)} /></pre><div class="implementation-body"><h3>{en?'How it works':'实现说明'}</h3><p>{implementation.explanation}</p>
+{implementation.output!==undefined&&<section><h3>{en?'Expected output (static example)':'预期输出（静态示例）'}</h3><pre tabindex="0"><code>{implementation.output}</code></pre></section>}
+{implementation.errorOutput!==undefined&&<section><h3>{en?'Error output (static example)':'错误输出（静态示例）'}</h3><pre tabindex="0"><code>{implementation.errorOutput}</code></pre></section>}
+{implementation.designRationale&&<section><h3>{en?'Design rationale':'设计思路'}</h3><p>{implementation.designRationale}</p></section>}
+{implementation.pros?.length?<section><h3>{en?'Advantages':'优点'}</h3><ul>{implementation.pros.map(v=><li>{v}</li>)}</ul></section>:null}
+{implementation.cons?.length?<section><h3>{en?'Trade-offs':'权衡与限制'}</h3><ul>{implementation.cons.map(v=><li>{v}</li>)}</ul></section>:null}
+{implementation.references?.length?<section><h3>{en?'References':'参考资料'}</h3><ul>{implementation.references.map(r=><li><a href={r.url} target="_blank" rel="noopener noreferrer">{r.title}<span class="sr-only">{en?' (new window)':'（新窗口）'}</span> ↗</a></li>)}</ul></section>:null}
+</div></article>})}</div>
+{features.some(f=>f.idiomIds.includes(id))&&<section class="related-docs"><h2>{en?'Related documentation':'相关文档'}</h2><ul>{features.filter(f=>f.idiomIds.includes(id)).map(f=><li><a href={`${base}/feature/${f.id}/`}>{f.title}</a></li>)}</ul></section>}
+</Layout>

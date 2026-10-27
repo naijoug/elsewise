@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DocsNav from '../components/DocsNav.astro';
+import {content,modules,routeBase,type Locale} from '../lib/localized-content';
+interface Props {locale?:Locale}
+const {locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);const {features}=content(locale);
+---
+<Layout title={en?'Programming, side by side':'编程用法对照文档'} locale={locale}>
+<div class="docs-workspace"><DocsNav locale={locale}/><div class="docs-article">
+<header class="document-heading"><p class="eyebrow">{en?'PRACTICAL COMPARISON DOCS':'实用编程对照文档'}</p><h1>{en?'One task. Many ways.':'同一个任务，不同的做法。'}</h1><p>{en?'Find a task, choose your languages, and compare code, requirements, and trade-offs.':'找到要做的事，选择语言，对照代码、运行环境与差异。'}</p></header>
+<form class="docs-search" role="search" onsubmit="return false"><label for="docs-query">{en?'Find a task or module':'查找任务或功能模块'}</label><input type="search" id="docs-query" placeholder={en?'e.g. read a file, JSON, HTTP, closures':'例如：读取文件、JSON、网络请求、闭包'} /><p id="docs-search-status" class="sr-only" role="status" data-empty={en?'No matching documents.':'没有匹配文档。'} data-count={en?'documents':'篇文档'}></p></form>
+<div class="docs-directory">{modules.map(module=><section data-doc-module><h2>{module[locale]}</h2><ul>{module.ids.map(id=>features.find(f=>f.id===id)).filter(Boolean).map(doc=><li data-doc-row data-search={`${module[locale]} ${doc!.title} ${doc!.description} ${doc!.tags.join(' ')} ${doc!.entries.map(e=>e.languageId).join(' ')}`.toLocaleLowerCase()}><a href={`${base}/feature/${doc!.id}/`}><span>{doc!.title}</span><small>{doc!.description}</small></a><span class="coverage-count">{doc!.entries.length} {en?'languages':'种语言'}</span></li>)}</ul></section>)}</div>
+<p class="doc-context">{en?'Growing chapter by chapter. These are reviewed topics, not complete language manuals. The first practical chapters cover UTF-8 files, JSON, and HTTP; each implementation links to its source and environment requirements.':'按章节持续补充，当前不是完整语言手册。第一批实用章节覆盖 UTF-8 文件读写、JSON 与 HTTP；每个实现分别列出文档依据和环境要求。'}</p>
+<p><a href={`${base}/idioms/`}>{en?'Explore patterns and idioms →':'继续查看设计模式与习语 →'}</a></p>
+</div></div>
+</Layout>
+<script>
+const input=document.getElementById('docs-query') as HTMLInputElement|null;
+input?.addEventListener('input',()=>{const query=input.value.trim().toLocaleLowerCase();let count=0;document.querySelectorAll<HTMLElement>('[data-doc-row]').forEach(row=>{row.hidden=!row.dataset.search?.includes(query);if(!row.hidden) count++;});document.querySelectorAll<HTMLElement>('[data-doc-module]').forEach(module=>{module.hidden=![...module.querySelectorAll<HTMLElement>('[data-doc-row]')].some(row=>!row.hidden);});const status=document.getElementById('docs-search-status');if(status){status.classList.toggle('sr-only',count>0);status.textContent=count?`${count} ${status.dataset.count}`:status.dataset.empty||'';}});
+</script>

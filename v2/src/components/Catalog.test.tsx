@@ -54,12 +54,25 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
-async function mount(favorites = false, base = '/elsewise') {
+async function mount(
+  favorites = false,
+  base = '/elsewise',
+  locale: 'zh' | 'en' = 'zh'
+) {
   const { default: Catalog } = await import('./Catalog');
   await act(async () =>
     root.render(
       <Catalog
-        summaries={summaries}
+        summaries={
+          locale === 'en'
+            ? summaries.map((item) => ({
+                ...item,
+                category: item.id === 'a' ? 'Basics' : 'Advanced',
+                paradigms: [item.id === 'a' ? 'Functional' : 'Object-oriented'],
+              }))
+            : summaries
+        }
+        locale={locale}
         languages={[
           { id: 'js', name: 'JavaScript' },
           { id: 'py', name: 'Python' },
@@ -118,7 +131,7 @@ it('checkbox selection and removable chips change results', async () => {
   expect(host.querySelectorAll('article')).toHaveLength(1);
   act(() =>
     (
-      host.querySelector('[aria-label="移除分类：基础"]') as HTMLButtonElement
+      host.querySelector('[aria-label="移除分类: 基础"]') as HTMLButtonElement
     ).click()
   );
   expect(host.querySelectorAll('article')).toHaveLength(2);
@@ -260,12 +273,12 @@ it('marks knowledge points and intersects learned with favorites; reset never de
   );
   await mount(true);
   const mark = host.querySelector<HTMLButtonElement>(
-    '[aria-label="标记已学会：Alpha"]'
+    '[aria-label="标记学会: Alpha"]'
   )!;
   act(() => mark.click());
   expect(
     host
-      .querySelector('[aria-label="撤销已学会：Alpha"]')
+      .querySelector('[aria-label="已学会: Alpha"]')
       ?.getAttribute('aria-pressed')
   ).toBe('true');
   act(() => button('未学会').click());
@@ -278,4 +291,43 @@ it('marks knowledge points and intersects learned with favorites; reset never de
   expect(JSON.parse(localStorage.getItem('elsewise_learned_v1')!).ids).toEqual([
     'a',
   ]);
+});
+
+it('renders English-only catalog controls and uses the English search index', async () => {
+  const fetch = vi
+    .fn()
+    .mockResolvedValue({ ok: true, json: async () => index });
+  vi.stubGlobal('fetch', fetch);
+  await mount(false, '/elsewise/en', 'en');
+  expect(host.innerHTML).not.toMatch(/[一-鿿]/);
+  expect(host.querySelector('article a')?.getAttribute('href')).toBe(
+    '/elsewise/en/idiom/a/'
+  );
+  expect(button('Favorites only')).toBeDefined();
+  await type('fmt.println');
+  expect(fetch).toHaveBeenCalledWith(
+    '/elsewise/en/search-index.json',
+    expect.any(Object)
+  );
+  expect(host.querySelector('[aria-label="Search matches"]')?.textContent).toBe(
+    'Matches: Code'
+  );
+  expect(host.innerHTML).not.toMatch(/[一-鿿]/);
+});
+it('renders English search errors and recovers through Retry', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi
+      .fn()
+      .mockResolvedValueOnce({ ok: false })
+      .mockResolvedValueOnce({ ok: true, json: async () => index })
+  );
+  await mount(false, '/en', 'en');
+  await type('alpha');
+  expect(host.querySelector('[role=alert]')?.textContent).toContain(
+    'Code search is temporarily unavailable'
+  );
+  expect(host.innerHTML).not.toMatch(/[一-鿿]/);
+  await act(async () => button('Retry').click());
+  expect(host.querySelector('[role=alert]')).toBeNull();
 });

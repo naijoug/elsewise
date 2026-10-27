@@ -1,11 +1,4 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Catalog from '../components/Catalog';
-import { catalog, languages } from '../lib/content';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import Page from '../templates/IndexPage.astro';
 ---
-<Layout title="编程习语">
-  <section class="intro"><p class="eyebrow">ONE IDEA · MANY LANGUAGES</p><h1>同一个想法，不同的写法。</h1><p>从一个特性或习语出发，选择多种语言，并排理解它们的实现。</p></section>
-  <section class="feature-entry card"><h2>不只看写法，也理解语言的能力与边界。</h2><p>从继承、多态、泛型、闭包等共同概念，关联到各语言的特色机制。</p><a class="button-link" href={`${base}/features/`}>探索语言特性地图 →</a></section>
-  <Catalog summaries={catalog} languages={languages} base={base} client:load />
-</Layout>
+<Page />

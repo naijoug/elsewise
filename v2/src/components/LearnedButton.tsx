@@ -1,27 +1,33 @@
 import { toggleLearned, useLearned } from '../lib/learned';
+import { text, type Locale } from '../lib/ui-i18n';
 export default function LearnedButton({
   id,
   title,
+  locale = 'zh',
 }: {
   id: string;
   title?: string;
+  locale?: Locale;
 }) {
   const learned = useLearned().ids.includes(id);
+  const label = learned
+    ? text(locale, '已学会', 'Learned')
+    : text(locale, '标记学会', 'Mark as learned');
   return (
     <button
       type="button"
       className="learned-button"
       aria-pressed={learned}
-      aria-label={`${learned ? '撤销已学会' : '标记已学会'}${title ? `：${title}` : ''}`}
-      title={learned ? '再次点击可撤销' : '标记这个知识点已学会'}
+      aria-label={`${label}${title ? `: ${title}` : ''}`}
+      title={learned ? text(locale, '再次点击可撤销', 'Click again to undo') : text(locale, '标记这个知识点已学会', 'Mark this topic as learned')}
       onClick={() => toggleLearned(id)}
     >
       <span aria-hidden="true">{learned ? '✓' : '+'}</span>{' '}
-      {learned ? 'Get · 已学会' : 'Get · 标记学会'}
+      {label}
     </button>
   );
 }
-export function LearnedNotice() {
+export function LearnedNotice({ locale = 'zh' }: { locale?: Locale }) {
   const { storage } = useLearned();
   return (
     <p
@@ -29,10 +35,10 @@ export function LearnedNotice() {
       role={storage === 'saved' ? undefined : 'status'}
     >
       {storage === 'session'
-        ? '学习记录暂时无法保存，仅在当前页面有效，刷新或离开后可能丢失。'
+        ? text(locale, '学习记录暂时无法保存，仅在当前页面有效，刷新或离开后可能丢失。', 'Learning progress cannot be saved right now. It may be lost when you refresh or leave this page.')
         : storage === 'invalid'
-          ? '已保存的学习记录格式异常，暂未载入。重新标记会建立新记录；收藏不受影响。'
-          : 'Get 表示这个知识点已学会，可再次点击撤销。仅保存在当前浏览器，与收藏分开，不跨设备同步。'}
+          ? text(locale, '已保存的学习记录格式异常，暂未载入。重新标记会建立新记录；收藏不受影响。', 'Saved learning progress has an invalid format and was not loaded. Marking a topic creates a new record; favorites are unaffected.')
+          : text(locale, '学习记录仅保存在当前浏览器，与收藏分开，可再次点击撤销。', 'Learning progress is saved only in this browser, separately from favorites. Click again to undo.')}
     </p>
   );
 }

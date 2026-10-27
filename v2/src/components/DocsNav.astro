@@ -1,0 +1,10 @@
+---
+import {content,modules,routeBase,type Locale} from '../lib/localized-content';
+interface Props {locale:Locale;active?:string}
+const {locale,active}=Astro.props; const {features}=content(locale);const base=routeBase(locale);
+---
+<aside class="docs-sidebar"><details open><summary>{locale==='en'?'Contents':'文档目录'}</summary><nav aria-label={locale==='en'?'Documentation contents':'文档目录'}>{modules.map(module=><section><h2>{module[locale]}</h2><ul>{module.ids.map(id=>features.find(f=>f.id===id)).filter(Boolean).map(doc=><li><a href={`${base}/feature/${doc!.id}/`} aria-current={active===doc!.id?'page':undefined}>{doc!.title}</a></li>)}</ul></section>)}</nav></details></aside>
+<script>
+const narrow=window.matchMedia('(max-width: 850px)');
+document.querySelectorAll<HTMLDetailsElement>('.docs-sidebar details').forEach(item=>{if(narrow.matches)item.open=false;});
+</script>

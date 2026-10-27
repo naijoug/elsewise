@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Catalog from '../components/Catalog';
+import FeatureCatalog from '../components/FeatureCatalog';
+import {content,routeBase,type Locale} from '../lib/localized-content';
+interface Props {locale?:Locale;kind?:string;id?:string}
+const {locale='zh',kind='idioms',id}=Astro.props;const en=locale==='en';const base=routeBase(locale);const {catalog,languages,features,featureSummaries}=content(locale);const language=languages.find(l=>l.id===id);
+const title=kind==='favorites'?(en?'Your saved reading':'我的收藏'):kind==='languages'?(en?'Languages':'编程语言'):kind==='language'?language!.name:(en?'Patterns & idioms':'模式与习语');
+---
+<Layout title={title} locale={locale}>
+<header class="document-heading"><h1>{title}</h1><p>{kind==='favorites'?(en?'Saved in this browser only. Learning progress is separate from favorites.':'仅保存在当前浏览器。学习记录与收藏分开保存。'):kind==='language'?language!.description:kind==='languages'?(en?'Explore collected documentation for each language. Coverage is not a measure of language capability.':'查看各语言已收录的文档。收录范围不代表语言能力边界。'):(en?'Compare reusable ideas and design patterns across languages.':'对照不同语言中的常用写法与设计模式。')}</p></header>
+{kind==='languages'?<ul class="language-directory">{languages.map(language=><li><a href={`${base}/language/${language.id}/`}><strong>{language.name}</strong><span>{language.description}</span></a></li>)}</ul>:kind==='language'?<>
+<a href={`${base}/languages/`} class="back-link">← {en?'All languages':'全部语言'}</a>
+<p><a href={language!.officialDocs} target="_blank" rel="noopener noreferrer">{en?'Documentation':'语言文档'} ↗<span class="sr-only">{en?' (new window)':'（新窗口）'}</span></a></p>
+<section class="docs-directory"><h2>{en?'Compare tasks':'按任务对照'}</h2><ul>{features.filter(f=>f.entries.some(e=>e.languageId===id)).map(f=><li><a href={`${base}/feature/${f.id}/`}><span>{f.title}</span><small>{f.entries.find(e=>e.languageId===id)!.summary}</small></a></li>)}</ul></section><h2>{en?'Patterns & idioms':'模式与习语'}</h2><Catalog summaries={catalog.filter(i=>i.languageIds.includes(id!))} languages={languages} base={base} locale={locale} client:load />
+</>:<><Catalog summaries={catalog} languages={languages} base={base} locale={locale} initialFavoritesOnly={kind==='favorites'} client:load />{kind==='favorites'&&<><h2>{en?'Saved documents':'收藏的文档'}</h2><FeatureCatalog features={featureSummaries} languages={languages} base={base} locale={locale} favoritesOnly={true} client:load /><noscript><p>{en?'JavaScript is needed to read local favorites.':'读取本地收藏需要 JavaScript。'}</p></noscript></>}</>}
+</Layout>

@@ -93,3 +93,20 @@ describe('static code copy', () => {
     expect(message().textContent).toBe('代码已复制。');
   });
 });
+
+it('uses English for copying success and every error fallback', async () => {
+  act(() => root.render(<CopyCode targetId="example" locale="en" />));
+  expect(button().textContent).toBe('Copy code');
+  await click();
+  expect(message().textContent).toBe('Code copied.');
+  writeText.mockRejectedValueOnce(new Error('denied'));
+  await click();
+  expect(message().textContent).toContain('Copy failed');
+  vi.stubGlobal('navigator', {});
+  await click();
+  expect(message().textContent).toContain('Automatic copying is unavailable');
+  target.remove();
+  await click();
+  expect(message().textContent).toContain('No code found');
+  expect(host.innerHTML).not.toMatch(/[一-鿿]/);
+});

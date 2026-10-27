@@ -1,9 +1,4 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { languages, catalog } from '../lib/content';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import Page from '../templates/CollectionPage.astro';
 ---
-<Layout title="编程语言">
-  <section class="intro"><p class="eyebrow">LANGUAGES</p><h1>从熟悉的语言，走向新的表达。</h1><p>浏览 {languages.length} 种语言及其已收录习语。收录数量不代表语言能力的范围。</p></section>
-  <ul class="catalog-grid language-list">{languages.map(language => <li class="card"><h2><a href={`${base}/language/${language.id}/`}>{language.name}</a></h2><p>{language.description}</p><div class="badges">{language.paradigms.map(paradigm => <span class="badge">{paradigm}</span>)}</div><p class="muted">{catalog.filter(idiom => idiom.languageIds.includes(language.id)).length} 个已收录习语</p></li>)}</ul>
-</Layout>
+<Page kind="languages" />

@@ -1,0 +1,10 @@
+---
+import IndexPage from '../../templates/IndexPage.astro';
+import CollectionPage from '../../templates/CollectionPage.astro';
+import DocumentPage from '../../templates/DocumentPage.astro';
+import IdiomPage from '../../templates/IdiomPage.astro';
+import {content} from '../../lib/localized-content';
+export function getStaticPaths(){const {idioms,languages,features}=content('en');return [undefined,'features','idioms','favorites','languages',...idioms.map(i=>`idiom/${i.id}`),...languages.map(l=>`language/${l.id}`),...features.map(f=>`feature/${f.id}`)].map(path=>({params:{path}}));}
+const [kind,id]=(Astro.params.path||'').split('/');
+---
+{!kind||kind==='features'?<IndexPage locale="en"/>:kind==='feature'?<DocumentPage id={id} locale="en"/>:kind==='idiom'?<IdiomPage id={id} locale="en"/>:<CollectionPage kind={kind} id={id} locale="en"/>}

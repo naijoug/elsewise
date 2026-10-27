@@ -25,9 +25,9 @@ afterEach(() => {
   localStorage.clear();
   vi.restoreAllMocks();
 });
-async function mount() {
+async function mount(locale: 'zh' | 'en' = 'zh') {
   const { default: ThemeToggle } = await import('./ThemeToggle');
-  await act(async () => root.render(<ThemeToggle />));
+  await act(async () => root.render(<ThemeToggle locale={locale} />));
 }
 const write = (theme = 'dark') =>
   localStorage.setItem(
@@ -74,4 +74,19 @@ it('refreshes document theme on pageshow', async () => {
   write('dark');
   act(() => window.dispatchEvent(new Event('pageshow')));
   expect(document.documentElement.dataset.theme).toBe('dark');
+});
+
+it('localizes English theme controls while retaining stored preferences', async () => {
+  write();
+  await mount('en');
+  const toggle = host.querySelector<HTMLButtonElement>(
+    '[aria-label="Toggle light and dark theme"]'
+  )!;
+  expect(toggle.textContent).toBe('Light / Dark');
+  expect(host.innerHTML).not.toMatch(/[一-鿿]/);
+  act(() => toggle.click());
+  expect(JSON.parse(localStorage.getItem('elsewise_preferences')!)).toEqual({
+    ...saved,
+    theme: 'light',
+  });
 });

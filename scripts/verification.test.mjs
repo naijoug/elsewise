@@ -72,6 +72,14 @@ async function buildFixture(root) {
     '404.html',
     'idiom/array-map/index.html',
     'language/javascript/index.html',
+    'en/index.html',
+    'en/features/index.html',
+    'en/idioms/index.html',
+    'en/languages/index.html',
+    'en/favorites/index.html',
+    'en/feature/closures/index.html',
+    'en/idiom/array-map/index.html',
+    'en/language/javascript/index.html',
   ]) {
     await put(
       root,
@@ -83,6 +91,7 @@ async function buildFixture(root) {
   await put(root, 'dist/_astro/app-test.css', 'body { margin: 0; }');
   await put(root, 'dist/build-manifest.json', JSON.stringify(validManifest()));
   await put(root, 'dist/search-index.json', JSON.stringify(validIndex()));
+  await put(root, 'dist/en/search-index.json', JSON.stringify(validIndex()));
 }
 
 describe('build artifact verification', () => {
@@ -101,6 +110,10 @@ describe('build artifact verification', () => {
     'features/index.html',
     'feature/closures/index.html',
     '404.html',
+    'en/feature/closures/index.html',
+    'en/idiom/array-map/index.html',
+    'en/language/javascript/index.html',
+    'en/search-index.json',
   ])(
     'rejects missing static route %s even if source data exists',
     async (route) => {
