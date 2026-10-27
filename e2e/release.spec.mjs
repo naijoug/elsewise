@@ -554,13 +554,13 @@ test('documents retain learning/favorites, related idioms and language navigatio
   ).toBeVisible();
 });
 
-async function expectNoHorizontalOverflow(page) {
+async function expectNoHorizontalOverflow(page, expectedWidth = 375) {
   expect(
     await page.evaluate(() => ({
       viewport: window.innerWidth,
       width: document.documentElement.scrollWidth,
     }))
-  ).toEqual({ viewport: 375, width: 375 });
+  ).toEqual({ viewport: expectedWidth, width: expectedWidth });
 }
 
 async function expectEnglishProse(page) {
@@ -879,7 +879,8 @@ test('language picker defaults match viewport and mobile disclosure supports rep
 });
 
 
-test('foundation-first directory opens the same five beginner chapters in both locales', async ({ page }) => {
+test('foundation-first directory opens the same five beginner chapters in both locales', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
   for (const locale of ['zh', 'en']) {
     const prefix = locale === 'en' ? 'en/' : '';
     await open(page, prefix || './');
@@ -891,11 +892,12 @@ test('foundation-first directory opens the same five beginner chapters in both l
     await hydrated(page);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(locale === 'en' ? foundations[0].en.title : foundations[0].title);
     await expect(page.locator('.docs-sidebar [aria-current="page"]')).toHaveAttribute('href', `${base}${prefix}feature/syntax-basics/`);
-    await expectNoHorizontalOverflow(page);
+    await expectNoHorizontalOverflow(page, page.viewportSize().width);
   }
 });
 
-test('all five beginner chapters deliver twelve complete sourced examples in both locales', async ({ page }) => {
+test('all five beginner chapters deliver twelve complete sourced examples in both locales', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
   test.setTimeout(180000);
   await page.addInitScript((ids) => localStorage.setItem('elsewise_preferences', JSON.stringify({ selectedLanguages: ids })), languages.map(language => language.id));
   for (const locale of ['zh', 'en']) {
@@ -912,7 +914,7 @@ test('all five beginner chapters deliver twelve complete sourced examples in bot
       }
       for (const theme of ['light', 'dark']) {
         if ((await page.locator('html').getAttribute('data-theme')) !== theme) await page.locator('#theme-toggle').click();
-        await expectNoHorizontalOverflow(page);
+        await expectNoHorizontalOverflow(page, page.viewportSize().width);
         if (locale === 'en') await expectEnglishProse(page);
       }
     }
