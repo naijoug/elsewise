@@ -15,9 +15,9 @@ export default function FeatureCatalog({ features, languages, base, favoritesOnl
     <div className="filters">
       <label>查找特性<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="继承、泛型、所有权…" /></label>
       <div className="toolbar feature-toolbar">
-        <label>概念标签<select value={scope} onChange={event => setScope(event.target.value)}><option value="">全部标签</option>{Object.entries(scopeLabels).map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
-        <label>对照语言<select value={language} onChange={event => setLanguage(event.target.value)}><option value="">全部语言</option>{languages.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-        <label>学习状态<select value={learning} onChange={event => setLearning(event.target.value)}><option value="all">全部</option><option value="learned">已学会</option><option value="unlearned">未学会</option></select></label>
+        <label>概念标签<select aria-label="概念标签" value={scope} onChange={event => setScope(event.target.value)}><option value="">全部标签</option>{Object.entries(scopeLabels).map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
+        <label>对照语言<select aria-label="对照语言" value={language} onChange={event => setLanguage(event.target.value)}><option value="">全部语言</option>{languages.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+        <label>学习状态<select aria-label="学习状态" value={learning} onChange={event => setLearning(event.target.value)}><option value="all">全部</option><option value="learned">已学会</option><option value="unlearned">未学会</option></select></label>
         <button onClick={() => { setQuery(''); setScope(''); setLanguage(''); setLearning('all'); }}>重置特性筛选</button>
       </div>
     </div>

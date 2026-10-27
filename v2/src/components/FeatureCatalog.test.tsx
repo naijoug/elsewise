@@ -16,7 +16,8 @@ it('stores Get separately, supports learned filtering and does not clear it when
   const get = host.querySelector('.learned-button') as HTMLButtonElement;
   await act(async () => get.click());
   expect(get.getAttribute('aria-pressed')).toBe('true');
-  const select = host.querySelectorAll('select')[2];
+  const select = host.querySelector('select[aria-label="学习状态"]') as HTMLSelectElement;
+  expect(select).not.toBeNull();
   await act(async () => { select.value = 'unlearned'; select.dispatchEvent(new Event('change', {bubbles:true})); });
   expect(host.querySelectorAll('article')).toHaveLength(0);
   const reset = [...host.querySelectorAll('button')].find(b => b.textContent === '重置特性筛选')!;
