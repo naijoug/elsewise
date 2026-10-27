@@ -12,7 +12,10 @@ const practical = JSON.parse(
 const conceptual = JSON.parse(
   readFileSync(new URL('../v2/src/data/features.json', import.meta.url))
 );
-const documents = [...practical, ...conceptual];
+const foundations = JSON.parse(
+  readFileSync(new URL('../v2/src/data/foundations.json', import.meta.url))
+);
+const documents = [...foundations, ...practical, ...conceptual];
 const english = JSON.parse(
   readFileSync(new URL('../v2/src/data/english-content.json', import.meta.url))
 );
@@ -582,7 +585,7 @@ test('documentation home is a searchable task workspace, not the idiom catalog',
   const response = await open(page, './');
   expect(response.status()).toBe(200);
   await expect(
-    page.getByRole('heading', { name: '同一个任务，不同的做法。' })
+    page.getByRole('heading', { name: '从基础开始，对照着学。' })
   ).toBeVisible();
   await expect(page.locator('.docs-sidebar')).toBeVisible();
   await expect(page.locator('[data-doc-row]')).toHaveCount(documents.length);
@@ -872,5 +875,46 @@ test('language picker defaults match viewport and mobile disclosure supports rep
     await expect(summary).toContainText('Rust');
     await expect(page.locator('[data-language-card="rust"]')).toBeVisible();
     await expectNoHorizontalOverflow(page);
+  }
+});
+
+
+test('foundation-first directory opens the same five beginner chapters in both locales', async ({ page }) => {
+  for (const locale of ['zh', 'en']) {
+    const prefix = locale === 'en' ? 'en/' : '';
+    await open(page, prefix || './');
+    const rows = page.locator('.docs-directory [data-doc-row] a');
+    for (const [index, doc] of foundations.entries()) {
+      await expect(rows.nth(index)).toHaveAttribute('href', `${base}${prefix}feature/${doc.id}/`);
+    }
+    await rows.first().click();
+    await hydrated(page);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(locale === 'en' ? foundations[0].en.title : foundations[0].title);
+    await expect(page.locator('.docs-sidebar [aria-current="page"]')).toHaveAttribute('href', `${base}${prefix}feature/syntax-basics/`);
+    await expectNoHorizontalOverflow(page);
+  }
+});
+
+test('all five beginner chapters deliver twelve complete sourced examples in both locales', async ({ page }) => {
+  test.setTimeout(180000);
+  await page.addInitScript((ids) => localStorage.setItem('elsewise_preferences', JSON.stringify({ selectedLanguages: ids })), languages.map(language => language.id));
+  for (const locale of ['zh', 'en']) {
+    for (const doc of foundations) {
+      const response = await open(page, `${locale === 'en' ? 'en/' : ''}feature/${doc.id}/`);
+      expect(response.status()).toBe(200);
+      await expect(page.locator('[data-language-card]')).toHaveCount(12);
+      for (const entry of doc.entries) {
+        const card = page.locator(`[data-language-card="${entry.languageId}"]`);
+        await expect(card).toBeVisible();
+        expect(await card.locator('pre code').textContent()).toBe(entry.code);
+        await expect(card).toContainText(locale === 'en' ? entry.en.summary : entry.summary);
+        await expect(card.locator('.source-details a')).toHaveCount(entry.sources.length);
+      }
+      for (const theme of ['light', 'dark']) {
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme) await page.locator('#theme-toggle').click();
+        await expectNoHorizontalOverflow(page);
+        if (locale === 'en') await expectEnglishProse(page);
+      }
+    }
   }
 });

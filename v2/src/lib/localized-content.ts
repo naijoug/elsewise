@@ -77,15 +77,13 @@ export function routeBase(locale: Locale) {
 }
 export const modules = [
   {
-    id: 'files',
-    zh: '文件与目录',
-    en: 'Files & directories',
-    ids: ['read-text-file', 'write-text-file'],
+    id: 'basics',
+    zh: '基础语法',
+    en: 'Language basics',
+    ids: ['syntax-basics', 'variables', 'constants', 'operators', 'functions'],
   },
-  { id: 'data', zh: '数据格式', en: 'Data formats', ids: ['json'] },
-  { id: 'network', zh: '网络请求', en: 'Networking', ids: ['http-get'] },
   {
-    id: 'functions',
+    id: 'functions-advanced',
     zh: '函数与迭代',
     en: 'Functions & iteration',
     ids: ['closures', 'javascript-generators', 'python-comprehensions'],
@@ -121,4 +119,12 @@ export const modules = [
     en: 'Concurrency',
     ids: ['go-goroutines-channels'],
   },
+  {
+    id: 'files',
+    zh: '文件与目录',
+    en: 'Files & directories',
+    ids: ['read-text-file', 'write-text-file'],
+  },
+  { id: 'data', zh: '数据格式', en: 'Data formats', ids: ['json'] },
+  { id: 'network', zh: '网络请求', en: 'Networking', ids: ['http-get'] },
 ];

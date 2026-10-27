@@ -111,12 +111,12 @@ describe('localized build content', () => {
     }
   );
 
-  it('assigns all twenty document IDs to exactly one directory module', () => {
+  it('assigns all document IDs to exactly one directory module', () => {
     const assignedIds = modules.flatMap((module) => module.ids);
     expect(new Set(modules.map((module) => module.id)).size).toBe(
       modules.length
     );
-    expect(assignedIds).toHaveLength(20);
+    expect(assignedIds).toHaveLength(25);
     expect(new Set(assignedIds).size).toBe(assignedIds.length);
     expect([...assignedIds].sort()).toEqual(
       content('zh')
@@ -168,5 +168,34 @@ describe('localized build content', () => {
       }
     }
     expect(checkedFields).toBeGreaterThan(0);
+  });
+});
+
+
+describe('foundations-first learning path', () => {
+  const ids = ['syntax-basics', 'variables', 'constants', 'operators', 'functions'];
+  it('starts with real foundation chapters, not practical APIs or empty placeholders', () => {
+    expect(modules[0].ids).toEqual(ids);
+    for (const locale of ['zh', 'en'] as const) {
+      const localized = content(locale);
+      for (const id of ids) {
+        const chapter = localized.features.find(feature => feature.id === id)!;
+        expect(chapter.entries.map(entry => entry.languageId).sort()).toEqual(localized.languages.map(language => language.id).sort());
+        for (const entry of chapter.entries) {
+          nonempty(entry.code, `${locale}/${id}/${entry.languageId}`);
+          nonempty(entry.summary, 'summary');
+          nonempty(entry.versionNotes, 'versionNotes');
+          expect(entry.sources.length).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+  it('distinguishes constants from universally immutable values', () => {
+    const entries = content('en').features.find(feature => feature.id === 'constants')!.entries;
+    const prose = (id: string) => { const e = entries.find(entry => entry.languageId === id)!; return `${e.summary} ${e.versionNotes}`; };
+    expect(prose('javascript')).toMatch(/binding|reassign/i);
+    expect(prose('python')).toMatch(/convention|runtime|run.time/i);
+    expect(prose('cpp')).toMatch(/constexpr/);
+    expect(prose('go')).toMatch(/constant expression|compile.time/i);
   });
 });

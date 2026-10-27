@@ -1,0 +1,1638 @@
+[
+  {
+    "id": "syntax-basics",
+    "title": "基础语法与注释",
+    "description": "从一个完整小程序开始，对照入口、语句、代码块与注释。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "语法",
+      "注释",
+      "入口"
+    ],
+    "related": [
+      "variables"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "console.log 是运行环境提供的输出接口；此例使用 Node.js。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "脚本可以直接从顶层语句开始；用 // 写行注释，用花括号组织代码块。",
+        "code": "// A first program\nconst message = \"Hello\";\nconsole.log(message);",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Grammar and types",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+            "section": "Comments; declarations; constants",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "A script can start with top-level statements; use // for line comments and braces for blocks.",
+          "versionNotes": "console.log is supplied by the host environment; this example uses Node.js. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；先用 tsc 编译为 JavaScript，再在 Node.js 22+ 运行。",
+        "versionNotes": "类型标注会在编译输出中移除；它不是运行时输入验证。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "保留 JavaScript 语句和注释语法，在声明处增加类型标注；先检查、编译，再执行输出代码。",
+        "code": "// A first program\nconst message: string = \"Hello\";\nconsole.log(message);",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — The Basics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html",
+            "section": "Static type-checking; erased types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "TypeScript Handbook — Everyday Types",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+            "section": "Type annotations on variables; functions",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "MDN JavaScript Guide — Grammar and types",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+            "section": "Comments; declarations; constants",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+; compile to JavaScript with tsc, then run on Node.js 22+.",
+          "summary": "Keep JavaScript statement and comment syntax, adding type annotations to declarations; check and compile before running emitted code.",
+          "versionNotes": "Type annotations are erased from emitted code; they are not runtime input validation. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "此例不要求 main 函数；导入模块也可能执行顶层语句。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "文件从顶层语句开始；# 表示行注释，缩进划分复合语句的代码块。",
+        "code": "# A first program\nmessage = \"Hello\"\nprint(message)",
+        "sources": [
+          {
+            "title": "Python 3.14 Tutorial — An Informal Introduction to Python",
+            "url": "https://docs.python.org/3.14/tutorial/introduction.html",
+            "section": "Comments; numbers; assignment",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.14 Tutorial — More Control Flow Tools",
+            "url": "https://docs.python.org/3.14/tutorial/controlflow.html#defining-functions",
+            "section": "Defining functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "A file starts with top-level statements; # introduces a line comment and indentation delimits compound-statement bodies.",
+          "versionNotes": "No main function is required for this example; importing a module can also execute top-level statements. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "main 包的 main 函数是入口；花括号划分代码块，// 写行注释。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    // Display a greeting.\n    fmt.Println(\"Hello\")\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — Comments",
+            "url": "https://go.dev/ref/spec#Comments",
+            "section": "Comments",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Program execution",
+            "url": "https://go.dev/ref/spec#Program_execution",
+            "section": "Program execution",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "The main function in package main is the entry point; braces delimit blocks and // starts a comment."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "fn main 是此可执行程序的入口；花括号划分块，// 写行注释。println! 是宏调用。",
+        "code": "fn main() {\n    // Display a greeting.\n    println!(\"Hello\");\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Functions",
+            "url": "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html",
+            "section": "Functions",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "The Rust Programming Language — Comments",
+            "url": "https://doc.rust-lang.org/book/ch03-04-comments.html",
+            "section": "Comments",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "fn main starts this executable; braces delimit blocks and // starts a comment. println! is a macro call."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "这里采用传统入口；Java 25 也支持更简洁的入口形式，并非只能这样写。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用类中的 main 作为入口，花括号组织代码块，语句以分号结束。// 是行注释，/* ... */ 是块注释。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        // Print a greeting.\n        /* This comment does not execute. */\n        System.out.println(\"Hello, Elsewise!\");\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — Comments",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-3.html#jls-3.7",
+            "section": "3.7 Comments",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Java SE 25 JLS — Invoke a main Method",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-12.html#jls-12.1.4",
+            "section": "12.1.4 Invoke a main Method",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "Use main inside a class as the entry point, braces for blocks, and semicolons for statements. // starts a line comment; /* ... */ encloses a block comment.",
+          "versionNotes": "Uses the traditional entry point; Java 25 also permits simpler entry forms. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "C# 也支持顶级语句；本例使用显式入口以便看清结构，不要与模板的顶级语句混用。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "此例显式声明 Main 入口，花括号分组，语句以分号结束；// 写行注释，/* ... */ 写块注释。Console.WriteLine 输出一行。",
+        "code": "using System;\n\nclass Program\n{\n    static void Main()\n    {\n        // Print a greeting.\n        /* This comment does not execute. */\n        Console.WriteLine(\"Hello, Elsewise!\");\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Main() and command-line arguments",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/program-structure/main-command-line",
+            "section": "Overview",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C# — Code comments",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/comments",
+            "section": "Single-line and multiline comments",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "This example declares an explicit Main entry point, groups code with braces and ends statements with semicolons. // and /* ... */ write line and block comments. Console.WriteLine prints a line.",
+          "versionNotes": "C# also supports top-level statements. This example uses an explicit entry point; do not mix it with the template top-level statements. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "puts 调用输出方法，不需要为此例声明 main。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "文件可直接写顶层语句；# 表示行注释，方法等结构通常以 end 结束。",
+        "code": "# A first program\nmessage = \"Hello\"\nputs message",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Code Comments",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/comments_rdoc.html",
+            "section": "Inline comments",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Methods",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/methods_rdoc.html",
+            "section": "Method definitions; arguments; return values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "Files can contain top-level statements; # starts a line comment, and constructs such as methods normally end with end.",
+          "versionNotes": "puts calls an output method; this example needs no main declaration. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "纯 PHP 文件可省略结束标签；这里是 CLI 示例，不依赖 Web 服务器。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "PHP 文件用 <?php 开始，脚本中的顶层语句直接执行，不必定义 main。语句以分号结束；// 和 /* ... */ 分别写行注释和块注释。",
+        "code": "<?php\n// Print a greeting.\n/* This comment does not execute. */\necho \"Hello, Elsewise!\\n\";",
+        "sources": [
+          {
+            "title": "PHP Manual — PHP tags",
+            "url": "https://www.php.net/manual/en/language.basic-syntax.phptags.php",
+            "section": "PHP tags",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — Comments",
+            "url": "https://www.php.net/manual/en/language.basic-syntax.comments.php",
+            "section": "Comments",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "A PHP file starts with <?php and executes top-level statements without requiring main. Statements end with semicolons; // and /* ... */ write line and block comments.",
+          "versionNotes": "A PHP-only file may omit the closing tag; this is a CLI example, not a web-server example. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "versionNotes": "此例不是需要应用生命周期入口的图形应用。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "命令行单文件可直接写顶层语句作为入口；// 写注释，换行分隔语句通常不需要分号。",
+        "code": "// Display a greeting.\nprint(\"Hello\")",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — A Swift Tour (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/GuidedTour/GuidedTour.md",
+            "section": "A Swift Tour; Simple Values",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "The Swift Programming Language — The Basics (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/TheBasics.md",
+            "section": "The Basics",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "versionNotes": "This is not a graphical application with a framework-managed lifecycle. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "A single-file command-line program can start with top-level statements; // adds a comment and separate lines usually need no semicolons."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "main 函数作为入口，用花括号划分函数体；通常每行一个语句，无需分号。// 是行注释，/* ... */ 是块注释，println 输出一行。",
+        "code": "fun main() {\n    // Print a greeting.\n    /* This comment does not execute. */\n    println(\"Hello, Elsewise!\")\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Basic syntax overview",
+            "url": "https://kotlinlang.org/docs/basic-syntax.html",
+            "section": "Program entry point; Comments",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "main is the entry point and braces delimit its body. A statement per line usually needs no semicolon. // starts a line comment, /* ... */ encloses a block comment, and println prints a line.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "versionNotes": "参考资料为持续更新的工作草案；此例仅使用 C++17 已有语法。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "此宿主程序从 main 进入；花括号划分块，语句以分号结束，// 是行注释。",
+        "code": "#include <iostream>\n\nint main() {\n    // Display a greeting.\n    std::cout << \"Hello\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — basic.start.main",
+            "url": "https://eel.is/c++draft/basic.start.main",
+            "section": "basic.start.main",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — lex.comment",
+            "url": "https://eel.is/c++draft/lex.comment",
+            "section": "lex.comment",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "versionNotes": "Reference is the evolving working draft; this example uses only C++17-era syntax. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "This hosted program starts at main; braces delimit blocks, statements end with semicolons, and // introduces a line comment."
+        }
+      }
+    ],
+    "en": {
+      "title": "Syntax and comments",
+      "description": "Start with a complete small program: entry points, statements, blocks, and comments.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "syntax",
+        "comments",
+        "entry point"
+      ]
+    }
+  },
+  {
+    "id": "variables",
+    "title": "变量与赋值",
+    "description": "声明或绑定一个名字，再更新值；分清类型推断与动态类型。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "变量",
+      "赋值",
+      "类型推断"
+    ],
+    "related": [
+      "constants",
+      "operators"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "重新赋值改变绑定的值；这与修改某个对象的属性不是同一操作。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 let 声明块作用域变量，用 = 重新赋值。",
+        "code": "let count = 2;\ncount = count + 1;\nconsole.log(count);",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Grammar and types",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+            "section": "Comments; declarations; constants",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "Declare a block-scoped variable with let and reassign it with =.",
+          "versionNotes": "Reassignment changes the bound value; mutating an object property is a different operation. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；先用 tsc 编译为 JavaScript，再在 Node.js 22+ 运行。",
+        "versionNotes": "number 是静态类型，不会在运行时自动验证外部数据。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "let 允许重新赋值；类型标注或推断限制可赋的值。",
+        "code": "let count: number = 2;\ncount = count + 1;\nconsole.log(count);",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Variable Declaration",
+            "url": "https://www.typescriptlang.org/docs/handbook/variable-declarations.html",
+            "section": "let declarations; const declarations",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "TypeScript Handbook — Everyday Types",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+            "section": "Type annotations on variables; functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+; compile to JavaScript with tsc, then run on Node.js 22+.",
+          "summary": "let permits reassignment; annotations or inference constrain the values accepted by the type checker.",
+          "versionNotes": "number is a static type; it does not automatically validate external data at runtime. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "对象拥有类型；名称可先后绑定不同类型的对象，这并不改变原对象。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "赋值将名称绑定到对象，不需要先写变量声明；再次赋值可改变绑定。",
+        "code": "count = 2\ncount = count + 1\nprint(count)",
+        "sources": [
+          {
+            "title": "Python 3.14 Tutorial — An Informal Introduction to Python",
+            "url": "https://docs.python.org/3.14/tutorial/introduction.html",
+            "section": "Comments; numbers; assignment",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.14 Tutorial — More Control Flow Tools",
+            "url": "https://docs.python.org/3.14/tutorial/controlflow.html#defining-functions",
+            "section": "Defining functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "Assignment binds a name to an object without a separate variable declaration; another assignment can change that binding.",
+          "versionNotes": "Objects have types; a name can later bind to an object of another type without changing the original object. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "var 声明变量；函数内也可用 := 推断类型，之后用 = 赋值。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var count int = 2\n    count = 3\n    label := \"items\"\n    fmt.Println(count, label)\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — Variable declarations",
+            "url": "https://go.dev/ref/spec#Variable_declarations",
+            "section": "Variable declarations",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Short variable declarations",
+            "url": "https://go.dev/ref/spec#Short_variable_declarations",
+            "section": "Short variable declarations",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "Declare with var or infer a local type with :=; reassign with =."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "let 默认不可重新赋值；添加 mut 后可更新，类型可推断或显式标注。",
+        "code": "fn main() {\n    let mut count: i32 = 2;\n    count = count + 1;\n    println!(\"{}\", count);\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Variables and Mutability",
+            "url": "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html",
+            "section": "Variables and Mutability",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "let bindings cannot be reassigned by default; mut permits updates. Types may be inferred or annotated."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "先声明类型和名称，再给变量赋值；没有 final 的局部变量可以重新赋值，但新值必须符合其类型。局部变量使用前必须初始化。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int count = 2;\n        count = count + 1;\n        String label = \"items\";\n        System.out.println(label + \": \" + count);\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — Variables",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-4.html#jls-4.12",
+            "section": "4.12 Variables; 4.12.5 Initial Values of Variables",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "Declare a type and name, then assign a value. A non-final local variable can be reassigned with a compatible value and must be initialized before use.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "局部变量可以显式写类型，也可以用 var 让编译器根据初始值推断。var 仍是静态类型，不代表以后能随意换成另一类型。",
+        "code": "using System;\n\nclass Program\n{\n    static void Main()\n    {\n        int count = 2;\n        count += 1;\n        var label = \"items\";\n        Console.WriteLine($\"{label}: {count}\");\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Declaration statements",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/declarations",
+            "section": "Implicitly typed local variables",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "Local variables can use explicit types or var to infer a type from the initializer. var is still statically typed; it does not allow arbitrary type changes later.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "赋值会重新绑定名称；变量持有对象的引用，而不是声明固定静态类型。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 = 创建或更新局部变量；普通局部变量名以小写字母或下划线开头。",
+        "code": "count = 2\ncount = count + 1\nputs count",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Assignment",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/assignment_rdoc.html",
+            "section": "Local variable names; assignment",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "Use = to create or update a local variable; ordinary local names begin with a lowercase letter or underscore.",
+          "versionNotes": "Assignment rebinds a name; variables refer to objects rather than declaring a fixed static type. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "变量名以 $ 开头且区分大小写；直接赋值即可创建普通变量。示例先赋整数再更新，PHP 普通变量并不因首次赋值就固定类型。",
+        "code": "<?php\n$count = 2;\n$count += 1;\n$label = \"items\";\necho \"$label: $count\\n\";",
+        "sources": [
+          {
+            "title": "PHP Manual — Variable basics",
+            "url": "https://www.php.net/manual/en/language.variables.basics.php",
+            "section": "Basics",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "Variable names begin with $ and are case-sensitive. Assignment creates an ordinary variable. The example initializes and updates an integer; ordinary PHP variables do not acquire a fixed type from their first assignment.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "var 声明可更新变量；可写类型注解，或让编译器从初值推断。",
+        "code": "var count: Int = 2\ncount = 3\nprint(count)",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — The Basics (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/TheBasics.md",
+            "section": "The Basics",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "var declares a mutable variable; annotate its type or let the compiler infer it from the initial value."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "var 可以重新赋值；val 局部绑定初始化后不能重新赋值。类型写在名称后的冒号后，也可从初始值推断；类型推断不会变成动态类型。",
+        "code": "fun main() {\n    var count: Int = 2\n    count += 1\n    val label = \"items\"\n    println(\"$label: $count\")\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Basic syntax overview",
+            "url": "https://kotlinlang.org/docs/basic-syntax.html#variables",
+            "section": "Variables",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "var permits reassignment; a local val cannot be reassigned after initialization. A type follows the name after a colon or can be inferred from the initializer; inference does not make the variable dynamically typed.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "versionNotes": "参考资料为持续更新的工作草案；此例仅使用 C++17 已有语法。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用类型及名字声明变量并初始化；之后可重新赋值，初始化与赋值是不同操作。",
+        "code": "#include <iostream>\n\nint main() {\n    int count = 2;\n    count = 3;\n    std::cout << count << \"\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — dcl.init.general",
+            "url": "https://eel.is/c++draft/dcl.init.general",
+            "section": "dcl.init.general",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "versionNotes": "Reference is the evolving working draft; this example uses only C++17-era syntax. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "Declare and initialize a variable with its type and name; later assignment is a separate operation."
+        }
+      }
+    ],
+    "en": {
+      "title": "Variables and assignment",
+      "description": "Declare or bind a name, then update its value; distinguish inference from dynamic typing.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "variables",
+        "assignment",
+        "type inference"
+      ]
+    }
+  },
+  {
+    "id": "constants",
+    "title": "常量与只读绑定",
+    "description": "比较常量表达式、不能重新赋值与对象不可变的不同约束。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "常量",
+      "只读",
+      "不可变"
+    ],
+    "related": [
+      "variables",
+      "functions"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "这不是编译期常量保证，也不提供深层不可变性。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 禁止重新绑定，但不冻结其引用的对象；声明时必须初始化。",
+        "code": "const limit = 3;\nconst options = { count: 1 };\noptions.count = 2;\nconsole.log(limit, options.count);",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Grammar and types",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+            "section": "Comments; declarations; constants",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "const prevents rebinding but does not freeze the referenced object; initialization is required at declaration.",
+          "versionNotes": "This is not a compile-time constant guarantee or deep immutability. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；先用 tsc 编译为 JavaScript，再在 Node.js 22+ 运行。",
+        "versionNotes": "readonly 是另一种静态检查约束，不等于在运行时冻结对象。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 沿用 JavaScript 的不可重新绑定规则，对象属性仍可修改。",
+        "code": "const limit: number = 3;\nconst options = { count: 1 };\noptions.count = 2;\nconsole.log(limit, options.count);",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Variable Declaration",
+            "url": "https://www.typescriptlang.org/docs/handbook/variable-declarations.html",
+            "section": "let declarations; const declarations",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+; compile to JavaScript with tsc, then run on Node.js 22+.",
+          "summary": "const follows JavaScript binding rules: the binding cannot be reassigned, but object properties may still change.",
+          "versionNotes": "readonly is a separate static checking constraint, not runtime object freezing. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "这是命名约定与可选静态检查，不是原生运行时只读绑定；Final 也不会冻结对象内容。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "idiomatic",
+        "summary": "通常以大写名称约定常量；Final 可向类型检查器声明不应重新赋值，但运行时不强制执行。",
+        "code": "from typing import Final\n\nLIMIT: Final[int] = 3\nprint(LIMIT)",
+        "sources": [
+          {
+            "title": "PEP 8 — Style Guide for Python Code",
+            "url": "https://peps.python.org/pep-0008/#constants",
+            "section": "Constants",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.14 — typing.Final",
+            "url": "https://docs.python.org/3.14/library/typing.html#typing.Final",
+            "section": "Final; runtime type annotation enforcement",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "Uppercase names conventionally mark constants; Final tells a type checker not to allow reassignment, but the runtime does not enforce it.",
+          "versionNotes": "This combines a naming convention with optional static checking, not a runtime read-only binding; Final does not freeze object contents. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "versionNotes": "常量不限于整数；不能用任意运行期结果初始化。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 绑定常量表达式；它不是冻结对象的机制。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    const limit = 4\n    fmt.Println(limit)\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — Constant declarations",
+            "url": "https://go.dev/ref/spec#Constant_declarations",
+            "section": "Constant declarations",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Constants",
+            "url": "https://go.dev/ref/spec#Constants",
+            "section": "Constants",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "versionNotes": "Constants are not limited to integers; arbitrary runtime results cannot initialize them. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "const binds a constant expression; it does not freeze objects."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "versionNotes": "这里讨论普通整数绑定；不是对所有类型内部状态的深度不可变保证。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 需要类型和常量表达式；普通 let 绑定也可接收运行期结果，两者不同。",
+        "code": "fn main() {\n    const LIMIT: usize = 4;\n    let used = String::from(\"abc\").len();\n    println!(\"{} {}\", LIMIT, used);\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Variables and Mutability",
+            "url": "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html",
+            "section": "Variables and Mutability",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "versionNotes": "This concerns ordinary integer bindings, not a blanket guarantee of deep immutability for all types. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "const requires a type and constant expression; an ordinary let binding may receive a runtime result."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "limit 是常量变量；scores 只是固定的数组引用。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "final 禁止变量再次赋值，不会冻结所引用的对象。只有以常量表达式初始化的 final 基本类型或 String 变量才是规范中的常量变量。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        final int limit = 3;\n        final int[] scores = {1, 2};\n        scores[0] = limit;\n        System.out.println(scores[0]);\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — final Variables",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-4.html#jls-4.12.4",
+            "section": "4.12.4 final Variables",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "final prevents reassignment, not mutation of a referenced object. Only a final primitive or String variable initialized by a constant expression is a constant variable in the specification.",
+          "versionNotes": "limit is a constant variable; scores is a fixed reference to a mutable array. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "readonly 在此修饰字段，不能拿来当作普通局部变量的声明关键字。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 要求编译期可求值的常量表达式；readonly 字段允许在声明或同类构造函数中赋值，之后不能重新赋值，但引用的对象仍可能可变。",
+        "code": "using System;\n\nclass Program\n{\n    const int Limit = 3;\n    static readonly int[] Scores = { 1, 2 };\n\n    static void Main()\n    {\n        Scores[0] = Limit;\n        Console.WriteLine(Scores[0]);\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — const",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/const",
+            "section": "Constant expressions",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C# — readonly",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/readonly",
+            "section": "Field declaration",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "const requires a compile-time constant expression. A readonly field can be assigned in its declaration or a constructor of the same class; afterward its reference cannot be replaced, but the object can still be mutable.",
+          "versionNotes": "readonly modifies a field here; it is not a general declaration keyword for ordinary local variables. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "常量名称不冻结对象；本例展示内容修改。常量赋值的位置受语法限制，不能照搬为方法内局部常量。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "大写开头的名称表示常量；重新赋值通常会警告，而不是像 JavaScript const 那样拒绝重新绑定。",
+        "code": "LIMIT = 3\nOPTIONS = { count: 1 }\nOPTIONS[:count] = 2\nputs LIMIT, OPTIONS[:count]",
+        "sources": [
+          {
+            "title": "Ruby — Ruby From Other Languages",
+            "url": "https://www.ruby-lang.org/en/documentation/ruby-from-other-languages/",
+            "section": "Constants",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Official Ruby FAQ — Variables, constants and arguments",
+            "url": "https://www.ruby-lang.org/en/documentation/faq/4/",
+            "section": "Variables and constants",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "A capitalized name denotes a constant; reassignment normally warns rather than rejecting rebinding like JavaScript const.",
+          "versionNotes": "A constant name does not freeze its object; this example mutates contents. Constant assignment has syntactic restrictions and is not a method-local constant declaration. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "这里只展示顶层 const；define() 是另一种定义常量的方式，两者适用位置与表达式限制不同。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 声明命名常量，引用时不加 $，定义后不能更改。它不是给普通变量加只读修饰符；此例用标量常量表达式，不涉及对象属性的 readonly。",
+        "code": "<?php\nconst LIMIT = 3;\nconst DOUBLE_LIMIT = LIMIT * 2;\necho DOUBLE_LIMIT, \"\\n\";",
+        "sources": [
+          {
+            "title": "PHP Manual — Constants syntax",
+            "url": "https://www.php.net/manual/en/language.constants.syntax.php",
+            "section": "Syntax",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "const declares a named constant, referenced without $. Its value cannot be changed after definition. It is not a read-only modifier for ordinary variables; this example uses scalar constant expressions, not readonly object properties.",
+          "versionNotes": "This shows top-level const; define() is another mechanism with different placement and expression restrictions. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "versionNotes": "值类型与引用类型的行为应分开理解。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "let 只能赋值一次，不要求编译期已知。类引用保持不变，不代表实例的可变属性被冻结。",
+        "code": "let limit = 4\nclass Counter {\n    var value = 0\n}\nlet counter = Counter()\ncounter.value = 1\nprint(limit, counter.value)",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — A Swift Tour (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/GuidedTour/GuidedTour.md",
+            "section": "A Swift Tour; Simple Values",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "The Swift Programming Language — Structures and Classes (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/ClassesAndStructures.md",
+            "section": "Structures and Classes",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "versionNotes": "Distinguish value-type behavior from reference-type behavior. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "let is assigned once and need not be known at compile time. A fixed class reference does not freeze the instance’s mutable properties."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "此例修改数组元素而不是重新给 scores 赋值；不使用自定义 getter。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const val 表示受限制的编译期常量；普通 val 是只读绑定，并不保证对象不可变。const val 只能用于顶层或 object／伴生对象中的合适属性，不能用于局部变量。",
+        "code": "const val LIMIT = 3\n\nfun main() {\n    val scores = intArrayOf(1, 2)\n    scores[0] = LIMIT\n    println(scores[0])\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Properties",
+            "url": "https://kotlinlang.org/docs/properties.html#compile-time-constants",
+            "section": "Compile-time constants; Declaring properties",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "const val declares a restricted compile-time constant. An ordinary val is a read-only binding, not a guarantee of object immutability. const val is limited to eligible top-level, object or companion-object properties, not local variables.",
+          "versionNotes": "The example changes an array element, not the scores binding; no custom getter is used. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "versionNotes": "参考资料为持续更新的工作草案；此例仅使用 C++17 已有语法。 const 不是通用的深度冻结；本例用非 constexpr 函数区分两种初始化。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "const 限制对象修改，允许运行期初始化；constexpr 变量必须满足常量初始化要求。",
+        "code": "#include <iostream>\n\nint read_count() {\n    return 3;\n}\n\nint main() {\n    constexpr int limit = 4;\n    const int observed = read_count();\n    std::cout << limit << \" \" << observed << \"\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — dcl.type.cv",
+            "url": "https://eel.is/c++draft/dcl.type.cv",
+            "section": "dcl.type.cv",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — dcl.constexpr",
+            "url": "https://eel.is/c++draft/dcl.constexpr",
+            "section": "dcl.constexpr",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — dcl.init.general",
+            "url": "https://eel.is/c++draft/dcl.init.general",
+            "section": "dcl.init.general",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "versionNotes": "Reference is the evolving working draft; this example uses only C++17-era syntax. const is not universal deep freezing; this example uses a non-constexpr function to distinguish the initializations. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "const restricts object modification but permits runtime initialization; constexpr variables must satisfy constant-initialization requirements."
+        }
+      }
+    ],
+    "en": {
+      "title": "Constants and read-only bindings",
+      "description": "Compare constant expressions, non-reassignable bindings, and object immutability.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "constants",
+        "read-only",
+        "immutability"
+      ]
+    }
+  },
+  {
+    "id": "operators",
+    "title": "算术、比较与逻辑操作符",
+    "description": "对照计算与条件组合的写法，留意整数除法和相等比较的差异。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "操作符",
+      "运算符",
+      "比较",
+      "逻辑"
+    ],
+    "related": [
+      "variables",
+      "functions"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "示例使用 Number：7 / 2 得到 3.5。=== 不做相等比较的类型转换；逻辑运算可返回操作数，不总是布尔值。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用算术运算符计算，用 === 比较，用 &&、||、! 组合条件。",
+        "code": "const a = 7;\nconst b = 2;\nconsole.log(a + b, a - b, a * b, a / b, a % b);\nconsole.log(a === b, a > b, a > 0 && b > 0, !(a === b));",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Expressions and operators",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators",
+            "section": "Arithmetic, comparison and logical operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "Compute with arithmetic operators, compare with ===, and combine conditions with &&, || and !.",
+          "versionNotes": "These are Number operands: 7 / 2 gives 3.5. === avoids equality coercion; logical operators can return operands rather than always returning booleans. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；先用 tsc 编译为 JavaScript，再在 Node.js 22+ 运行。",
+        "versionNotes": "这里只覆盖常用算术、比较和逻辑运算，不是完整运算符列表；number 除法不是整数除法。 已查阅所列官方章节；原创新示例已通过本地 TypeScript tsc --noEmit 静态检查；未执行。",
+        "status": "native",
+        "summary": "运算符运行规则来自 JavaScript；TypeScript 额外静态检查操作数类型。",
+        "code": "const a: number = 7;\nconst b: number = 2;\nconsole.log(a + b, a - b, a * b, a / b, a % b);\nconsole.log(a === b, a > b, a > 0 && b > 0, !(a === b));",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — The Basics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html",
+            "section": "Static type-checking; erased types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "MDN JavaScript Guide — Expressions and operators",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators",
+            "section": "Arithmetic, comparison and logical operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+; compile to JavaScript with tsc, then run on Node.js 22+.",
+          "summary": "Runtime operator behavior comes from JavaScript; TypeScript additionally checks operand types statically.",
+          "versionNotes": "This covers basic arithmetic, comparison and logic, not all operators; number division is not integer division. Listed official chapters reviewed; original example passed local TypeScript tsc --noEmit checking; not executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "/ 为真除法；// 向负无穷方向取整。== 比较相等，不等于 is 的对象身份比较；and/or 可返回操作数。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "算术、比较与逻辑组合分别使用 + 等符号、== 等符号和 and、or、not。",
+        "code": "a = 7\nb = 2\nprint(a + b, a - b, a * b, a / b, a // b, a % b)\nprint(a == b, a > b, a > 0 and b > 0, not (a == b))",
+        "sources": [
+          {
+            "title": "Python 3.14 Tutorial — An Informal Introduction to Python",
+            "url": "https://docs.python.org/3.14/tutorial/introduction.html",
+            "section": "Comments; numbers; assignment",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.14 — Built-in Types",
+            "url": "https://docs.python.org/3.14/builtins/stdtypes.html#boolean-operations-and-or-not",
+            "section": "Boolean operations; comparisons; numeric types",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "Use arithmetic symbols such as +, comparisons such as ==, and the logical keywords and, or and not.",
+          "versionNotes": "/ performs true division; // floors toward negative infinity. == tests equality rather than object identity (is); and/or can return operands. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "versionNotes": "此例使用非零除数和小整数，未覆盖溢出或全部运算符。内建 && 短路求值。已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 7 和 2 对照加减乘除、余数、相等比较和逻辑与。这里是整数除法：7 / 2 得 3，7 % 2 得 1；不是浮点除法。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    a, b := 7, 2\n    fmt.Println(a + b, a - b, a * b)\n    fmt.Println(a / b, a % b)\n    fmt.Println(a == b, a != b)\n    fmt.Println(a != b && b != 0)\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — Arithmetic operators",
+            "url": "https://go.dev/ref/spec#Arithmetic_operators",
+            "section": "Arithmetic operators",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Comparison operators",
+            "url": "https://go.dev/ref/spec#Comparison_operators",
+            "section": "Comparison operators",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Logical operators",
+            "url": "https://go.dev/ref/spec#Logical_operators",
+            "section": "Logical operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "versionNotes": "Uses a nonzero divisor and small integers; overflow and the complete operator set are not covered. Built-in && short-circuits. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "Compare arithmetic, remainder, equality and logical AND with 7 and 2. These are integers: 7 / 2 gives 3 and 7 % 2 gives 1, not floating-point division."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "versionNotes": "此例使用非零除数和小整数，未覆盖溢出或全部运算符。内建 && 短路求值。已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 7 和 2 对照加减乘除、余数、相等比较和逻辑与。这里是整数除法：7 / 2 得 3，7 % 2 得 1；不是浮点除法。",
+        "code": "fn main() {\n    let a: i32 = 7;\n    let b: i32 = 2;\n    println!(\"{} {} {}\", a + b, a - b, a * b);\n    println!(\"{} {}\", a / b, a % b);\n    println!(\"{} {}\", a == b, a != b);\n    println!(\"{}\", a != b && b != 0);\n}",
+        "sources": [
+          {
+            "title": "The Rust Reference — Operator expressions",
+            "url": "https://doc.rust-lang.org/reference/expressions/operator-expr.html",
+            "section": "Arithmetic and logical binary operators; Comparison operators; Lazy boolean operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "versionNotes": "Uses a nonzero divisor and small integers; overflow and the complete operator set are not covered. Built-in && short-circuits. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "Compare arithmetic, remainder, equality and logical AND with 7 and 2. These are integers: 7 / 2 gives 3 and 7 % 2 gives 1, not floating-point division."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "数字支持 +、-、*、/、%；比较产生布尔值，&&、|| 会短路，! 取反。两个 int 相除舍去小数部分并向零截断；引用类型的 == 不能泛化为内容比较。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int total = 7 + 2 * 3;\n        int quotient = 7 / 2;\n        int remainder = 7 % 2;\n        boolean allowed = (total > 10) && (remainder == 1);\n        System.out.println(total);\n        System.out.println(quotient);\n        System.out.println(allowed);\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — Expressions",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html#jls-15.17",
+            "section": "15.17–15.24 Arithmetic, equality and conditional operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "Numbers support +, -, *, / and %. Comparisons yield booleans; && and || short-circuit and ! negates. int division truncates toward zero; == on references is not general content equality.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "数字支持 +、-、*、/、%；关系运算产生 bool，&&、|| 短路，! 取反。两个 int 相除向零截断；改用浮点数或 decimal 会有不同的数值规则。",
+        "code": "using System;\n\nclass Program\n{\n    static void Main()\n    {\n        int total = 7 + 2 * 3;\n        int quotient = 7 / 2;\n        int remainder = 7 % 2;\n        bool allowed = (total > 10) && (remainder == 1);\n        Console.WriteLine(total);\n        Console.WriteLine(quotient);\n        Console.WriteLine(allowed);\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Arithmetic operators",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/arithmetic-operators",
+            "section": "Division operator /",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C# — Boolean logical operators",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/boolean-logical-operators",
+            "section": "Conditional logical AND and OR",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C# — Comparison operators",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/comparison-operators",
+            "section": "Relational operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "Numbers support +, -, *, / and %. Relational operations yield bool; && and || short-circuit and ! negates. int division truncates toward zero; floating-point and decimal arithmetic follow different numeric rules.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "本例两个 Integer 相除得到整数 3；需要小数结果时可使用浮点操作数。and/or 与 &&/|| 的优先级不同。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用算术与比较运算符处理值，用 &&、||、! 组合条件。",
+        "code": "a = 7\nb = 2\nputs a + b, a - b, a * b, a / b, a % b\nputs a == b, a > b, (a > 0 && b > 0), !(a == b)",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Precedence",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/precedence_rdoc.html",
+            "section": "Operator precedence",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Integer",
+            "url": "https://docs.ruby-lang.org/en/3.2/Integer.html#method-i-2F",
+            "section": "Division",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "Use arithmetic and comparison operators on values and &&, || and ! to combine conditions.",
+          "versionNotes": "Dividing these two Integer operands yields integer 3; use a floating-point operand when a fractional result is required. and/or differ in precedence from &&/||. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "支持算术、比较和逻辑运算。/ 不会一律做整数除法，7 / 2 得到 3.5；=== 同时比较类型和值，避免 == 的类型转换。&&、|| 会短路，! 取反。",
+        "code": "<?php\n$total = 7 + 2 * 3;\n$quotient = 7 / 2;\n$remainder = 7 % 2;\n$allowed = ($total > 10) && ($remainder === 1);\nvar_dump($total, $quotient, $allowed);",
+        "sources": [
+          {
+            "title": "PHP Manual — Arithmetic operators",
+            "url": "https://www.php.net/manual/en/language.operators.arithmetic.php",
+            "section": "Arithmetic Operators",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — Comparison operators",
+            "url": "https://www.php.net/manual/en/language.operators.comparison.php",
+            "section": "Comparison Operators",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — Logical operators",
+            "url": "https://www.php.net/manual/en/language.operators.logical.php",
+            "section": "Logical Operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "Arithmetic, comparison and logical operators are available. / is not always integer division: 7 / 2 gives 3.5. === compares both type and value, avoiding the conversion performed by ==. && and || short-circuit; ! negates.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "versionNotes": "此例使用非零除数和小整数，未覆盖溢出或全部运算符。内建 && 短路求值。已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 7 和 2 对照加减乘除、余数、相等比较和逻辑与。这里是整数除法：7 / 2 得 3，7 % 2 得 1；不是浮点除法。",
+        "code": "let a: Int = 7\nlet b: Int = 2\nprint(a + b, a - b, a * b)\nprint(a / b, a % b)\nprint(a == b, a != b)\nprint(a != b && b != 0)",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — Basic Operators (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/BasicOperators.md",
+            "section": "Basic Operators",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Swift standard library — BinaryInteger operator documentation (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift/main/stdlib/public/core/Integers.swift",
+            "section": "BinaryInteger / and % operator documentation",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "versionNotes": "Uses a nonzero divisor and small integers; overflow and the complete operator set are not covered. Built-in && short-circuits. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "Compare arithmetic, remainder, equality and logical AND with 7 and 2. These are integers: 7 / 2 gives 3 and 7 % 2 gives 1, not floating-point division."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "数字支持 +、-、*、/、%；Int 相除丢弃小数部分。比较得到 Boolean；&&、|| 短路，! 取反。== 做结构相等比较，=== 检查引用身份，不能混同。",
+        "code": "fun main() {\n    val total = 7 + 2 * 3\n    val quotient = 7 / 2\n    val remainder = 7 % 2\n    val allowed = (total > 10) && (remainder == 1)\n    println(total)\n    println(quotient)\n    println(allowed)\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Numbers",
+            "url": "https://kotlinlang.org/docs/numbers.html#arithmetic-operations",
+            "section": "Arithmetic operations; Integer division",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Booleans",
+            "url": "https://kotlinlang.org/docs/booleans.html",
+            "section": "Boolean operations",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Equality",
+            "url": "https://kotlinlang.org/docs/equality.html",
+            "section": "Structural and referential equality",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "Numbers support +, -, *, / and %. Int division discards the fractional part. Comparisons yield Boolean; && and || short-circuit and ! negates. == checks structural equality, while === checks reference identity.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "versionNotes": "参考资料为持续更新的工作草案；此例仅使用 C++17 已有语法。 此例使用非零除数和小整数，未覆盖溢出或全部运算符。内建 && 短路求值。已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 7 和 2 对照加减乘除、余数、相等比较和逻辑与。这里是整数除法：7 / 2 得 3，7 % 2 得 1；不是浮点除法。",
+        "code": "#include <iostream>\n\nint main() {\n    int a = 7;\n    int b = 2;\n    std::cout << a + b << \" \" << a - b << \" \" << a * b << \"\\n\";\n    std::cout << a / b << \" \" << a % b << \"\\n\";\n    std::cout << std::boolalpha << (a == b) << \" \" << (a != b) << \"\\n\";\n    std::cout << (a != b && b != 0) << \"\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — expr.add",
+            "url": "https://eel.is/c++draft/expr.add",
+            "section": "expr.add",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — expr.eq",
+            "url": "https://eel.is/c++draft/expr.eq",
+            "section": "expr.eq",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — expr.log.and",
+            "url": "https://eel.is/c++draft/expr.log.and",
+            "section": "expr.log.and",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — expr.mul",
+            "url": "https://eel.is/c++draft/expr.mul",
+            "section": "Multiplicative operators",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "versionNotes": "Reference is the evolving working draft; this example uses only C++17-era syntax. Uses a nonzero divisor and small integers; overflow and the complete operator set are not covered. Built-in && short-circuits. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "Compare arithmetic, remainder, equality and logical AND with 7 and 2. These are integers: 7 / 2 gives 3 and 7 % 2 gives 1, not floating-point division."
+        }
+      }
+    ],
+    "en": {
+      "title": "Arithmetic, comparison, and logic",
+      "description": "Compare calculations and Boolean combinations, including division and equality differences.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "operators",
+        "arithmetic",
+        "comparison",
+        "logic"
+      ]
+    }
+  },
+  {
+    "id": "functions",
+    "title": "定义与调用函数",
+    "description": "将加法封装成函数或方法，对照参数、返回值与调用方式。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "函数",
+      "方法",
+      "参数",
+      "返回值"
+    ],
+    "related": [
+      "closures",
+      "generics"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "这里只演示普通函数声明；定义函数不等于执行函数。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "function 声明命名函数；括号传入参数，return 返回计算结果。",
+        "code": "function add(left, right) {\n  return left + right;\n}\nconsole.log(add(2, 3));",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Functions",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+            "section": "Function declarations; calling functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "function declares a named function; parentheses pass arguments and return supplies the result.",
+          "versionNotes": "This demonstrates an ordinary function declaration; defining a function does not execute its body. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；先用 tsc 编译为 JavaScript，再在 Node.js 22+ 运行。",
+        "versionNotes": "返回类型也可推断；类型标注不改变 JavaScript 运行规则。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "为函数参数及返回值标注类型，再用普通调用语法使用它。",
+        "code": "function add(left: number, right: number): number {\n  return left + right;\n}\nconsole.log(add(2, 3));",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Everyday Types",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+            "section": "Type annotations on variables; functions",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "TypeScript Handbook — The Basics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html",
+            "section": "Static type-checking; erased types",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+; compile to JavaScript with tsc, then run on Node.js 22+.",
+          "summary": "Annotate function parameters and the return type, then use normal call syntax.",
+          "versionNotes": "The return type may also be inferred; annotations do not change JavaScript runtime behavior. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "没有显式返回值时返回 None；此例不加入类型提示，参数仍可接收支持相应操作的对象。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 def 定义函数，缩进函数体，用 return 返回值，再以名称加括号调用。",
+        "code": "def add(left, right):\n    return left + right\n\nprint(add(2, 3))",
+        "sources": [
+          {
+            "title": "Python 3.14 Tutorial — More Control Flow Tools",
+            "url": "https://docs.python.org/3.14/tutorial/controlflow.html#defining-functions",
+            "section": "Defining functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "Define a function with def, indent its body, return a value and call it by name with parentheses.",
+          "versionNotes": "Without an explicit returned value, the result is None; this unannotated example accepts objects supporting the relevant operation. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "func 声明函数；参数类型在名字之后，return 返回结果。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc add(a int, b int) int {\n    return a + b\n}\n\nfunc main() {\n    fmt.Println(add(2, 3))\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — Function declarations",
+            "url": "https://go.dev/ref/spec#Function_declarations",
+            "section": "Function declarations",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "func declares a function; parameter types follow names, and return supplies the result."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "fn 定义带类型的参数，-> 标明返回类型；末尾无分号的表达式可作为返回值。",
+        "code": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\nfn main() {\n    println!(\"{}\", add(2, 3));\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Functions",
+            "url": "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html",
+            "section": "Functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "fn declares typed parameters; -> gives the return type. A final expression without a semicolon can supply the result."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "这里用静态方法表达可复用的函数：参数类型在名称前，返回类型在方法名前；return 把结果交回调用者。main 调用同一个类中的 add，无需创建对象。",
+        "code": "public class Main {\n    static int add(int left, int right) {\n        return left + right;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(add(4, 6));\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — Method Declarations",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.4",
+            "section": "8.4 Method Declarations; 8.4.3.2 static Methods; 8.4.5 Method Result",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "This example uses a static method as a reusable function: parameter types precede names and the return type precedes the method name. return gives the result to the caller; main calls add without constructing an object.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用方法封装操作，参数和返回值显式标注类型。静态 Add 方法直接由 Main 调用，return 返回结果；不需要创建 Program 实例。",
+        "code": "using System;\n\nclass Program\n{\n    static int Add(int left, int right)\n    {\n        return left + right;\n    }\n\n    static void Main()\n    {\n        Console.WriteLine(Add(4, 6));\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Methods",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/methods",
+            "section": "Method signatures; Method access; Return values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "Encapsulate an operation in a method with explicit parameter and return types. Main calls the static Add method directly and return passes back the result; no Program instance is needed.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "这里对应的是 Ruby 方法，而不是独立函数类型；也可以用 return 显式提前返回。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "用 def/end 定义方法并以括号传参；最后求值的表达式默认作为返回值。",
+        "code": "def add(left, right)\n  left + right\nend\n\nputs add(2, 3)",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Methods",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/methods_rdoc.html",
+            "section": "Method definitions; arguments; return values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "Define a method with def/end and pass arguments in parentheses; the last evaluated expression is returned by default.",
+          "versionNotes": "The corresponding construct here is a Ruby method, not a separate free-function type; return can also exit explicitly. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "本例未声明参数或返回类型，只传入整数；不代表 PHP 不支持类型声明。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "function 定义函数，参数使用 $ 名称；return 结束调用并交回结果。这里直接在脚本中调用顶层函数，不要求类或 main。",
+        "code": "<?php\nfunction add($left, $right) {\n    return $left + $right;\n}\n\necho add(4, 6), \"\\n\";",
+        "sources": [
+          {
+            "title": "PHP Manual — User-defined functions",
+            "url": "https://www.php.net/manual/en/functions.user-defined.php",
+            "section": "User-defined functions",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — Returning values",
+            "url": "https://www.php.net/manual/en/functions.returning-values.php",
+            "section": "Returning values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "function declares a function with $-prefixed parameter names. return ends the call and passes back a result. This script calls a top-level function directly, without a class or main.",
+          "versionNotes": "This example omits parameter and return type declarations and passes integers; PHP also supports explicit type declarations. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "versionNotes": "已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "func 定义参数及返回类型；参数前的 _ 省略调用标签，return 返回结果。",
+        "code": "func add(_ a: Int, _ b: Int) -> Int {\n    return a + b\n}\nprint(add(2, 3))",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — Functions (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Functions.md",
+            "section": "Functions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "versionNotes": "Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "func defines parameters and a return type; _ suppresses the argument label at the call site, and return supplies the result."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "fun 定义函数；参数名后写类型，参数列表后标注返回类型。函数可直接写在文件顶层；main 调用 add，return 交回计算结果。",
+        "code": "fun add(left: Int, right: Int): Int {\n    return left + right\n}\n\nfun main() {\n    println(add(4, 6))\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Functions",
+            "url": "https://kotlinlang.org/docs/functions.html",
+            "section": "Function declaration; Parameters; Return type",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "fun declares a function. Types follow parameter names and the return type follows the parameter list. Functions may be top-level; main calls add and return passes back its result.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "versionNotes": "参考资料为持续更新的工作草案；此例仅使用 C++17 已有语法。 已查阅所列章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "函数声明返回类型及参数类型；定义放在调用前，return 返回结果。",
+        "code": "#include <iostream>\n\nint add(int a, int b) {\n    return a + b;\n}\n\nint main() {\n    std::cout << add(2, 3) << \"\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — dcl.fct.def.general",
+            "url": "https://eel.is/c++draft/dcl.fct.def.general",
+            "section": "dcl.fct.def.general",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "versionNotes": "Reference is the evolving working draft; this example uses only C++17-era syntax. Listed chapters reviewed; original example not compiled or executed.",
+          "summary": "A function specifies its return and parameter types; define it before the call, and use return for the result."
+        }
+      }
+    ],
+    "en": {
+      "title": "Defining and calling functions",
+      "description": "Wrap addition in a function or method and compare parameters, return values, and calls.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "functions",
+        "methods",
+        "parameters",
+        "return values"
+      ]
+    }
+  }
+]

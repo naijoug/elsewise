@@ -3,10 +3,10 @@ import { features, featureSummaries, validateFeatures } from './feature-content'
 import { featureKey, filterFeatures } from './features';
 import { languages } from './content';
 describe('reviewed feature catalog', () => {
-  it('covers every registered language with preserved concepts and four practical tasks', () => {
-    expect(features).toHaveLength(20);
-    expect(features.reduce((n, feature) => n + feature.entries.length, 0)).toBe(108);
-    for (const language of languages) expect(features.flatMap(f => f.entries).filter(e => e.languageId === language.id)).toHaveLength(9);
+  it('covers every registered language with preserved concepts and four practical tasks and five foundation chapters', () => {
+    expect(features).toHaveLength(25);
+    expect(features.reduce((n, feature) => n + feature.entries.length, 0)).toBe(168);
+    for (const language of languages) expect(features.flatMap(f => f.entries).filter(e => e.languageId === language.id)).toHaveLength(14);
     expect(() => validateFeatures(features)).not.toThrow();
   });
   it('keeps code and evidence out of client summaries and isolates learned ids', () => {
@@ -16,7 +16,7 @@ describe('reviewed feature catalog', () => {
   it('combines search, scope and language without claiming unsupported', () => {
     expect(filterFeatures(featureSummaries, '所有权', 'specific', 'rust').map(f => f.id)).toEqual(['rust-ownership']);
     expect(filterFeatures(featureSummaries, '所有权', '', 'java')).toEqual([]);
-    expect(filterFeatures(featureSummaries, '', 'common', '')).toHaveLength(6);
+    expect(filterFeatures(featureSummaries, '', 'common', '')).toHaveLength(11);
   });
   it('requires complete reviewed coverage for a common label', () => {
     const copy = structuredClone(features); copy.find(f => f.scope === 'common')!.entries.pop();

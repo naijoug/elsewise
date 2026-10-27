@@ -1,9 +1,10 @@
 /** Build-only: never pass entries / code into a client island. */
 import data from '../data/features.json';
 import practical from '../data/practical-docs.json';
+import foundations from '../data/foundations.json';
 import { idioms, languages } from './content';
 import type { Feature } from './features';
-export const features = [...practical, ...data] as Feature[];
+export const features = [...foundations, ...practical, ...data] as Feature[];
 export function validateFeatures(values: Feature[]) {
   const ids = values.map(feature => feature.id);
   if (new Set(ids).size !== ids.length) throw new Error('Duplicate feature id');
