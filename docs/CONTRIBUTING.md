@@ -12,7 +12,7 @@ npm ci
 npm run dev
 ```
 
-以当前代码和[架构说明](ARCHITECTURE.md)为依据。历史 `.kiro/specs` 不作为每次贡献的必读材料。
+以当前代码和[架构说明](ARCHITECTURE.md)为依据。
 
 ## 内容贡献
 

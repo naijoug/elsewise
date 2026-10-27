@@ -22,9 +22,7 @@ Elsewise 使用 Astro 静态生成页面、React 局部交互与 TypeScript，�
 | 构建、托管、发布 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 | UI 可访问性 | [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md) |
 
-只读取当前任务需要的文档和代码。`.kiro/specs/bytebite/` 是历史规格与实施记录，
-其中未实现的需求、旧接口和已勾选任务不代表当前任务的范围或验证结果。
-命令以 package.json 为准，类型以 src/types/index.ts 为准，部署以实际工作流为准。
+只读取当前任务需要的文档和代码。命令以 package.json 为准，类型以 src/types/index.ts 为准，部署以实际工作流为准。
 发现文档与实现不一致时，说明差异；不要自动把历史需求扩成新功能。
 
 ## 数据修改

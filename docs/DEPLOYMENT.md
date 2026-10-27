@@ -57,7 +57,7 @@ GitHub 仓库旧链接与 Pages 旧站点是不同资源，不应依赖旧 Pages
 同域名下从 `/bytebite/` 迁到 `/elsewise/` 不改变 Local Storage 的源，
 应用会自动读取旧收藏和语言偏好，详见[架构说明](ARCHITECTURE.md)。
 
-历史规格 `.kiro/specs/bytebite/`、历史验收记录与原始版权署名保留原名，避免改写历史。
+历史验收记录与原始版权署名保留原名，避免改写历史。
 
 ## 验证 Pages 新前缀
 

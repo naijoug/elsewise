@@ -22,8 +22,6 @@
 
 # 当前架构
 
-本文描述当前实现；原始设计保留在 [.kiro/specs/bytebite](../.kiro/specs/bytebite/design.md)，仅作历史参考。
-
 ## 运行方式
 
 Elsewise 是客户端渲染的 SPA。Vite 生成静态资源，浏览器加载 React 后渲染页面；
