@@ -63,9 +63,6 @@ npm run dev
 | 调查性能或查看旧测量记录 | [性能说明](docs/PERFORMANCE_OPTIMIZATIONS.md) |
 | 使用开发 Agent | [项目约定](AGENTS.md) |
 
-`.kiro/specs/bytebite/` 保留原始规格与实施记录，不是当前接口或完成状态的依据。
-性能和 WCAG AA 属于验证目标；历史测试结果不能证明当前版本达标。
-
 ## 路线图
 
 以下功能尚未作为当前能力交付，不是日常修改的隐含范围：
