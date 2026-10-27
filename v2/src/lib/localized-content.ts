@@ -80,7 +80,7 @@ export const modules = [
     id: 'basics',
     zh: '基础语法',
     en: 'Language basics',
-    ids: ['syntax-basics', 'variables', 'constants', 'operators', 'functions'],
+    ids: ['syntax-basics', 'variables', 'constants', 'basic-types', 'operators', 'conditions', 'loops', 'functions'],
   },
   {
     id: 'functions-advanced',

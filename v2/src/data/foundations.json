@@ -657,7 +657,7 @@
     ],
     "related": [
       "variables",
-      "functions"
+      "basic-types"
     ],
     "idiomIds": [],
     "entries": [
@@ -968,6 +968,393 @@
     }
   },
   {
+    "id": "basic-types",
+    "title": "基础类型与缺失值",
+    "description": "认识数字、布尔、字符串与缺失值，区分类型检查和运行时表示。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "基础类型",
+      "数字",
+      "字符串",
+      "布尔",
+      "缺失值"
+    ],
+    "related": [
+      "operators",
+      "conditions"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "number 使用双精度浮点数，安全整数范围为 ±(2^53−1)；需要更大精确整数可用 bigint，但不能直接与 number 混合做算术。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "常用值包括 number、boolean、string、null 和 undefined。JavaScript 是动态类型语言：let 绑定可先后指向不同类型的值，但 const 仍不可重新赋值。",
+        "code": "const count = 3;\nconst price = 2.5;\nconst active = true;\nconst label = \"Ada\";\nconst missing = null;\nlet pending;\nconsole.log(count, price, active, label, missing, pending);",
+        "sources": [
+          {
+            "title": "MDN JavaScript — Data types and data structures",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures",
+            "section": "Dynamic typing; primitive values; Number, BigInt, null and undefined",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "MDN JavaScript — Number.MAX_SAFE_INTEGER",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER",
+            "section": "Safe integer range",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "Common values include number, boolean, string, null and undefined. JavaScript is dynamically typed: a let binding can hold different value types over time, but const still forbids reassignment.",
+          "versionNotes": "number uses double-precision floating point with safe integers in ±(2^53−1); bigint supports larger exact integers, but arithmetic cannot directly mix bigint and number. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；启用 strict，编译为 JavaScript 后在 Node.js 22+ 运行。",
+        "versionNotes": "类型检查不改变运行时值；number 的精度边界与 JavaScript 相同。strictNullChecks 区分可空与不可空类型。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "在 JavaScript 值之上，用 number、boolean、string 等类型进行静态检查；null 与 undefined 可显式标注。",
+        "code": "const count: number = 3;\nconst price: number = 2.5;\nconst active: boolean = true;\nconst label: string = \"Ada\";\nconst missing: null = null;\nconst pending: undefined = undefined;\nconsole.log(count, price, active, label, missing, pending);",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Everyday Types",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+            "section": "Primitive types; null and undefined; strictNullChecks",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "TypeScript Handbook — The Basics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types",
+            "section": "Static checking; erased types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "MDN JavaScript — Number.MAX_SAFE_INTEGER",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER",
+            "section": "Safe integer range",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+ with strict enabled; compile to JavaScript and run on Node.js 22+.",
+          "summary": "Use number, boolean, string and other types to statically check JavaScript values; null and undefined can be annotated explicitly.",
+          "versionNotes": "Type checking does not change runtime values; number has JavaScript precision limits. strictNullChecks distinguishes nullable types. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "int 为任意精度整数，受可用资源限制；float 通常使用 C double，并非所有十进制小数都可精确表示。bool 是 int 的子类型。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "常用类型有 int、float、bool、str；None 表示缺失值，类型属于对象而不是固定的变量槽位。",
+        "code": "count = 3\nprice = 2.5\nactive = True\nlabel = \"Ada\"\nmissing = None\nprint(count, price, active, label, missing)",
+        "sources": [
+          {
+            "title": "Python 3.14 — Built-in Types",
+            "url": "https://docs.python.org/3.14/builtins/stdtypes.html",
+            "section": "Truth value testing; numeric types; text sequence type str",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "Common types include int, float, bool and str; None represents absence, and types belong to objects rather than fixed variable slots.",
+          "versionNotes": "int provides arbitrary-precision integers subject to available resources; float usually uses C double and cannot exactly represent every decimal fraction. bool is a subtype of int. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "status": "native",
+        "summary": "Go 是静态类型语言；int、float64、bool、string 分别表示整数、浮点数、布尔值和文本。nil 不能赋给这些普通值，可用于指针等指定类型。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var count int = 3\n    var price float64 = 2.5\n    var ready bool = true\n    var name string = \"Ada\"\n    var missing *int = nil\n    fmt.Println(count, price, ready, name, missing == nil)\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — Types",
+            "url": "https://go.dev/ref/spec#Types",
+            "section": "Types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Assignability",
+            "url": "https://go.dev/ref/spec#Assignability",
+            "section": "Assignability",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "示例用可空指针表达缺失，不把 nil 视为所有类型共有的空值。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "summary": "Go is statically typed. int, float64, bool and string cover integers, floating-point values, Booleans and text. nil is not valid for these ordinary values; pointers are one supported category.",
+          "versionNotes": "A nullable pointer represents absence here; nil is not a universal empty value. Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "status": "native",
+        "summary": "Rust 静态检查类型。i32、f64、bool 和 String 覆盖常用值；Option<i32> 的 None 表示缺失，Some 包装实际整数，不等同于可随意赋给普通整数的 null。",
+        "code": "fn main() {\n    let count: i32 = 3;\n    let price: f64 = 2.5;\n    let ready: bool = true;\n    let name = String::from(\"Ada\");\n    let missing: Option<i32> = None;\n    println!(\"{} {} {} {} {:?}\", count, price, ready, name, missing);\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Data Types",
+            "url": "https://doc.rust-lang.org/book/ch03-02-data-types.html",
+            "section": "Data Types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "The Rust Programming Language — The String Type",
+            "url": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+            "section": "The String Type",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "The Rust Programming Language — The Option Enum and Its Advantages Over Null Values",
+            "url": "https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html",
+            "section": "The Option Enum and Its Advantages Over Null Values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "示例只用安全普通值；不讨论原始指针。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "summary": "Rust checks types statically. i32, f64, bool and String cover common values. Option<i32> uses None for absence and Some for a present integer, not a null assignable to ordinary integers.",
+          "versionNotes": "This example uses ordinary safe values, not raw pointers. Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "double 是二进制浮点数，不保证任意十进制小数都精确；此例不对 null 调用方法。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "Java 是静态类型语言。int、double、boolean 是基本类型；String 是引用类型。null 可表示缺少对象引用，不能直接赋给 int 或 boolean。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int count = 3;\n        double ratio = 0.5;\n        boolean ready = true;\n        String label = \"items\";\n        String missing = null;\n        System.out.println(label + \": \" + count);\n        System.out.println(ratio);\n        System.out.println(ready);\n        System.out.println(missing == null);\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — Types, Values, and Variables",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-4.html#jls-4.1",
+            "section": "4.1 Kinds of Types and Values; 4.2 Primitive Types; 4.3 Reference Types",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "Java is statically typed. int, double and boolean are primitive types; String is a reference type. null can represent an absent object reference, but cannot be assigned directly to int or boolean.",
+          "versionNotes": "double uses binary floating point and cannot exactly represent every decimal fraction; this example never calls a method on null. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "这里使用静态类型声明并显式启用可空分析；可空引用检查主要给出编译警告，不会自动添加运行时防护。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "C# 中 int、double、bool 是值类型，string 是引用类型。int? 扩展值类型以容纳 null；string? 是可空引用注解，辅助编译器检查，不是新的运行时类型。",
+        "code": "#nullable enable\nusing System;\n\nclass Program\n{\n    static void Main()\n    {\n        int count = 3;\n        double ratio = 0.5;\n        bool ready = true;\n        string label = \"items\";\n        int? missingCount = null;\n        string? missingLabel = null;\n        Console.WriteLine($\"{label}: {count}\");\n        Console.WriteLine(ratio);\n        Console.WriteLine(ready);\n        Console.WriteLine(missingCount == null);\n        Console.WriteLine(missingLabel == null);\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Built-in types",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types",
+            "section": "Value types and reference types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C# — Nullable value types",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types",
+            "section": "Declaration and assignment",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C# — Nullable reference types",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/null-safety/nullable-reference-types",
+            "section": "Compile-time analysis and annotations",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "In C#, int, double and bool are value types; string is a reference type. int? extends a value type with null. string? is a nullable-reference annotation for compiler analysis, not a new runtime type.",
+          "versionNotes": "Uses static type declarations and explicitly enables nullable analysis; nullable-reference checks primarily produce warnings, not automatic runtime guards. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "Integer 可表示任意大小整数，实际受资源限制；Float 使用本机双精度表示，可能不精确。nil 不等于空字符串或数字零。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "常用对象包括 Integer、Float、String，以及 true、false 和 nil；变量名无需固定类型声明。",
+        "code": "count = 3\nprice = 2.5\nactive = true\nlabel = \"Ada\"\nmissing = nil\np count, price, active, label, missing",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Literals",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/literals_rdoc.html",
+            "section": "Boolean and nil; number; string; range literals",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Float",
+            "url": "https://docs.ruby-lang.org/en/3.2/Float.html",
+            "section": "Native double precision and inexact representation",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Assignment",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/assignment_rdoc.html",
+            "section": "Local variables",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "Common objects include Integer, Float and String, plus true, false and nil; variable names need no fixed type declaration.",
+          "versionNotes": "Integer can represent arbitrary-size integers subject to resources; Float uses native double precision and can be inexact. nil is distinct from an empty string or numeric zero. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "var_dump 用于同时观察类型和值；null 不等于变量从未定义。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "常用值类型有 int、float、bool、string 和 null。普通变量没有固定的声明类型，可在后续赋值时持有另一类型；函数参数、返回值和属性可另外声明类型。",
+        "code": "<?php\n$count = 3;\n$ratio = 0.5;\n$ready = true;\n$label = \"items\";\n$missing = null;\nvar_dump($count, $ratio, $ready, $label, $missing);",
+        "sources": [
+          {
+            "title": "PHP Manual — Type System",
+            "url": "https://www.php.net/manual/en/language.types.type-system.php",
+            "section": "Atomic types; Scalar types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — Type Juggling",
+            "url": "https://www.php.net/manual/en/language.types.type-juggling.php",
+            "section": "Type Juggling",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "Common value types include int, float, bool, string and null. Ordinary variables have no fixed declared type and can hold another type after reassignment; parameters, return values and properties can have type declarations.",
+          "versionNotes": "var_dump exposes types as well as values; null is not the same as a variable never being defined. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "status": "native",
+        "summary": "Swift 静态检查 Int、Double、Bool、String 等类型，也支持类型推断。Int? 是可选整数，nil 表示没有值，不是普通 Int。",
+        "code": "let count: Int = 3\nlet price: Double = 2.5\nlet ready: Bool = true\nlet name: String = \"Ada\"\nlet missing: Int? = nil\nprint(count, price, ready, name, missing == nil)",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — TheBasics (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/TheBasics.md",
+            "section": "Type Safety and Type Inference; Integers; Floating-Point Numbers; Booleans; Optionals",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "summary": "Swift statically checks types such as Int, Double, Bool and String and supports inference. Int? is an optional integer; nil means no value, not an ordinary Int.",
+          "versionNotes": "Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "此处面向 Kotlin/JVM，不将 Kotlin 类型简单等同于 Java 原始类型；示例没有使用 !!。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "Kotlin 静态检查类型。常用 Int、Double、Boolean 和 String；非空类型不能存 null，String? 则明确允许缺失值。类型推断不会取消这些约束。",
+        "code": "fun main() {\n    val count: Int = 3\n    val ratio: Double = 0.5\n    val ready: Boolean = true\n    val label: String = \"items\"\n    val missing: String? = null\n    println(\"$label: $count\")\n    println(ratio)\n    println(ready)\n    println(missing == null)\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Numbers",
+            "url": "https://kotlinlang.org/docs/numbers.html",
+            "section": "Choose a number type",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Strings",
+            "url": "https://kotlinlang.org/docs/strings.html",
+            "section": "Declare strings",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Null safety",
+            "url": "https://kotlinlang.org/docs/null-safety.html",
+            "section": "Nullable types and non-nullable types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Booleans",
+            "url": "https://kotlinlang.org/docs/booleans.html",
+            "section": "Declare a Boolean variable",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "Kotlin checks types statically. Common types include Int, Double, Boolean and String. A non-null type cannot hold null; String? explicitly permits absence. Type inference does not remove these constraints.",
+          "versionNotes": "Targets Kotlin/JVM without equating Kotlin types directly with Java primitives; the example does not use !!. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "status": "native",
+        "summary": "C++ 静态检查类型；int、double、bool 是内建类型，std::string 是标准库字符串。C++17 的 std::optional<int> 可表达有值或缺失，std::nullopt 不等于整数零。",
+        "code": "#include <iostream>\n#include <string>\n#include <optional>\n\nint main() {\n    int count = 3;\n    double price = 2.5;\n    bool ready = true;\n    std::string name = \"Ada\";\n    std::optional<int> missing = std::nullopt;\n    std::cout << count << \" \" << price << \" \" << std::boolalpha\n              << ready << \" \" << name << \" \" << missing.has_value() << \"\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — basic.fundamental",
+            "url": "https://eel.is/c++draft/basic.fundamental",
+            "section": "basic.fundamental",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — string.syn",
+            "url": "https://eel.is/c++draft/string.syn",
+            "section": "string.syn",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — optional.general",
+            "url": "https://eel.is/c++draft/optional.general",
+            "section": "optional.general",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — optional.observe",
+            "url": "https://eel.is/c++draft/optional.observe",
+            "section": "optional.observe",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "参考为持续更新的工作草案；示例限定 C++17。 不要假定 int 在所有平台均为 32 位。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "summary": "C++ checks types statically. int, double and bool are built-in types; std::string is a library string. C++17 std::optional<int> represents presence or absence; std::nullopt is not integer zero.",
+          "versionNotes": "Reference is an evolving working draft; example targets C++17. Do not assume int is 32-bit on every platform. Listed official chapters checked; original example not compiled or executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "Basic types and missing values",
+      "description": "Explore numbers, booleans, strings, and missing values; distinguish type checking from runtime representation.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "basic types",
+        "numbers",
+        "strings",
+        "booleans",
+        "missing values"
+      ]
+    }
+  },
+  {
     "id": "operators",
     "title": "算术、比较与逻辑操作符",
     "description": "对照计算与条件组合的写法，留意整数除法和相等比较的差异。",
@@ -980,8 +1367,8 @@
       "逻辑"
     ],
     "related": [
-      "variables",
-      "functions"
+      "basic-types",
+      "conditions"
     ],
     "idiomIds": [],
     "entries": [
@@ -1337,6 +1724,708 @@
         "arithmetic",
         "comparison",
         "logic"
+      ]
+    }
+  },
+  {
+    "id": "conditions",
+    "title": "条件分支",
+    "description": "用条件决定执行哪一段代码，留意布尔条件与真值转换的区别。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "条件",
+      "分支",
+      "if",
+      "else"
+    ],
+    "related": [
+      "loops",
+      "functions"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "条件不要求原本是布尔值：0、空字符串、null、undefined 等是假值；空数组与空对象是真值。此例用比较表达式避免隐式判断。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "按顺序测试 if、else if，命中后执行对应分支；else 处理其余情况。",
+        "code": "const score = 75;\nif (score >= 90) {\n  console.log(\"high\");\n} else if (score >= 60) {\n  console.log(\"pass\");\n} else {\n  console.log(\"retry\");\n}",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Control flow and error handling",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#if...else_statement",
+            "section": "if...else; falsy values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "Test if and else if branches in order; execute the matching branch, with else handling the remainder.",
+          "versionNotes": "Conditions need not start as booleans: 0, empty strings, null and undefined are falsy; empty arrays and objects are truthy. This example uses comparisons for explicit tests. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；启用 strict，编译为 JavaScript 后在 Node.js 22+ 运行。",
+        "versionNotes": "真假值判断不会自动区分“缺失”与“空字符串”：二者都可能是假值；需要区分时应显式比较 null 或 undefined。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "if/else 运行规则与 JavaScript 相同；类型检查器还可依据分支条件缩小可用类型。",
+        "code": "const score: number = 75;\nif (score >= 90) {\n  console.log(\"high\");\n} else if (score >= 60) {\n  console.log(\"pass\");\n} else {\n  console.log(\"retry\");\n}",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Narrowing",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#truthiness-narrowing",
+            "section": "Truthiness narrowing",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "MDN JavaScript Guide — Control flow and error handling",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#if...else_statement",
+            "section": "if...else; falsy values",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+ with strict enabled; compile to JavaScript and run on Node.js 22+.",
+          "summary": "if/else runs as in JavaScript; the checker can also narrow types based on branch conditions.",
+          "versionNotes": "Truthiness does not automatically distinguish absence from an empty string: both can be falsy. Compare explicitly with null or undefined when that distinction matters. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "None、False、数值零和空容器是假值；非空字符串 \"false\" 仍是真值。与 JavaScript 不同，空列表也是假值。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "使用 if、elif、else；冒号后由缩进定义分支体，按顺序只选择一个分支。",
+        "code": "score = 75\nif score >= 90:\n    print(\"high\")\nelif score >= 60:\n    print(\"pass\")\nelse:\n    print(\"retry\")",
+        "sources": [
+          {
+            "title": "Python 3.14 Tutorial — More Control Flow Tools",
+            "url": "https://docs.python.org/3.14/tutorial/controlflow.html",
+            "section": "if statements; for statements; range; break and continue",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.14 — Built-in Types",
+            "url": "https://docs.python.org/3.14/builtins/stdtypes.html",
+            "section": "Truth value testing; numeric types; text sequence type str",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "Use if, elif and else; indentation after the colon defines each body, and branches are selected in order.",
+          "versionNotes": "None, False, numeric zero and empty containers are falsy; the nonempty string \"false\" is truthy. Unlike JavaScript, an empty list is falsy. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "status": "native",
+        "summary": "if / else if / else 按顺序选择分支；普通条件表达式必须为布尔值，不能直接用整数代替。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    score := 75\n    if score >= 90 {\n        fmt.Println(\"high\")\n    } else if score >= 60 {\n        fmt.Println(\"pass\")\n    } else {\n        fmt.Println(\"retry\")\n    }\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — If statements",
+            "url": "https://go.dev/ref/spec#If_statements",
+            "section": "If statements",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "summary": "if / else if / else selects a branch in order. An ordinary condition expression must be Boolean; an integer cannot replace it.",
+          "versionNotes": "Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "status": "native",
+        "summary": "if / else if / else 按顺序选择分支；普通条件表达式必须为布尔值，不能直接用整数代替。",
+        "code": "fn main() {\n    let score: i32 = 75;\n    if score >= 90 {\n        println!(\"high\");\n    } else if score >= 60 {\n        println!(\"pass\");\n    } else {\n        println!(\"retry\");\n    }\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Control Flow",
+            "url": "https://doc.rust-lang.org/book/ch03-05-control-flow.html",
+            "section": "Control Flow",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "summary": "if / else if / else selects a branch in order. An ordinary condition expression must be Boolean; an integer cannot replace it.",
+          "versionNotes": "Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "本例用比较得到基本类型 boolean；若 Boolean 对象为 null，拆箱会失败。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "if / else if / else 按顺序选择分支，只执行第一个满足条件的分支，否则执行 else。条件要求 boolean 或可拆箱的 Boolean，不能直接用数字或字符串代替。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int score = 75;\n        if (score >= 90) {\n            System.out.println(\"high\");\n        } else if (score >= 60) {\n            System.out.println(\"pass\");\n        } else {\n            System.out.println(\"retry\");\n        }\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — The if Statement",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.9",
+            "section": "14.9; 14.9.1; 14.9.2",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "if / else if / else selects the first matching branch in order, falling back to else. A condition requires boolean or an unboxable Boolean, not a number or string.",
+          "versionNotes": "Comparisons here produce primitive booleans; unboxing a null Boolean would fail. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "这里只展示内置 bool 条件，不涉及自定义类型的运算符。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "if / else if / else 按顺序选中第一个成立的分支。这里用比较产生 bool；普通数字和字符串不能当作条件，不能照搬其他语言的真假值规则。",
+        "code": "using System;\n\nclass Program\n{\n    static void Main()\n    {\n        int score = 75;\n        if (score >= 90) {\n            Console.WriteLine(\"high\");\n        } else if (score >= 60) {\n            Console.WriteLine(\"pass\");\n        } else {\n            Console.WriteLine(\"retry\");\n        }\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Selection statements",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/selection-statements#the-if-statement",
+            "section": "The if statement",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "if / else if / else selects the first successful branch in order. Comparisons here produce bool; ordinary numbers and strings cannot serve as conditions, so truthiness rules from other languages do not apply.",
+          "versionNotes": "Shows built-in bool conditions, not user-defined type operators. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "只有 false 和 nil 是假值；0、空字符串、空数组都是真值。不能照搬 Python 或 JavaScript 的真假值假设。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "使用 if、elsif、else，并用 end 结束；只执行第一个满足条件的分支。",
+        "code": "score = 75\nif score >= 90\n  puts \"high\"\nelsif score >= 60\n  puts \"pass\"\nelse\n  puts \"retry\"\nend",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Control Expressions",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/control_expressions_rdoc.html",
+            "section": "if; while; for; break; next",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "Use if, elsif and else, ending with end; only the first matching branch executes.",
+          "versionNotes": "Only false and nil are falsy; 0, empty strings and empty arrays are truthy. Do not import Python or JavaScript truthiness assumptions. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "if / elseif / else 依次选择分支。PHP 会把条件转换为 bool；例如 0、空字符串和字符串 \"0\" 都是假值。示例使用显式数值比较，避免依赖容易混淆的隐式转换。",
+        "code": "<?php\n$score = 75;\nif ($score >= 90) {\n    echo \"high\\n\";\n} elseif ($score >= 60) {\n    echo \"pass\\n\";\n} else {\n    echo \"retry\\n\";\n}",
+        "sources": [
+          {
+            "title": "PHP Manual — if",
+            "url": "https://www.php.net/manual/en/control-structures.if.php",
+            "section": "if",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — elseif/else if",
+            "url": "https://www.php.net/manual/en/control-structures.elseif.php",
+            "section": "elseif/else if",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — Booleans",
+            "url": "https://www.php.net/manual/en/language.types.boolean.php#language.types.boolean.casting",
+            "section": "Converting to boolean",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "if / elseif / else selects a branch in order. PHP converts conditions to bool: 0, an empty string and the string \"0\" are false. Explicit numeric comparisons here avoid relying on easily confused implicit conversions.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "status": "native",
+        "summary": "if / else if / else 按顺序选择分支；普通条件表达式必须为布尔值，不能直接用整数代替。",
+        "code": "let score = 75\nif score >= 90 {\n    print(\"high\")\n} else if score >= 60 {\n    print(\"pass\")\n} else {\n    print(\"retry\")\n}",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — ControlFlow (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/ControlFlow.md",
+            "section": "Conditional Statements; For-In Loops; While Loops; Control Transfer Statements",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "The Swift Programming Language — TheBasics (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/TheBasics.md",
+            "section": "Booleans",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "summary": "if / else if / else selects a branch in order. An ordinary condition expression must be Boolean; an integer cannot replace it.",
+          "versionNotes": "Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "if 的条件必须是 Boolean，不把整数或字符串自动视作真假值。它既可控制语句，也可产生值；本例把分支结果赋给变量，因此必须有 else。",
+        "code": "fun main() {\n    val score = 75\n    val result = if (score >= 90) {\n        \"high\"\n    } else if (score >= 60) {\n        \"pass\"\n    } else {\n        \"retry\"\n    }\n    println(result)\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Conditions and loops",
+            "url": "https://kotlinlang.org/docs/control-flow.html#if-expression",
+            "section": "If expression",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Booleans",
+            "url": "https://kotlinlang.org/docs/booleans.html",
+            "section": "Boolean in conditions",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "An if condition must be Boolean; integers and strings are not implicitly treated as truth values. if can control statements or produce a value. This example assigns the result, so an else branch is required.",
+          "versionNotes": "Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "status": "native",
+        "summary": "if / else if / else 按顺序选择分支。条件进行上下文 bool 转换：整数零为假，非零为真；这里用明确的比较表达式。",
+        "code": "#include <iostream>\n\nint main() {\n    int score = 75;\n    if (score >= 90) {\n        std::cout << \"high\\n\";\n    } else if (score >= 60) {\n        std::cout << \"pass\\n\";\n    } else {\n        std::cout << \"retry\\n\";\n    }\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — stmt.if",
+            "url": "https://eel.is/c++draft/stmt.if",
+            "section": "stmt.if",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — stmt.pre",
+            "url": "https://eel.is/c++draft/stmt.pre",
+            "section": "stmt.pre",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — conv.bool",
+            "url": "https://eel.is/c++draft/conv.bool",
+            "section": "conv.bool",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "参考为持续更新的工作草案；示例限定 C++17。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "summary": "if / else if / else selects a branch in order. Conditions undergo contextual conversion to bool: zero is false and nonzero is true; explicit comparisons are used here.",
+          "versionNotes": "Reference is an evolving working draft; example targets C++17. Listed official chapters checked; original example not compiled or executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "Conditional branches",
+      "description": "Choose which code runs, distinguishing Boolean conditions from truth-value conversion.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "conditions",
+        "branches",
+        "if",
+        "else"
+      ]
+    }
+  },
+  {
+    "id": "loops",
+    "title": "循环与跳转",
+    "description": "重复处理一组值，比较遍历边界、提前结束与跳过本轮的写法。",
+    "scope": "common",
+    "scopeNote": "共同学习主题，不代表各语言采用相同机制；代码用于对照。",
+    "tags": [
+      "循环",
+      "迭代",
+      "for",
+      "while",
+      "break",
+      "continue"
+    ],
+    "related": [
+      "functions",
+      "closures"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "JavaScript；Node.js 22+，保存为 .mjs。",
+        "versionNotes": "本例累加 1 和 3 后达到 4，提前退出，没有遍历到 5；倒计数从 2 降至 0。 <= 5 包含上界；continue 跳到 for 的更新表达式，break 退出当前循环。while 每轮检查条件，必须确保状态能向终止条件推进。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "在 1 到 5 中跳过偶数、累加奇数，达到 4 时提前退出，不再遍历到 5；另用 while 倒数到零。",
+        "code": "let total = 0;\nfor (let n = 1; n <= 5; n += 1) {\n  if (n % 2 === 0) continue;\n  total += n;\n  if (total >= 4) break;\n}\nconsole.log(total);\nlet remaining = 2;\nwhile (remaining > 0) {\n  remaining -= 1;\n}\nconsole.log(remaining);",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Loops and iteration",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration",
+            "section": "for; while; break; continue",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JavaScript; Node.js 22+, save as .mjs.",
+          "summary": "Skip even numbers while summing odds from 1 through 5, stopping at 4 before reaching 5; a separate while loop counts down to zero.",
+          "versionNotes": "This sums 1 and 3 to reach 4, exiting before visiting 5; the countdown goes from 2 to 0. <= 5 includes the upper bound; continue goes to the for update expression, while break exits the loop. while tests its condition each time; ensure state progresses toward termination. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3+；启用 strict，编译为 JavaScript 后在 Node.js 22+ 运行。",
+        "versionNotes": "本例累加 1 和 3 后达到 4，提前退出，没有遍历到 5；倒计数从 2 降至 0。 此例包含 1 与 5，跳过偶数并在总和达到 4 时 break；continue 仍执行 for 更新。静态类型不能代替对循环终止的检查。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "用与 JavaScript 相同的 for/while 控制重复执行，累加器与计数器可标注为 number。",
+        "code": "let total: number = 0;\nfor (let n: number = 1; n <= 5; n += 1) {\n  if (n % 2 === 0) continue;\n  total += n;\n  if (total >= 4) break;\n}\nconsole.log(total);\nlet remaining: number = 2;\nwhile (remaining > 0) {\n  remaining -= 1;\n}\nconsole.log(remaining);",
+        "sources": [
+          {
+            "title": "MDN JavaScript Guide — Loops and iteration",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration",
+            "section": "for; while; break; continue",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "TypeScript Handbook — The Basics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types",
+            "section": "Static checking; erased types",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3+ with strict enabled; compile to JavaScript and run on Node.js 22+.",
+          "summary": "Use JavaScript-style for/while loops, optionally annotating accumulators and counters as number.",
+          "versionNotes": "This sums 1 and 3 to reach 4, exiting before visiting 5; the countdown goes from 2 to 0. This includes 1 and 5, skips evens and breaks when the sum reaches 4; continue still performs the for update. Static types do not replace checking termination. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；保存为 .py。",
+        "versionNotes": "本例累加 1 和 3 后达到 4，提前退出，没有遍历到 5；倒计数从 2 降至 0。 range(1, 6) 包含 1、不包含 6，因此覆盖到 5；这不是 C 风格的 for 初始化/条件/更新三段。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "for 遍历 range 产生的整数；continue 跳过当前轮，break 提前退出，while 按条件重复。",
+        "code": "total = 0\nfor n in range(1, 6):\n    if n % 2 == 0:\n        continue\n    total += n\n    if total >= 4:\n        break\nprint(total)\nremaining = 2\nwhile remaining > 0:\n    remaining -= 1\nprint(remaining)",
+        "sources": [
+          {
+            "title": "Python 3.14 Tutorial — More Control Flow Tools",
+            "url": "https://docs.python.org/3.14/tutorial/controlflow.html",
+            "section": "if statements; for statements; range; break and continue",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.14 Tutorial — An Informal Introduction to Python",
+            "url": "https://docs.python.org/3.14/tutorial/introduction.html#first-steps-towards-programming",
+            "section": "First steps towards programming: while",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; save as .py.",
+          "summary": "for traverses integers produced by range; continue skips an iteration, break exits early, and while repeats by condition.",
+          "versionNotes": "This sums 1 and 3 to reach 4, exiting before visiting 5; the countdown goes from 2 to 0. range(1, 6) includes 1 but excludes 6, reaching 5; this is not a C-style initialization/condition/update for loop. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.x；完整 main.go 程序，仅标准库。",
+        "status": "native",
+        "summary": "Go 用 for 统一表达循环，没有 while 关键字；n <= 5 包含上界。 示例跳过偶数，累计到 4 即提前退出；continue 跳过本轮剩余语句，break 退出循环。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    total := 0\n    for n := 1; n <= 5; n++ {\n        if n % 2 == 0 { continue }\n        total += n\n        if total >= 4 { break }\n    }\n    remaining := 2\n    for remaining > 0 { remaining-- }\n    fmt.Println(total, remaining)\n}",
+        "sources": [
+          {
+            "title": "Go Language Specification — For statements",
+            "url": "https://go.dev/ref/spec#For_statements",
+            "section": "For statements",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Break statements",
+            "url": "https://go.dev/ref/spec#Break_statements",
+            "section": "Break statements",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go Language Specification — Continue statements",
+            "url": "https://go.dev/ref/spec#Continue_statements",
+            "section": "Continue statements",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "提前退出意味着本例不会走完整个 1 到 5 区间。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Go 1.x; complete main.go program, standard library only.",
+          "summary": "Go uses for for loops and has no while keyword; n <= 5 includes the upper bound. The example skips even numbers and stops when the sum reaches 4; continue skips the rest of an iteration and break exits the loop.",
+          "versionNotes": "Early exit means this example does not traverse the entire 1-to-5 range. Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 稳定工具链；完整 main.rs 程序，无外部依赖。",
+        "status": "native",
+        "summary": "for 遍历序列，1..=5 包含 5；while 在每轮前检查条件。 示例跳过偶数，累计到 4 即提前退出；continue 跳过本轮剩余语句，break 退出循环。",
+        "code": "fn main() {\n    let mut total = 0;\n    for n in 1..=5 {\n        if n % 2 == 0 { continue; }\n        total += n;\n        if total >= 4 { break; }\n    }\n    let mut remaining = 2;\n    while remaining > 0 { remaining -= 1; }\n    println!(\"{} {}\", total, remaining);\n}",
+        "sources": [
+          {
+            "title": "The Rust Programming Language — Control Flow",
+            "url": "https://doc.rust-lang.org/book/ch03-05-control-flow.html",
+            "section": "Control Flow",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Rust standard library — RangeInclusive",
+            "url": "https://doc.rust-lang.org/std/ops/struct.RangeInclusive.html",
+            "section": "Inclusive range start..=end",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "提前退出意味着本例不会走完整个 1 到 5 区间。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Stable Rust toolchain; complete main.rs program, no external dependencies.",
+          "summary": "for traverses a sequence; 1..=5 includes 5. while checks its condition before each iteration. The example skips even numbers and stops when the sum reaches 4; continue skips the rest of an iteration and break exits the loop.",
+          "versionNotes": "Early exit means this example does not traverse the entire 1-to-5 range. Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "JDK 25；每个示例单独保存为 Main.java。",
+        "versionNotes": "逻辑推演：累加 1、3 后 total 达到 4，提前退出，尚未遍历到 5；while 将 remaining 从 2 减至 0，最后输出 4、0。不是实际运行记录。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "for 把初始化、条件、更新写在一起；n <= 5 包含 5。continue 跳过本轮剩余语句后仍执行 for 的更新；while 先检查条件，break 提前退出最近一层循环。",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int n = 1; n <= 5; n++) {\n            if (n % 2 == 0) continue;\n            total += n;\n            if (total >= 4) break;\n        }\n        int remaining = 2;\n        while (remaining > 0) {\n            remaining--;\n        }\n        System.out.println(total);\n        System.out.println(remaining);\n    }\n}",
+        "sources": [
+          {
+            "title": "Java SE 25 JLS — while and for",
+            "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.12",
+            "section": "14.12 while; 14.14.1 basic for; 14.15 break; 14.16 continue",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "JDK 25; save each example separately as Main.java.",
+          "summary": "for groups initialization, condition and update; n <= 5 includes 5. continue skips the remaining body but still performs the for update. while checks first, and break exits the nearest loop early.",
+          "versionNotes": "By inspection, adding 1 and 3 brings total to 4 and exits before reaching 5. The while loop reduces remaining from 2 to 0; the final values printed are 4 and 0. This is not an execution record. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": ".NET 10 SDK 控制台项目；以本例替换 Program.cs。",
+        "versionNotes": "逻辑推演：累加 1、3 后 total 达到 4，提前退出，尚未遍历到 5；while 将 remaining 从 2 减至 0，最后输出 4、0。不是实际运行记录。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "for 指定初始化、继续条件和更新；<= 让上界 5 也参与。continue 跳过本轮剩余部分并进入更新，while 先判断条件；break 结束最近的循环。",
+        "code": "using System;\n\nclass Program\n{\n    static void Main()\n    {\n        int total = 0;\n        for (int n = 1; n <= 5; n++) {\n            if (n % 2 == 0) continue;\n            total += n;\n            if (total >= 4) break;\n        }\n        int remaining = 2;\n        while (remaining > 0) {\n            remaining--;\n        }\n        Console.WriteLine(total);\n        Console.WriteLine(remaining);\n    }\n}",
+        "sources": [
+          {
+            "title": "C# — Iteration statements",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/iteration-statements",
+            "section": "The for statement; The while statement; break and continue",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": ".NET 10 SDK console project; replace Program.cs with this example.",
+          "summary": "for specifies initialization, a continuation condition and an update; <= includes the upper bound 5. continue skips the remaining body and proceeds to the update. while tests first; break ends the nearest loop.",
+          "versionNotes": "By inspection, adding 1 and 3 brings total to 4 and exits before reaching 5. The while loop reduces remaining from 2 to 0; the final values printed are 4 and 0. This is not an execution record. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2+；保存为 .rb。",
+        "versionNotes": "本例累加 1 和 3 后达到 4，提前退出，没有遍历到 5；倒计数从 2 降至 0。 1..5 包含 5，1...5 则不包含；Ruby 使用 next 而非 continue。for 不创建新局部变量作用域；常见 each 块的作用域规则不同。 已查阅所列官方章节；本条原创示例未编译或执行。",
+        "status": "native",
+        "summary": "for 遍历范围；next 跳过本轮，break 退出循环；while 可按条件倒数。",
+        "code": "total = 0\nfor n in 1..5\n  next if n % 2 == 0\n  total += n\n  break if total >= 4\nend\nputs total\nremaining = 2\nwhile remaining > 0\n  remaining -= 1\nend\nputs remaining",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Control Expressions",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/control_expressions_rdoc.html",
+            "section": "if; while; for; break; next",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Literals",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/literals_rdoc.html",
+            "section": "Boolean and nil; number; string; range literals",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.2+; save as .rb.",
+          "summary": "for traverses a range; next skips the iteration and break exits; while can count down by a condition.",
+          "versionNotes": "This sums 1 and 3 to reach 4, exiting before visiting 5; the countdown goes from 2 to 0. 1..5 includes 5, whereas 1...5 excludes it; Ruby uses next, not continue. for does not create a new local scope, unlike the usual each block. Listed official chapters reviewed; this original example has not been compiled or executed."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.x CLI；每个示例单独保存为 main.php。",
+        "versionNotes": "逻辑推演：累加 1、3 后 total 达到 4，提前退出，尚未遍历到 5；while 将 remaining 从 2 减至 0，最后输出 4、0。不是实际运行记录。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "for 的三部分分别是初始化、继续条件、更新；<= 包含上界。continue 跳过本轮剩余内容，for 随后执行更新；while 在循环体前检查条件，break 提前退出。",
+        "code": "<?php\n$total = 0;\nfor ($n = 1; $n <= 5; $n++) {\n    if ($n % 2 === 0) continue;\n    $total += $n;\n    if ($total >= 4) break;\n}\n$remaining = 2;\nwhile ($remaining > 0) {\n    $remaining--;\n}\necho $total, \"\\n\";\necho $remaining, \"\\n\";",
+        "sources": [
+          {
+            "title": "PHP Manual — for",
+            "url": "https://www.php.net/manual/en/control-structures.for.php",
+            "section": "for",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — while",
+            "url": "https://www.php.net/manual/en/control-structures.while.php",
+            "section": "while",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — continue",
+            "url": "https://www.php.net/manual/en/control-structures.continue.php",
+            "section": "continue",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Manual — break",
+            "url": "https://www.php.net/manual/en/control-structures.break.php",
+            "section": "break",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.x CLI; save each example separately as main.php.",
+          "summary": "The three for clauses initialize, test and update; <= includes the upper bound. continue skips the remaining body, then for runs its update. while tests before the body and break exits early.",
+          "versionNotes": "By inspection, adding 1 and 3 brings total to 4 and exits before reaching 5. The while loop reduces remaining from 2 to 0; the final values printed are 4 and 0. This is not an execution record. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5+；保存为 main.swift 的命令行程序。",
+        "status": "native",
+        "summary": "for-in 遍历序列，1...5 包含 5；while 每轮先检查条件。 示例跳过偶数，累计到 4 即提前退出；continue 跳过本轮剩余语句，break 退出循环。",
+        "code": "var total = 0\nfor n in 1...5 {\n    if n % 2 == 0 { continue }\n    total += n\n    if total >= 4 { break }\n}\nvar remaining = 2\nwhile remaining > 0 { remaining -= 1 }\nprint(total, remaining)",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — ControlFlow (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/ControlFlow.md",
+            "section": "Conditional Statements; For-In Loops; While Loops; Control Transfer Statements",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "提前退出意味着本例不会走完整个 1 到 5 区间。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "Swift 5+; command-line program saved as main.swift.",
+          "summary": "for-in traverses a sequence; 1...5 includes 5. while checks before each iteration. The example skips even numbers and stops when the sum reaches 4; continue skips the rest of an iteration and break exits the loop.",
+          "versionNotes": "Early exit means this example does not traverse the entire 1-to-5 range. Listed official chapters checked; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin/JVM 1.5+；每个示例单独保存为 Main.kt。",
+        "versionNotes": "逻辑推演：累加 1、3 后 total 达到 4，提前退出，尚未遍历到 5；while 将 remaining 从 2 减至 0，最后输出 4、0。不是实际运行记录。 已查阅所列官方章节；原创新示例未编译或执行。",
+        "status": "native",
+        "summary": "for (n in 1..5) 遍历包含两端的范围，没有 C 风格的三段式 for。continue 跳到下一项；while 先判断，break 退出最近的循环。",
+        "code": "fun main() {\n    var total = 0\n    for (n in 1..5) {\n        if (n % 2 == 0) continue\n        total += n\n        if (total >= 4) break\n    }\n    var remaining = 2\n    while (remaining > 0) {\n        remaining--\n    }\n    println(total)\n    println(remaining)\n}",
+        "sources": [
+          {
+            "title": "Kotlin — Conditions and loops",
+            "url": "https://kotlinlang.org/docs/control-flow.html#for-loops",
+            "section": "For loops; While loops",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Ranges and progressions",
+            "url": "https://kotlinlang.org/docs/ranges.html#ranges",
+            "section": "Ranges",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Kotlin — Returns and jumps",
+            "url": "https://kotlinlang.org/docs/returns.html",
+            "section": "break; continue",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin/JVM 1.5+; save each example separately as Main.kt.",
+          "summary": "for (n in 1..5) traverses an inclusive range; Kotlin has no C-style three-part for. continue moves to the next item; while checks its condition first and break exits the nearest loop.",
+          "versionNotes": "By inspection, adding 1 and 3 brings total to 4 and exits before reaching 5. The while loop reduces remaining from 2 to 0; the final values printed are 4 and 0. This is not an execution record. Listed official chapters reviewed; original example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++17；完整命令行程序及标准库。",
+        "status": "native",
+        "summary": "for 管理初始化、条件和更新；n <= 5 包含上界，while 每轮先检查条件。 示例跳过偶数，累计到 4 即提前退出；continue 跳过本轮剩余语句，break 退出循环。",
+        "code": "#include <iostream>\n\nint main() {\n    int total = 0;\n    for (int n = 1; n <= 5; ++n) {\n        if (n % 2 == 0) { continue; }\n        total += n;\n        if (total >= 4) { break; }\n    }\n    int remaining = 2;\n    while (remaining > 0) { --remaining; }\n    std::cout << total << \" \" << remaining << \"\\n\";\n}",
+        "sources": [
+          {
+            "title": "C++ working draft — stmt.for",
+            "url": "https://eel.is/c++draft/stmt.for",
+            "section": "stmt.for",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — stmt.while",
+            "url": "https://eel.is/c++draft/stmt.while",
+            "section": "stmt.while",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — stmt.break",
+            "url": "https://eel.is/c++draft/stmt.break",
+            "section": "stmt.break",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++ working draft — stmt.cont",
+            "url": "https://eel.is/c++draft/stmt.cont",
+            "section": "stmt.cont",
+            "checkedAt": "2026-10-27"
+          }
+        ],
+        "versionNotes": "参考为持续更新的工作草案；示例限定 C++17。 提前退出意味着本例不会走完整个 1 到 5 区间。 已核验所列官方章节；原创示例未编译或执行。",
+        "en": {
+          "baseline": "C++17; complete hosted command-line program with the standard library.",
+          "summary": "for manages initialization, condition and update; n <= 5 includes the upper bound. while checks before each iteration. The example skips even numbers and stops when the sum reaches 4; continue skips the rest of an iteration and break exits the loop.",
+          "versionNotes": "Reference is an evolving working draft; example targets C++17. Early exit means this example does not traverse the entire 1-to-5 range. Listed official chapters checked; original example not compiled or executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "Loops, break, and continue",
+      "description": "Process values repeatedly, comparing iteration bounds, early exit, and skipping an iteration.",
+      "scopeNote": "A shared learning topic, not a claim of identical mechanisms; code is for comparison.",
+      "tags": [
+        "loops",
+        "iteration",
+        "for",
+        "while",
+        "break",
+        "continue"
       ]
     }
   },

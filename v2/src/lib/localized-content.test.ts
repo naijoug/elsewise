@@ -116,7 +116,7 @@ describe('localized build content', () => {
     expect(new Set(modules.map((module) => module.id)).size).toBe(
       modules.length
     );
-    expect(assignedIds).toHaveLength(25);
+    expect(assignedIds).toHaveLength(28);
     expect(new Set(assignedIds).size).toBe(assignedIds.length);
     expect([...assignedIds].sort()).toEqual(
       content('zh')
@@ -173,7 +173,7 @@ describe('localized build content', () => {
 
 
 describe('foundations-first learning path', () => {
-  const ids = ['syntax-basics', 'variables', 'constants', 'operators', 'functions'];
+  const ids = ['syntax-basics', 'variables', 'constants', 'basic-types', 'operators', 'conditions', 'loops', 'functions'];
   it('starts with real foundation chapters, not practical APIs or empty placeholders', () => {
     expect(modules[0].ids).toEqual(ids);
     for (const locale of ['zh', 'en'] as const) {
@@ -198,4 +198,22 @@ describe('foundations-first learning path', () => {
     expect(prose('cpp')).toMatch(/constexpr/);
     expect(prose('go')).toMatch(/constant expression|compile.time/i);
   });
+});
+
+it('covers types, branches and loops as sourced beginner chapters in both locales', () => {
+  for (const locale of ['zh', 'en'] as const) {
+    const chapters = content(locale).features.filter(feature => ['basic-types', 'conditions', 'loops'].includes(feature.id));
+    expect(chapters).toHaveLength(3);
+    expect(chapters.reduce((count, chapter) => count + chapter.entries.length, 0)).toBe(36);
+    expect(chapters.find(chapter => chapter.id === 'basic-types')!.related).toContain('conditions');
+    expect(chapters.find(chapter => chapter.id === 'conditions')!.related).toContain('loops');
+    for (const chapter of chapters) {
+      expect(chapter.scope).toBe('common');
+      for (const entry of chapter.entries) {
+        nonempty(entry.baseline, 'documented environment');
+        nonempty(entry.versionNotes, 'execution and semantic boundaries');
+        expect(entry.sources.every(source => source.url.startsWith('https://') && source.section.trim())).toBe(true);
+      }
+    }
+  }
 });

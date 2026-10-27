@@ -1,3 +1,5 @@
+> 基础补齐：新增基础类型、条件、循环 3 章 × 12 语言，现合计 28 篇 / 204 份实现。基础目录 8 章均有真实内容。[核查范围](foundations2-source-review.md)。以下更新记录保留历史数量。
+
 > 基础优先补充：新增 `v2/src/data/foundations.json`，5 章 × 12 语言，现合计 25 篇 / 168 份实现。目录先从基础语法开始；基础类型与控制流尚待补齐。[核查范围](foundations-source-review.md)。
 
 > 2026-10-27 更新：生产界面现为任务优先的对照文档，不再显示 common/shared/specific 范围筛选和特色徽章；这些字段仅保留为内容兼容元数据。原 16 条概念保留 ID，新增 4 个实用任务与 48 个实现，合计 20/108。英文翻译层与目录分组见 `v2/src/lib/localized-content.ts`，完整边界见 [发布记录](releases/2026-10-27-comparison-docs.md)。下文是上一版数据契约，涉及旧 UI 的描述不代表当前界面。

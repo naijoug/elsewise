@@ -879,7 +879,7 @@ test('language picker defaults match viewport and mobile disclosure supports rep
 });
 
 
-test('foundation-first directory opens the same five beginner chapters in both locales', async ({ page }, testInfo) => {
+test('foundation-first directory opens the same eight beginner chapters in both locales', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
   for (const locale of ['zh', 'en']) {
     const prefix = locale === 'en' ? 'en/' : '';
@@ -896,7 +896,7 @@ test('foundation-first directory opens the same five beginner chapters in both l
   }
 });
 
-test('all five beginner chapters deliver twelve complete sourced examples in both locales', async ({ page }, testInfo) => {
+test('all eight beginner chapters deliver twelve complete sourced examples in both locales', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
   test.setTimeout(180000);
   await page.addInitScript((ids) => localStorage.setItem('elsewise_preferences', JSON.stringify({ selectedLanguages: ids })), languages.map(language => language.id));
@@ -917,6 +917,26 @@ test('all five beginner chapters deliver twelve complete sourced examples in bot
         await expectNoHorizontalOverflow(page, page.viewportSize().width);
         if (locale === 'en') await expectEnglishProse(page);
       }
+    }
+  }
+});
+
+
+test('basic types, conditions and loops navigate as one beginner sequence without losing locale or selection', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+  for (const locale of ['zh', 'en']) {
+    const prefix = locale === 'en' ? 'en/' : '';
+    await open(page, `${prefix}feature/basic-types/`);
+    const picker = await expandLanguagePicker(page);
+    const python = picker.getByRole('button', { name: 'Python', exact: true });
+    if ((await python.getAttribute('aria-pressed')) !== 'true') await python.click();
+    for (const id of ['conditions', 'loops']) {
+      await page.locator(`.related-docs a[href="${base}${prefix}feature/${id}/"]`).click();
+      await hydrated(page);
+      await expect(page.locator('[data-language-card="python"]')).toBeVisible();
+      await expect(page.locator('.docs-sidebar [aria-current="page"]')).toHaveAttribute('href', `${base}${prefix}feature/${id}/`);
+      await expectNoHorizontalOverflow(page, page.viewportSize().width);
+      if (locale === 'en') await expectEnglishProse(page);
     }
   }
 });
