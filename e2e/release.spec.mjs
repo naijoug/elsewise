@@ -347,3 +347,68 @@ test('without JavaScript, complete detail source and links remain available', as
     await context.close();
   }
 });
+
+test('Get marks are separate, persist across detail navigation/reload, and compose with filters', async ({
+  page,
+}) => {
+  await open(page);
+  const first = cards(page).first();
+  const title = await first.getByRole('heading').innerText();
+  await first.getByRole('button', { name: `标记已学会：${title}` }).click();
+  await expect(
+    first.getByRole('button', { name: `撤销已学会：${title}` })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: '已学会', exact: true }).click();
+  await expect(cards(page)).toHaveCount(1);
+  await cards(page).first().getByRole('link').click();
+  await hydrated(page);
+  await expect(
+    page.getByRole('button', { name: '撤销已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByRole('button', { name: '☆ 收藏习语' })
+  ).toHaveAttribute('aria-pressed', 'false');
+  await page.reload();
+  await hydrated(page);
+  await expect(
+    page.getByRole('button', { name: '撤销已学会', exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: '撤销已学会', exact: true }).click();
+  await page.goBack();
+  await hydrated(page);
+  await page.getByRole('button', { name: '已学会', exact: true }).click();
+  await expect(cards(page)).toHaveCount(0);
+  await page.getByRole('button', { name: '未学会', exact: true }).click();
+  await expect(cards(page)).toHaveCount(idioms.length);
+  await page.getByRole('button', { name: '只看收藏', exact: true }).click();
+  await expect(cards(page)).toHaveCount(0);
+  await page.getByRole('button', { name: '重置', exact: true }).click();
+  await expect(cards(page)).toHaveCount(idioms.length);
+});
+
+test('learned state synchronizes another tab and ignores malformed data without affecting favorites', async ({
+  page,
+  context,
+}) => {
+  await open(page, './idiom/array-map/');
+  await page.evaluate(() => {
+    localStorage.setItem('elsewise_learned_v1', '{bad');
+  });
+  await page.reload();
+  await hydrated(page);
+  await expect(
+    page.getByText('已保存的学习记录格式异常', { exact: false })
+  ).toBeVisible();
+  const second = await context.newPage();
+  await open(second);
+  await second.getByRole('button', { name: '已学会', exact: true }).click();
+  await expect(cards(second)).toHaveCount(0);
+  await page.getByRole('button', { name: '标记已学会', exact: true }).click();
+  await expect(cards(second)).toHaveCount(1);
+  await expect(
+    page.getByRole('button', { name: '☆ 收藏习语' })
+  ).toHaveAttribute('aria-pressed', 'false');
+  await page.getByRole('button', { name: '撤销已学会', exact: true }).click();
+  await expect(cards(second)).toHaveCount(0);
+  await second.close();
+});

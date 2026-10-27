@@ -640,3 +640,28 @@ legend {
   max-width: 180px;
   color: var(--muted);
 }
+
+.learning-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.learning-filter span,
+.learned-notice {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.learned-notice {
+  margin: 10px 0 18px;
+}
+.learned-button {
+  font-size: 0.85rem;
+}
+.learned-button[aria-pressed='true'] {
+  font-weight: 650;
+}
+.detail-controls > .learned-button {
+  margin-left: 8px;
+}

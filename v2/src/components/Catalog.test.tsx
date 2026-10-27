@@ -223,21 +223,19 @@ for (const [field, label] of [
 it('matches raw mixed-case code and language labels from the index', async () => {
   vi.stubGlobal(
     'fetch',
-    vi
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        json: async () => [
-          {
-            id: 'a',
-            fields: {
-              ...fields(),
-              code: ['fmt.Println(values)'],
-              languages: ['JavaScript'],
-            },
+    vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => [
+        {
+          id: 'a',
+          fields: {
+            ...fields(),
+            code: ['fmt.Println(values)'],
+            languages: ['JavaScript'],
           },
-        ],
-      })
+        },
+      ],
+    })
   );
   await mount();
   await type('fmt.println');
@@ -250,4 +248,34 @@ it('matches raw mixed-case code and language labels from the index', async () =>
   expect(host.querySelector('[aria-label="搜索命中"]')?.textContent).toBe(
     '命中：语言'
   );
+});
+it('marks knowledge points and intersects learned with favorites; reset never deletes progress', async () => {
+  localStorage.setItem(
+    'elsewise_preferences',
+    JSON.stringify({
+      favoriteIdioms: ['a'],
+      selectedLanguages: [],
+      theme: 'light',
+    })
+  );
+  await mount(true);
+  const mark = host.querySelector<HTMLButtonElement>(
+    '[aria-label="标记已学会：Alpha"]'
+  )!;
+  act(() => mark.click());
+  expect(
+    host
+      .querySelector('[aria-label="撤销已学会：Alpha"]')
+      ?.getAttribute('aria-pressed')
+  ).toBe('true');
+  act(() => button('未学会').click());
+  expect(host.querySelectorAll('[role=listitem]')).toHaveLength(0);
+  act(() => button('已学会').click());
+  expect(host.querySelectorAll('[role=listitem]')).toHaveLength(1);
+  act(() => button('重置').click());
+  expect(button('全部').getAttribute('aria-pressed')).toBe('true');
+  expect(host.querySelectorAll('[role=listitem]')).toHaveLength(1);
+  expect(JSON.parse(localStorage.getItem('elsewise_learned_v1')!).ids).toEqual([
+    'a',
+  ]);
 });

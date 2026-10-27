@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usePreferences } from '../lib/preferences';
+import { useLearned } from '../lib/learned';
+import LearnedButton, { LearnedNotice } from './LearnedButton';
 import {
   emptyFilters,
   filterSummaries,
@@ -37,6 +39,10 @@ export default function Catalog({
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [sort, setSort] = useState<Sort>('original');
+  const [learning, setLearning] = useState<'all' | 'learned' | 'unlearned'>(
+    'all'
+  );
+  const { ids: learned } = useLearned();
   const [favoritesOnly, setFavoritesOnly] = useState(initialFavoritesOnly);
   const { favoriteIdioms: favorites } = usePreferences();
   const [index, setIndex] = useState<SearchEntry[] | null>(null);
@@ -92,6 +98,8 @@ export default function Catalog({
   };
   const results = filterSummaries(summaries, filters, sort).filter(
     (item) =>
+      (learning === 'all' ||
+        learned.includes(item.id) === (learning === 'learned')) &&
       (!(initialFavoritesOnly || favoritesOnly) ||
         favorites.includes(item.id)) &&
       (!term ||
@@ -185,12 +193,37 @@ export default function Catalog({
             setFilters(emptyFilters());
             setSort('original');
             setFavoritesOnly(initialFavoritesOnly);
+            setLearning('all');
             setError(false);
           }}
         >
           重置
         </button>
       </div>
+      <div className="learning-filter" role="group" aria-label="学习状态">
+        {(
+          [
+            ['all', '全部'],
+            ['unlearned', '未学会'],
+            ['learned', '已学会'],
+          ] as const
+        ).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={learning === id}
+            onClick={() => setLearning(id)}
+          >
+            {label}
+          </button>
+        ))}
+        <span>
+          本目录已学会{' '}
+          {summaries.filter((item) => learned.includes(item.id)).length} /{' '}
+          {summaries.length}
+        </span>
+      </div>
+      <LearnedNotice />
       <details className="filter-panel">
         <summary>筛选条件（{Object.values(filters).flat().length}）</summary>
         <p>
@@ -257,6 +290,7 @@ export default function Catalog({
                 )}
               </a>
             </h2>
+            <LearnedButton id={item.id} title={item.title} />
             <p>{item.description}</p>
             {term && (
               <p aria-label="搜索命中">

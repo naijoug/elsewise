@@ -104,3 +104,22 @@ it('favorite updates do not overwrite language or theme', async () => {
     theme: 'dark',
   });
 });
+it('toggles learned independently of favorites and reports temporary saves', async () => {
+  await mount();
+  act(() =>
+    host.querySelector<HTMLButtonElement>('[aria-label="标记已学会"]')!.click()
+  );
+  expect(
+    host
+      .querySelector('[aria-label="撤销已学会"]')
+      ?.getAttribute('aria-pressed')
+  ).toBe('true');
+  expect(button('☆ 收藏习语').getAttribute('aria-pressed')).toBe('false');
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new Error('quota');
+  });
+  act(() =>
+    host.querySelector<HTMLButtonElement>('[aria-label="撤销已学会"]')!.click()
+  );
+  expect(host.textContent).toContain('仅在当前页面有效');
+});

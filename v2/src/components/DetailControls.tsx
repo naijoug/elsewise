@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePreferences, updatePreferences } from '../lib/preferences';
+import LearnedButton, { LearnedNotice } from './LearnedButton';
 type Option = { id: string; name: string };
 export default function DetailControls({
   idiomId,
@@ -51,6 +52,8 @@ export default function DetailControls({
       >
         {favorite ? '★ 已收藏' : '☆ 收藏习语'}
       </button>
+      <LearnedButton id={idiomId} />
+      <LearnedNotice />
       <div>
         <h2>选择要对比的语言</h2>
         <p>
