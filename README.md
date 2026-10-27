@@ -6,6 +6,9 @@
 
 ## 当前功能
 
+- 语言特性地图：16 个概念、60 份语言对照，按共同概念、语言特色和语言筛选；逐条附文档章节与版本基线。
+- 特性、语言页和已有习语互相关联；Get 学习标记与收藏分别保存。内容边界见[特性目录契约](docs/FEATURE_CATALOG.md)。
+
 - 浏览习语，按关键词搜索，按分类、范式、难度和语言筛选。
 - 搜索覆盖标题、描述、标签、分类、语言名称/ID、实现代码和说明；卡片展示命中原因。
 - 多语言代码对比、Prism.js 高亮、实现说明和预先编写的输出展示。
@@ -27,7 +30,7 @@ npm ci
 npm run dev
 ```
 
-开发服务器默认地址为 `http://localhost:5173`。
+Astro 开发服务器默认地址为 `http://localhost:4321`（以启动输出为准）。
 单独克隆本仓库即可使用已提交的数据；修改习语时需要 handbook 主数据，见[数据指南](docs/DATA_FORMAT.md)。
 
 ## 常用命令
@@ -49,8 +52,7 @@ npm run dev
 
 ## 架构与文档
 
-当前是 React 19 + TypeScript 的客户端 SPA，使用 React Router 7、Tailwind CSS 4、Prism.js，
-通过 rolldown-vite 构建为静态资源。部署工作流当前发布到 GitHub Pages。
+当前生产版本采用 Astro + React + TypeScript：正文页面静态生成，筛选、语言选择、收藏和 Get 使用 React 局部交互；Prism 高亮在构建期完成。部署工作流发布到 GitHub Pages。根目录旧 React SPA 保留用于兼容回归，不是当前生产入口。
 
 | 要做的事 | 文档 |
 | --- | --- |

@@ -1,4 +1,6 @@
 ---
+import { features } from '../../lib/feature-content';
+import { scopeLabels, statusLabels } from '../../lib/features';
 import Layout from '../../layouts/Layout.astro';
 import Catalog from '../../components/Catalog';
 import { languages, catalog } from '../../lib/content';
@@ -11,6 +13,7 @@ const types = { static: '静态类型', dynamic: '动态类型', gradual: '渐�
 <Layout title={language.name} description={language.description}>
   <a class="back-link" href={`${base}/languages/`}>← 全部语言</a>
   <section class="intro"><p class="eyebrow">LANGUAGE</p><h1>{language.name}</h1><p>{language.description}</p></section>
-  <section class="card language-facts" aria-label="语言资料"><dl><div><dt>资料记录版本</dt><dd>{language.version}</dd></div><div><dt>类型系统</dt><dd>{types[language.typeSystem]}</dd></div><div><dt>编程范式</dt><dd>{language.paradigms.join(' · ')}</dd></div></dl><h2>语言特性</h2><div class="badges">{language.features.map(feature => <span class="badge">{feature}</span>)}</div><p><a href={language.officialDocs} target="_blank" rel="noopener noreferrer">官方文档 ↗<span class="sr-only">（新窗口）</span></a></p></section>
+  <section class="card language-facts" aria-label="语言资料"><dl><div><dt>资料记录版本</dt><dd>{language.version}</dd></div><div><dt>类型系统</dt><dd>{types[language.typeSystem]}</dd></div><div><dt>编程范式</dt><dd>{language.paradigms.join(' · ')}</dd></div></dl><h2>语言特性</h2><div class="badges">{language.features.map(feature => <span class="badge">{feature}</span>)}</div><p><a href={language.officialDocs} target="_blank" rel="noopener noreferrer">{language.id === 'cpp' ? '参考文档' : '官方文档'} ↗<span class="sr-only">（新窗口）</span></a></p></section>
+  <section class="feature-entry" aria-labelledby="feature-heading"><h2 id="feature-heading">已核对的特性与关联概念</h2><p class="muted">逐条附文档依据；标签指本站比较范围，不宣称全球独有。</p><div class="catalog-grid">{features.filter(feature => feature.entries.some(entry => entry.languageId === language.id)).map(feature => { const entry = feature.entries.find(item => item.languageId === language.id)!; return <article class="card"><div class="badges"><span class="badge">{scopeLabels[feature.scope]}</span><span class="badge">{statusLabels[entry.status]}</span></div><h3><a href={`${base}/feature/${feature.id}/`}>{feature.title}</a></h3><p>{entry.summary}</p></article>; })}</div><p><a href={`${base}/features/`}>查看所有特性并选择多语言对比 →</a></p></section>
   <section aria-labelledby="related-heading"><h2 id="related-heading">已收录的习语</h2><p class="muted">以下仅表示当前资料覆盖，不代表这门语言的全部能力。</p><Catalog summaries={related} languages={languages} base={base} client:load /></section>
 </Layout>

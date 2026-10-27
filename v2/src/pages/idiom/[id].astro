@@ -1,4 +1,5 @@
 ---
+import { features } from '../../lib/feature-content';
 import Layout from '../../layouts/Layout.astro';
 import DetailControls from '../../components/DetailControls';
 import CopyCode from '../../components/CopyCode';
@@ -33,4 +34,5 @@ const difficulty = { beginner: '入门', intermediate: '进阶', advanced: '高�
       </article>;
     })}
   </div>
+  {features.some(feature => feature.idiomIds.includes(idiom.id)) && <section class="feature-related"><h2>理解相关语言特性</h2><div class="chips">{features.filter(feature => feature.idiomIds.includes(idiom.id)).map(feature => <a class="button-link" href={`${base}/feature/${feature.id}/`}>{feature.title}</a>)}</div></section>}
 </Layout>

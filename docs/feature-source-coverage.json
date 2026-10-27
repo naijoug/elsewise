@@ -1,0 +1,434 @@
+[
+  {
+    "id": "javascript",
+    "baseline": "ECMAScript 2023",
+    "versionNotes": "基线为 ECMAScript 2023；引用固定版本规范。泛型条目展示运行时通用方法，不等同于静态类型参数。",
+    "sources": [
+      {
+        "title": "ECMAScript 2023 — Functions and Classes",
+        "url": "https://tc39.es/ecma262/2023/multipage/ecmascript-language-functions-and-classes.html",
+        "section": "15.7 Class Definitions; 15.7.14 ClassDefinitionEvaluation; 15.2.5 InstantiateOrdinaryFunctionExpression; 15.5.5 generator evaluation",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "ECMAScript 2023 — Expressions",
+        "url": "https://tc39.es/ecma262/2023/multipage/ecmascript-language-expressions.html",
+        "section": "13.3.6 Function Calls / EvaluateCall",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "ECMAScript 2023 — Indexed Collections",
+        "url": "https://tc39.es/ecma262/2023/multipage/indexed-collections.html",
+        "section": "23.1.3.21 Array.prototype.map, including generic-method note",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "typescript",
+    "baseline": "TypeScript 5.3",
+    "versionNotes": "基线为 TypeScript 5.3；所选语法适用于该基线。引用持续更新的官方 Handbook，闭包引用官方旧版 Functions 章节；静态契约与运行时行为须区分。",
+    "sources": [
+      {
+        "title": "TypeScript Handbook — Classes",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/classes.html",
+        "section": "Class Heritage: implements clauses; extends clauses",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "TypeScript Handbook — Generics",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+        "section": "Identity function; Generic Types",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "TypeScript Handbook — Functions",
+        "url": "https://www.typescriptlang.org/docs/handbook/functions.html",
+        "section": "Functions: captured variables (legacy handbook, official)",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "TypeScript Handbook — Narrowing",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+        "section": "Discriminated unions",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "python",
+    "baseline": "Python 3.12",
+    "versionNotes": "基线为 Python 3.12；示例中的 def keep[T] 语法要求 3.12。Protocol 来自标准库，类型注解一般由外部类型检查工具检查。",
+    "sources": [
+      {
+        "title": "Python 3.12 Tutorial — Classes",
+        "url": "https://docs.python.org/3.12/tutorial/classes.html",
+        "section": "9.5 Inheritance, including overriding and multiple inheritance",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Python 3.12 — typing",
+        "url": "https://docs.python.org/3.12/library/typing.html",
+        "section": "Runtime annotation disclaimer; Generics; Protocol; TypeVar version notes",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Python 3.12 Tutorial — Control Flow",
+        "url": "https://docs.python.org/3.12/tutorial/controlflow.html",
+        "section": "Lambda Expressions",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Python 3.12 Tutorial — Data Structures",
+        "url": "https://docs.python.org/3.12/tutorial/datastructures.html",
+        "section": "5.1.3 List Comprehensions",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "ruby",
+    "baseline": "Ruby 3.2",
+    "versionNotes": "基线为 Ruby 3.2，引用对应版本官方文档。泛型条目展示动态集合复用，不是静态类型参数声明。",
+    "sources": [
+      {
+        "title": "Ruby 3.2 — Modules and Classes",
+        "url": "https://docs.ruby-lang.org/en/3.2/syntax/modules_and_classes_rdoc.html",
+        "section": "Modules/mix-ins; Module Definition/reopening; Defining a class; Inheritance",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Ruby 3.2 — Proc",
+        "url": "https://docs.ruby-lang.org/en/3.2/Proc.html",
+        "section": "Opening description: Proc objects are closures",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Ruby 3.2 — Array",
+        "url": "https://docs.ruby-lang.org/en/3.2/Array.html",
+        "section": "Opening description: heterogeneous elements; map",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "java",
+    "baseline": "Java 21",
+    "versionNotes": "以 Java 21 的 JLS 为依据；片段均为该基线支持的语法，不表示特性首次出现于 Java 21。",
+    "sources": [
+      {
+        "title": "JLS 21: Classes",
+        "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.4",
+        "section": "8.1.4 Superclasses and Subclasses",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "JLS 21: Interfaces",
+        "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.1",
+        "section": "9.1 Interface Declarations",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "JLS 21: Generic Classes",
+        "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.2",
+        "section": "8.1.2 Generic Classes and Type Parameters",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "JLS 21: Lambda expressions",
+        "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.27.2",
+        "section": "15.27.2 Lambda Body; 15.27.3 Type of a Lambda Expression",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "JLS 21: Exceptions",
+        "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.2",
+        "section": "11.2 Compile-Time Checking of Exceptions",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "csharp",
+    "baseline": "C# 12",
+    "versionNotes": "以 C# 12 为兼容基线；Microsoft Learn 为持续更新文档，未采用更高版本或预览语法。",
+    "sources": [
+      {
+        "title": "C# Inheritance",
+        "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/inheritance",
+        "section": "Inheritance",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C# Interfaces",
+        "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/interfaces",
+        "section": "Declare and implement an interface",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C# Generic types and methods",
+        "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics",
+        "section": "Generic methods",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C# Lambda expressions",
+        "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions#capture-of-outer-variables-and-variable-scope-in-lambda-expressions",
+        "section": "Capture of outer variables",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C# event keyword",
+        "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/event",
+        "section": "Event declaration and invocation",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "kotlin",
+    "baseline": "Kotlin 1.9",
+    "versionNotes": "以 Kotlin 1.9 为兼容基线；官方文档持续更新，未采用后续版本的 JVM-default 编译选项。",
+    "sources": [
+      {
+        "title": "Kotlin Inheritance",
+        "url": "https://kotlinlang.org/docs/inheritance.html",
+        "section": "Open keyword; Overriding methods",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Kotlin Interfaces",
+        "url": "https://kotlinlang.org/docs/interfaces.html",
+        "section": "Implementing interfaces",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Kotlin Generics",
+        "url": "https://kotlinlang.org/docs/generics.html",
+        "section": "Type parameters; Declaration-site variance",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Kotlin Higher-order functions and lambdas",
+        "url": "https://kotlinlang.org/docs/lambdas.html#closures",
+        "section": "Closures",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Kotlin Delegated properties",
+        "url": "https://kotlinlang.org/docs/delegated-properties.html#lazy-properties",
+        "section": "Delegated property syntax; Lazy properties",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "php",
+    "baseline": "PHP 8.3",
+    "versionNotes": "以 PHP 8.3 为兼容基线；未采用 PHP 8.4 的接口属性等后续特性。原生泛型缺失的判断依据类型系统及类型声明文档，而非仅凭示例推断。",
+    "sources": [
+      {
+        "title": "PHP Object Inheritance",
+        "url": "https://www.php.net/manual/en/language.oop5.inheritance.php",
+        "section": "Object Inheritance",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "PHP Object Interfaces",
+        "url": "https://www.php.net/manual/en/language.oop5.interfaces.php",
+        "section": "implements",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "PHP Type System",
+        "url": "https://www.php.net/manual/en/language.types.type-system.php",
+        "section": "Atomic types; User-defined types; Composite types",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "PHP Anonymous functions",
+        "url": "https://www.php.net/manual/en/functions.anonymous.php",
+        "section": "Inheriting variables from the parent scope",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "PHP Traits",
+        "url": "https://www.php.net/manual/en/language.oop5.traits.php",
+        "section": "Traits; Precedence",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "PHP Type declarations",
+        "url": "https://www.php.net/manual/en/language.types.declarations.php",
+        "section": "Type declarations and changelog",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "go",
+    "baseline": "Go 1.21",
+    "versionNotes": "规范固定为 go1.21.0。不包含方法独立类型参数、对整数或函数使用 range，以及 Go 1.22 的循环变量语义。",
+    "sources": [
+      {
+        "title": "Go 1.21 specification",
+        "url": "https://raw.githubusercontent.com/golang/go/go1.21.0/doc/go_spec.html",
+        "section": "Interface types; Type parameter declarations; Function literals; Channel types; Go statements",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Go FAQ",
+        "url": "https://go.dev/doc/faq#Is_Go_an_object-oriented_language",
+        "section": "Is Go an object-oriented language?; How do I get dynamic dispatch of methods?; Why is there no type inheritance?",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "rust",
+    "baseline": "Rust 1.75, edition 2021",
+    "versionNotes": "以 Rust 1.75、edition 2021 为基线。查阅的是当前官方 Rust Book，条目仅使用 1.75 已支持的特性，不包含 edition 2024 变更或后续 API；网页工具无法读取 1.75 版书籍地址。",
+    "sources": [
+      {
+        "title": "Rust Book: OOP",
+        "url": "https://doc.rust-lang.org/book/ch18-01-what-is-oo.html",
+        "section": "Inheritance as a Type System and as Code Sharing",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Rust Book: Traits",
+        "url": "https://doc.rust-lang.org/book/ch10-02-traits.html",
+        "section": "Defining a Trait; Trait bounds",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Rust Book: Trait objects",
+        "url": "https://doc.rust-lang.org/book/ch18-02-trait-objects.html",
+        "section": "Defining a Trait for Common Behavior",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Rust Book: Generics",
+        "url": "https://doc.rust-lang.org/book/ch10-01-syntax.html",
+        "section": "In Function Definitions",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Rust Book: Closures",
+        "url": "https://doc.rust-lang.org/book/ch13-01-closures.html",
+        "section": "Capturing the Environment",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "Rust Book: Ownership",
+        "url": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+        "section": "What Is Ownership?",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "cpp",
+    "baseline": "C++20",
+    "versionNotes": "以 C++20 的 N4861 工作草案为依据，已核对 cplusplus/draft 仓库 n4861 标签下的源文；HTML 转录仅辅助定位条款。工作草案并非正式出版的 ISO 标准，不采用最新草案中的后续特性。",
+    "sources": [
+      {
+        "title": "C++ working draft N4861 source",
+        "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/expressions.tex",
+        "section": "[expr.prim.lambda]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++ working draft N4861 source",
+        "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/templates.tex",
+        "section": "[temp.pre]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++ working draft N4861 source",
+        "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/classes.tex",
+        "section": "[class.derived]; [class.virtual]; [class.dtor]/15",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/class.derived",
+        "section": "[class.derived]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/class.virtual",
+        "section": "[class.virtual]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/class.abstract",
+        "section": "[class.abstract]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/temp",
+        "section": "[temp.pre]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/expr.prim.lambda",
+        "section": "[expr.prim.lambda]",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/class.dtor",
+        "section": "[class.dtor]/15",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "C++20 working draft N4861 (HTML transcription)",
+        "url": "https://timsong-cpp.github.io/cppwp/n4861/unique.ptr.single.dtor",
+        "section": "[unique.ptr.single.dtor]",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  },
+  {
+    "id": "swift",
+    "baseline": "Swift 5.9",
+    "versionNotes": "以 Swift 5.9 为基线。查阅当前官方 Swift 语言书籍源码，示例仅使用 5.9 已支持的特性，不包含后续 Swift 6 并发或所有权扩展；因网页正文依赖 JavaScript，改读官方 swiftlang/swift-book 源码。",
+    "sources": [
+      {
+        "title": "The Swift Programming Language: Inheritance",
+        "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Inheritance.md",
+        "section": "Defining a Base Class; Subclassing; Overriding",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "The Swift Programming Language: Protocols",
+        "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Protocols.md",
+        "section": "Protocol Syntax; Property Requirements",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "The Swift Programming Language: Generics",
+        "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Generics.md",
+        "section": "Generic Functions",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "The Swift Programming Language: Closures",
+        "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Closures.md",
+        "section": "Closure Expressions; Capturing Values",
+        "checkedAt": "2026-10-27"
+      },
+      {
+        "title": "The Swift Programming Language: The Basics",
+        "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/TheBasics.md",
+        "section": "Optionals; Optional Binding",
+        "checkedAt": "2026-10-27"
+      }
+    ]
+  }
+]

@@ -412,3 +412,28 @@ test('learned state synchronizes another tab and ignores malformed data without 
   await expect(cards(second)).toHaveCount(0);
   await second.close();
 });
+
+test('feature map filters, compares, preserves learned state and connects language/idiom routes', async ({ page }) => {
+  await open(page, 'features/');
+  await expect(page.getByRole('status')).toContainText('16 个特性概念');
+  await page.getByLabel('概念标签').selectOption('specific');
+  await page.getByLabel('对照语言').selectOption('rust');
+  await expect(page.getByRole('status')).toContainText('1 个特性概念');
+  await page.getByRole('link', { name: 'Rust 所有权', exact: true }).click();
+  await hydrated(page);
+  await expect(page.getByRole('heading', { name: 'Rust 所有权', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '标记已学会', exact: true }).click();
+  await page.getByRole('button', { name: '☆ 收藏特性', exact: true }).click();
+  await open(page, 'favorites/');
+  await expect(page.getByRole('link', { name: 'Rust 所有权', exact: true })).toBeVisible();
+  await open(page, 'feature/polymorphism/');
+  await page.getByRole('button', { name: 'Go', exact: true }).click();
+  await expect(page.locator('[data-language-card="go"]')).toBeVisible();
+  await expect(page.getByRole('link', { name: /习语：依赖注入/ })).toBeVisible();
+  await open(page, 'language/rust/');
+  await expect(page.getByRole('link', { name: 'Rust 所有权', exact: true })).toBeVisible();
+  await open(page, 'features/');
+  await page.getByLabel('学习状态', { exact: true }).selectOption('learned');
+  await expect(page.getByRole('status')).toContainText('1 个特性概念');
+  await expect(page.getByRole('link', { name: 'Rust 所有权', exact: true })).toBeVisible();
+});

@@ -665,3 +665,14 @@ legend {
 .detail-controls > .learned-button {
   margin-left: 8px;
 }
+
+.feature-entry, .feature-related { margin-block: 28px; }
+.feature-toolbar { align-items: end; flex-wrap: wrap; }
+.feature-toolbar label { display: grid; gap: 6px; flex: 1 1 160px; }
+.feature-toolbar select { width: 100%; }
+.feature-related .chips { gap: 12px; }
+.catalog-grid .learned-button { margin-top: 18px; }
+.implementation-body ul { padding-left: 20px; }
+.implementation-body li { overflow-wrap: anywhere; }
+.card summary { cursor: pointer; min-height: 44px; font-weight: 600; }
+@media (max-width: 600px) { nav { flex-wrap: wrap; } nav a { padding-inline: 9px; } }

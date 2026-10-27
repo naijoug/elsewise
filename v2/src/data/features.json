@@ -1,0 +1,1360 @@
+[
+  {
+    "id": "inheritance",
+    "title": "类继承与组合",
+    "description": "比较子类复用与覆盖；没有类继承时，展示组合等替代组织方式。",
+    "scope": "shared",
+    "tags": [
+      "面向对象",
+      "继承",
+      "组合"
+    ],
+    "related": [
+      "polymorphism",
+      "php-traits"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "ECMAScript 2023",
+        "versionNotes": "基线为 ECMAScript 2023；引用固定版本规范。泛型条目展示运行时通用方法，不等同于静态类型参数。",
+        "status": "native",
+        "summary": "类通过 extends 建立父类与原型关系；子类可以定义自己的方法。",
+        "code": "class Base { name() { return 'base'; } }\nclass Child extends Base { name() { return 'child'; } }\nnew Child().name();",
+        "sources": [
+          {
+            "title": "ECMAScript 2023 — Functions and Classes",
+            "url": "https://tc39.es/ecma262/2023/multipage/ecmascript-language-functions-and-classes.html#sec-class-definitions",
+            "section": "15.7 Class Definitions; 15.7.14 ClassDefinitionEvaluation; 15.2.5 InstantiateOrdinaryFunctionExpression; 15.5.5 generator evaluation",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3",
+        "versionNotes": "基线为 TypeScript 5.3；所选语法适用于该基线。引用持续更新的官方 Handbook，闭包引用官方旧版 Functions 章节；静态契约与运行时行为须区分。",
+        "status": "native",
+        "summary": "extends 创建继承父类成员的子类；TypeScript 同时检查声明的类型。",
+        "code": "class Base { value(): number { return 1; } }\nclass Child extends Base { label = 'child'; }\nnew Child().value();",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Classes",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/classes.html#extends-clauses",
+            "section": "Class Heritage: implements clauses; extends clauses",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12",
+        "versionNotes": "基线为 Python 3.12；示例中的 def keep[T] 语法要求 3.12。Protocol 来自标准库，类型注解一般由外部类型检查工具检查。",
+        "status": "native",
+        "summary": "子类在定义中指定基类，并可重写方法；Python 也支持多个基类。",
+        "code": "class Base:\n    def name(self): return 'base'\n\nclass Child(Base):\n    def name(self): return 'child'",
+        "sources": [
+          {
+            "title": "Python 3.12 Tutorial — Classes",
+            "url": "https://docs.python.org/3.12/tutorial/classes.html#inheritance",
+            "section": "9.5 Inheritance, including overriding and multiple inheritance",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2",
+        "versionNotes": "基线为 Ruby 3.2，引用对应版本官方文档。泛型条目展示动态集合复用，不是静态类型参数声明。",
+        "status": "native",
+        "summary": "子类用 < 指定父类，可重写继承的方法，并通过 super 调用父类实现。",
+        "code": "class Base\n  def name; 'base'; end\nend\nclass Child < Base\n  def name; super + ' child'; end\nend",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Modules and Classes",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/modules_and_classes_rdoc.html#label-Inheritance",
+            "section": "Modules/mix-ins; Module Definition/reopening; Defining a class; Inheritance",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "java",
+        "baseline": "Java 21",
+        "versionNotes": "以 Java 21 的 JLS 为依据；片段均为该基线支持的语法，不表示特性首次出现于 Java 21。",
+        "status": "native",
+        "summary": "类通过 extends 继承一个父类，并可重写允许重写的实例方法。",
+        "code": "class Animal { String sound() { return \"?\"; } }\nclass Dog extends Animal { @Override String sound() { return \"woof\"; } }",
+        "sources": [
+          {
+            "title": "JLS 21: Classes",
+            "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.4",
+            "section": "8.1.4 Superclasses and Subclasses",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12",
+        "versionNotes": "以 C# 12 为兼容基线；Microsoft Learn 为持续更新文档，未采用更高版本或预览语法。",
+        "status": "native",
+        "summary": "类只有一个直接基类；virtual 方法允许派生类用 override 重写。",
+        "code": "class Animal { public virtual string Sound() => \"?\"; }\nclass Dog : Animal { public override string Sound() => \"woof\"; }",
+        "sources": [
+          {
+            "title": "C# Inheritance",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/inheritance",
+            "section": "Inheritance",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9",
+        "versionNotes": "以 Kotlin 1.9 为兼容基线；官方文档持续更新，未采用后续版本的 JVM-default 编译选项。",
+        "status": "native",
+        "summary": "类和成员默认 final；open 允许继承或重写，override 显式重写成员。",
+        "code": "open class Animal { open fun sound() = \"?\" }\nclass Dog : Animal() { override fun sound() = \"woof\" }",
+        "sources": [
+          {
+            "title": "Kotlin Inheritance",
+            "url": "https://kotlinlang.org/docs/inheritance.html",
+            "section": "Open keyword; Overriding methods",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.3",
+        "versionNotes": "以 PHP 8.3 为兼容基线；未采用 PHP 8.4 的接口属性等后续特性。原生泛型缺失的判断依据类型系统及类型声明文档，而非仅凭示例推断。",
+        "status": "native",
+        "summary": "类通过 extends 继承一个父类，并可重写继承的 public 或 protected 方法。 可重写允许重写的 public/protected 方法；final 方法除外。",
+        "code": "class Animal { public function sound(): string { return '?'; } }\nclass Dog extends Animal {\n  public function sound(): string { return 'woof'; }\n}",
+        "sources": [
+          {
+            "title": "PHP Object Inheritance",
+            "url": "https://www.php.net/manual/en/language.oop5.inheritance.php",
+            "section": "Object Inheritance",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.21",
+        "versionNotes": "规范固定为 go1.21.0。不包含方法独立类型参数、对整数或函数使用 range，以及 Go 1.22 的循环变量语义。",
+        "status": "not-applicable",
+        "summary": "没有类继承或类型继承层次。通常通过组合与嵌入复用行为；方法和接口仍可支持面向对象设计。",
+        "code": "type Engine struct{}\ntype Car struct { Engine } // embedding, not subclassing",
+        "sources": [
+          {
+            "title": "Go FAQ",
+            "url": "https://go.dev/doc/faq#Is_Go_an_object-oriented_language",
+            "section": "Is Go an object-oriented language?; How do I get dynamic dispatch of methods?; Why is there no type inheritance?",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.75, edition 2021",
+        "versionNotes": "以 Rust 1.75、edition 2021 为基线。查阅的是当前官方 Rust Book，条目仅使用 1.75 已支持的特性，不包含 edition 2024 变更或后续 API；网页工具无法读取 1.75 版书籍地址。",
+        "status": "not-applicable",
+        "summary": "结构体不能继承另一个结构体的字段和方法。常用组合与 trait 默认方法复用代码；仍可通过方法和可见性封装数据。",
+        "code": "struct Engine;\nstruct Car { engine: Engine }",
+        "sources": [
+          {
+            "title": "Rust Book: OOP",
+            "url": "https://doc.rust-lang.org/book/ch18-01-what-is-oo.html",
+            "section": "Inheritance as a Type System and as Code Sharing",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++20",
+        "versionNotes": "以 C++20 的 N4861 工作草案为依据，已核对 cplusplus/draft 仓库 n4861 标签下的源文；HTML 转录仅辅助定位条款。工作草案并非正式出版的 ISO 标准，不采用最新草案中的后续特性。",
+        "status": "native",
+        "summary": "类可派生自一个或多个基类；访问说明符控制可访问性。",
+        "code": "struct Animal { int age = 0; };\nstruct Dog : public Animal {};",
+        "sources": [
+          {
+            "title": "C++ working draft N4861 source",
+            "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/classes.tex",
+            "section": "[class.derived]; [class.virtual]; [class.dtor]/15",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/class.derived",
+            "section": "[class.derived]",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9",
+        "versionNotes": "以 Swift 5.9 为基线。查阅当前官方 Swift 语言书籍源码，示例仅使用 5.9 已支持的特性，不包含后续 Swift 6 并发或所有权扩展；因网页正文依赖 JavaScript，改读官方 swiftlang/swift-book 源码。",
+        "status": "native",
+        "summary": "类支持继承一个父类，并用 override 显式重写成员；结构体和枚举不参与类继承。",
+        "code": "class Animal { func sound() -> String { \"?\" } }\nclass Dog: Animal {\n  override func sound() -> String { \"woof\" }\n}",
+        "sources": [
+          {
+            "title": "The Swift Programming Language: Inheritance",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Inheritance.md",
+            "section": "Defining a Base Class; Subclassing; Overriding",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "比较本目录语言的原生机制与替代方案；“不适用此机制”不等于不支持面向对象或代码复用。"
+  },
+  {
+    "id": "polymorphism",
+    "title": "多态与行为契约",
+    "description": "同一调用面向不同实现：区分接口、协议、trait 与动态鸭子类型。",
+    "scope": "common",
+    "tags": [
+      "面向对象",
+      "接口",
+      "协议",
+      "鸭子类型"
+    ],
+    "related": [
+      "inheritance",
+      "generics"
+    ],
+    "idiomIds": [
+      "dependency-injection"
+    ],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "ECMAScript 2023",
+        "versionNotes": "基线为 ECMAScript 2023；引用固定版本规范。泛型条目展示运行时通用方法，不等同于静态类型参数。",
+        "status": "idiomatic",
+        "summary": "调用方按约定调用对象的同名方法，实现运行时多态；这里展示的是动态协议，而非静态 interface 声明。",
+        "code": "const speak = value => value.speak();\nspeak({ speak() { return 'hello'; } });",
+        "sources": [
+          {
+            "title": "ECMAScript 2023 — Expressions",
+            "url": "https://tc39.es/ecma262/2023/multipage/ecmascript-language-expressions.html#sec-function-calls",
+            "section": "13.3.6 Function Calls / EvaluateCall",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3",
+        "versionNotes": "基线为 TypeScript 5.3；所选语法适用于该基线。引用持续更新的官方 Handbook，闭包引用官方旧版 Functions 章节；静态契约与运行时行为须区分。",
+        "status": "native",
+        "summary": "interface 描述静态契约，implements 检查类是否满足它；该子句不会改变类中方法的类型推断。",
+        "code": "interface Named { name(): string; }\nclass Person implements Named {\n  name(): string { return 'Ada'; }\n}",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Classes",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/classes.html#implements-clauses",
+            "section": "Class Heritage: implements clauses; extends clauses",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12",
+        "versionNotes": "基线为 Python 3.12；示例中的 def keep[T] 语法要求 3.12。Protocol 来自标准库，类型注解一般由外部类型检查工具检查。",
+        "status": "native",
+        "summary": "标准库 typing.Protocol 为静态检查描述结构化契约；普通类型注解不会在运行时强制检查方法签名。",
+        "code": "from typing import Protocol\n\nclass Named(Protocol):\n    def name(self) -> str: ...\n\ndef greet(value: Named) -> str:\n    return value.name()",
+        "sources": [
+          {
+            "title": "Python 3.12 — typing",
+            "url": "https://docs.python.org/3.12/library/typing.html#typing.Protocol",
+            "section": "Runtime annotation disclaimer; Generics; Protocol; TypeVar version notes",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2",
+        "versionNotes": "基线为 Ruby 3.2，引用对应版本官方文档。泛型条目展示动态集合复用，不是静态类型参数声明。",
+        "status": "idiomatic",
+        "summary": "调用方只调用对象约定的同名方法，实现鸭子类型式多态；module 可共享方法实现，但不是静态接口契约。",
+        "code": "class Person\n  def name; 'Ada'; end\nend\nclass Project\n  def name; 'Elsewise'; end\nend\ndef label(value)\n  value.name\nend\n[Person.new, Project.new].map { |value| label(value) }",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Modules and Classes",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/modules_and_classes_rdoc.html#label-Modules",
+            "section": "Modules/mix-ins; Module Definition/reopening; Defining a class; Inheritance",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Array",
+            "url": "https://docs.ruby-lang.org/en/3.2/Array.html#method-i-map",
+            "section": "Opening description: heterogeneous elements; map",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "java",
+        "baseline": "Java 21",
+        "versionNotes": "以 Java 21 的 JLS 为依据；片段均为该基线支持的语法，不表示特性首次出现于 Java 21。",
+        "status": "native",
+        "summary": "类显式实现 interface，使无需继承同一业务基类的类型也能遵循同一契约。",
+        "code": "interface Named { String name(); }\nclass User implements Named { public String name() { return \"Ada\"; } }",
+        "sources": [
+          {
+            "title": "JLS 21: Interfaces",
+            "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.1",
+            "section": "9.1 Interface Declarations",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12",
+        "versionNotes": "以 C# 12 为兼容基线；Microsoft Learn 为持续更新文档，未采用更高版本或预览语法。",
+        "status": "native",
+        "summary": "class 和 struct 均可实现多个 interface 契约。",
+        "code": "interface INamed { string Name(); }\nclass User : INamed { public string Name() => \"Ada\"; }",
+        "sources": [
+          {
+            "title": "C# Interfaces",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/interfaces",
+            "section": "Declare and implement an interface",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9",
+        "versionNotes": "以 Kotlin 1.9 为兼容基线；官方文档持续更新，未采用后续版本的 JVM-default 编译选项。",
+        "status": "native",
+        "summary": "类可实现多个 interface；接口可提供方法实现，但不能存储实例状态。",
+        "code": "interface Named { fun name(): String }\nclass User : Named { override fun name() = \"Ada\" }",
+        "sources": [
+          {
+            "title": "Kotlin Interfaces",
+            "url": "https://kotlinlang.org/docs/interfaces.html",
+            "section": "Implementing interfaces",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.3",
+        "versionNotes": "以 PHP 8.3 为兼容基线；未采用 PHP 8.4 的接口属性等后续特性。原生泛型缺失的判断依据类型系统及类型声明文档，而非仅凭示例推断。",
+        "status": "native",
+        "summary": "类通过 implements 显式实现一个或多个接口，以 public 方法履行共同契约。",
+        "code": "interface Named { public function name(): string; }\nclass User implements Named {\n  public function name(): string { return 'Ada'; }\n}",
+        "sources": [
+          {
+            "title": "PHP Object Interfaces",
+            "url": "https://www.php.net/manual/en/language.oop5.interfaces.php",
+            "section": "implements",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.21",
+        "versionNotes": "规范固定为 go1.21.0。不包含方法独立类型参数、对整数或函数使用 range，以及 Go 1.22 的循环变量语义。",
+        "status": "native",
+        "summary": "接口值支持动态方法分派；具体类型只要具备接口要求的方法集，就会隐式实现该接口。",
+        "code": "type Speaker interface { Speak() string }\ntype Dog struct{}\nfunc (Dog) Speak() string { return \"woof\" }\nvar pet Speaker = Dog{}",
+        "sources": [
+          {
+            "title": "Go 1.21 specification",
+            "url": "https://raw.githubusercontent.com/golang/go/go1.21.0/doc/go_spec.html#Interface_types",
+            "section": "Interface types; Type parameter declarations; Function literals; Channel types; Go statements",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go FAQ",
+            "url": "https://go.dev/doc/faq#Is_Go_an_object-oriented_language",
+            "section": "Is Go an object-oriented language?; How do I get dynamic dispatch of methods?; Why is there no type inheritance?",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.75, edition 2021",
+        "versionNotes": "以 Rust 1.75、edition 2021 为基线。查阅的是当前官方 Rust Book，条目仅使用 1.75 已支持的特性，不包含 edition 2024 变更或后续 API；网页工具无法读取 1.75 版书籍地址。",
+        "status": "native",
+        "summary": "trait 定义共享行为。泛型 trait 约束支持静态分派；对适用的 trait，&dyn Trait 等引用支持运行时分派。",
+        "code": "trait Speaker { fn speak(&self) -> &'static str; }\nfn hear(pet: &dyn Speaker) -> &'static str { pet.speak() }",
+        "sources": [
+          {
+            "title": "Rust Book: Traits",
+            "url": "https://doc.rust-lang.org/book/ch10-02-traits.html",
+            "section": "Defining a Trait; Trait bounds",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Rust Book: Trait objects",
+            "url": "https://doc.rust-lang.org/book/ch18-02-trait-objects.html",
+            "section": "Defining a Trait for Common Behavior",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++20",
+        "versionNotes": "以 C++20 的 N4861 工作草案为依据，已核对 cplusplus/draft 仓库 n4861 标签下的源文；HTML 转录仅辅助定位条款。工作草案并非正式出版的 ISO 标准，不采用最新草案中的后续特性。",
+        "status": "native",
+        "summary": "虚函数支持动态分派。含纯虚函数的抽象类可表达接口，无需单独的 interface 关键字。",
+        "code": "struct Speaker {\n  virtual const char* speak() const = 0;\n  virtual ~Speaker() = default;\n};\nstruct Dog : Speaker {\n  const char* speak() const override { return \"woof\"; }\n};",
+        "sources": [
+          {
+            "title": "C++ working draft N4861 source",
+            "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/classes.tex",
+            "section": "[class.derived]; [class.virtual]; [class.dtor]/15",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/class.virtual",
+            "section": "[class.virtual]",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/class.abstract",
+            "section": "[class.abstract]",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9",
+        "versionNotes": "以 Swift 5.9 为基线。查阅当前官方 Swift 语言书籍源码，示例仅使用 5.9 已支持的特性，不包含后续 Swift 6 并发或所有权扩展；因网页正文依赖 JavaScript，改读官方 swiftlang/swift-book 源码。",
+        "status": "native",
+        "summary": "协议声明类型必须满足的要求，类、结构体和枚举均可遵循；协议扩展可提供复用实现。",
+        "code": "protocol Speaker { func speak() -> String }\nstruct Dog: Speaker {\n  func speak() -> String { \"woof\" }\n}",
+        "sources": [
+          {
+            "title": "The Swift Programming Language: Protocols",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Protocols.md",
+            "section": "Protocol Syntax; Property Requirements",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "在本目录的 12 种语言中对照同一概念；语义和约束不保证相同。"
+  },
+  {
+    "id": "generics",
+    "title": "泛型与类型参数",
+    "description": "比较保留类型关系的泛型机制，以及动态语言的值复用边界。",
+    "scope": "shared",
+    "tags": [
+      "类型系统",
+      "泛型",
+      "类型参数"
+    ],
+    "related": [
+      "polymorphism",
+      "typescript-discriminated-unions"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "ECMAScript 2023",
+        "versionNotes": "基线为 ECMAScript 2023；引用固定版本规范。泛型条目展示运行时通用方法，不等同于静态类型参数。",
+        "status": "not-applicable",
+        "summary": "这里的泛型复用指运行时通用算法：Array.prototype.map 可以用于类数组对象，并非声明静态类型参数。",
+        "code": "Array.prototype.map.call({ 0: 3, length: 1 }, x => x * 2);",
+        "sources": [
+          {
+            "title": "ECMAScript 2023 — Indexed Collections",
+            "url": "https://tc39.es/ecma262/2023/multipage/indexed-collections.html#sec-array.prototype.map",
+            "section": "23.1.3.21 Array.prototype.map, including generic-method note",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3",
+        "versionNotes": "基线为 TypeScript 5.3；所选语法适用于该基线。引用持续更新的官方 Handbook，闭包引用官方旧版 Functions 章节；静态契约与运行时行为须区分。",
+        "status": "native",
+        "summary": "类型参数关联输入与输出类型，使同一函数能用于多种类型。",
+        "code": "function keep<T>(value: T): T { return value; }\nconst word = keep<string>('hello');",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Generics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+            "section": "Identity function; Generic Types",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12",
+        "versionNotes": "基线为 Python 3.12；示例中的 def keep[T] 语法要求 3.12。Protocol 来自标准库，类型注解一般由外部类型检查工具检查。",
+        "status": "native",
+        "summary": "Python 3.12 的类型参数语法可声明泛型函数；注解中的类型关系供类型工具检查，不强制限制运行时实参。",
+        "code": "def keep[T](value: T) -> T:\n    return value",
+        "sources": [
+          {
+            "title": "Python 3.12 — typing",
+            "url": "https://docs.python.org/3.12/library/typing.html#generics",
+            "section": "Runtime annotation disclaimer; Generics; Protocol; TypeVar version notes",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Python 3.12 — typing",
+            "url": "https://docs.python.org/3.12/library/typing.html#typing.TypeVar",
+            "section": "Runtime annotation disclaimer; Generics; Protocol; TypeVar version notes",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2",
+        "versionNotes": "基线为 Ruby 3.2，引用对应版本官方文档。泛型条目展示动态集合复用，不是静态类型参数声明。",
+        "status": "not-applicable",
+        "summary": "运行时集合算法可复用于不同对象类型：Array 可包含不同类型的元素，map 对每个元素调用 block；这里并非静态类型参数声明。",
+        "code": "[1, 'hello'].map { |value| value.to_s }",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Array",
+            "url": "https://docs.ruby-lang.org/en/3.2/Array.html",
+            "section": "Opening description: heterogeneous elements; map",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Ruby 3.2 — Array",
+            "url": "https://docs.ruby-lang.org/en/3.2/Array.html#method-i-map",
+            "section": "Opening description: heterogeneous elements; map",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "java",
+        "baseline": "Java 21",
+        "versionNotes": "以 Java 21 的 JLS 为依据；片段均为该基线支持的语法，不表示特性首次出现于 Java 21。",
+        "status": "native",
+        "summary": "类和方法可声明类型参数；同一泛型类的不同参数化类型共享运行时类。",
+        "code": "class Box<T> {\n  final T value;\n  Box(T value) { this.value = value; }\n}",
+        "sources": [
+          {
+            "title": "JLS 21: Generic Classes",
+            "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.2",
+            "section": "8.1.2 Generic Classes and Type Parameters",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12",
+        "versionNotes": "以 C# 12 为兼容基线；Microsoft Learn 为持续更新文档，未采用更高版本或预览语法。",
+        "status": "native",
+        "summary": "类型参数支持静态检查的通用代码，并保留运行时类型信息。",
+        "code": "class Utility {\n  public static T Identity<T>(T value) => value;\n}",
+        "sources": [
+          {
+            "title": "C# Generic types and methods",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics",
+            "section": "Generic methods",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9",
+        "versionNotes": "以 Kotlin 1.9 为兼容基线；官方文档持续更新，未采用后续版本的 JVM-default 编译选项。",
+        "status": "native",
+        "summary": "类和函数支持类型参数；in、out 表示声明处型变。",
+        "code": "class Box<T>(val value: T)\nval name: Box<String> = Box(\"Ada\")",
+        "sources": [
+          {
+            "title": "Kotlin Generics",
+            "url": "https://kotlinlang.org/docs/generics.html",
+            "section": "Type parameters; Declaration-site variance",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.3",
+        "versionNotes": "以 PHP 8.3 为兼容基线；未采用 PHP 8.4 的接口属性等后续特性。原生泛型缺失的判断依据类型系统及类型声明文档，而非仅凭示例推断。",
+        "status": "not-applicable",
+        "summary": "PHP 8.3 不支持原生参数化泛型。示例的 mixed 只是动态复用，不表达输入与返回值类型相同的泛型约束；PHPDoc 静态分析注解也不属于原生类型系统。",
+        "code": "function identity(mixed $value): mixed {\n  return $value;\n}",
+        "sources": [
+          {
+            "title": "PHP Type System",
+            "url": "https://www.php.net/manual/en/language.types.type-system.php",
+            "section": "Atomic types; User-defined types; Composite types",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "PHP Type declarations",
+            "url": "https://www.php.net/manual/en/language.types.declarations.php",
+            "section": "Type declarations and changelog",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.21",
+        "versionNotes": "规范固定为 go1.21.0。不包含方法独立类型参数、对整数或函数使用 range，以及 Go 1.22 的循环变量语义。",
+        "status": "native",
+        "summary": "函数和类型可声明带约束的类型参数。Go 1.21 的方法不能另行声明独立的类型参数。",
+        "code": "func Identity[T any](x T) T { return x }",
+        "sources": [
+          {
+            "title": "Go 1.21 specification",
+            "url": "https://raw.githubusercontent.com/golang/go/go1.21.0/doc/go_spec.html#Type_parameter_declarations",
+            "section": "Interface types; Type parameter declarations; Function literals; Channel types; Go statements",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.75, edition 2021",
+        "versionNotes": "以 Rust 1.75、edition 2021 为基线。查阅的是当前官方 Rust Book，条目仅使用 1.75 已支持的特性，不包含 edition 2024 变更或后续 API；网页工具无法读取 1.75 版书籍地址。",
+        "status": "native",
+        "summary": "函数、结构体等可使用类型参数；trait 约束规定类型必须提供的操作。",
+        "code": "fn identity<T>(value: T) -> T { value }",
+        "sources": [
+          {
+            "title": "Rust Book: Generics",
+            "url": "https://doc.rust-lang.org/book/ch10-01-syntax.html",
+            "section": "In Function Definitions",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++20",
+        "versionNotes": "以 C++20 的 N4861 工作草案为依据，已核对 cplusplus/draft 仓库 n4861 标签下的源文；HTML 转录仅辅助定位条款。工作草案并非正式出版的 ISO 标准，不采用最新草案中的后续特性。",
+        "status": "native",
+        "summary": "模板定义一组相关的函数或类型；C++20 还支持约束与 concept。",
+        "code": "template<class T>\nT identity(T value) { return value; }",
+        "sources": [
+          {
+            "title": "C++ working draft N4861 source",
+            "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/templates.tex",
+            "section": "[temp.pre]",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/temp",
+            "section": "[temp.pre]",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9",
+        "versionNotes": "以 Swift 5.9 为基线。查阅当前官方 Swift 语言书籍源码，示例仅使用 5.9 已支持的特性，不包含后续 Swift 6 并发或所有权扩展；因网页正文依赖 JavaScript，改读官方 swiftlang/swift-book 源码。",
+        "status": "native",
+        "summary": "泛型函数和类型使用类型参数，并可通过约束规定所需行为。",
+        "code": "func identity<T>(_ value: T) -> T { value }",
+        "sources": [
+          {
+            "title": "The Swift Programming Language: Generics",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Generics.md",
+            "section": "Generic Functions",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "比较本目录语言的原生机制与替代方案；“不适用此机制”不等于不支持面向对象或代码复用。"
+  },
+  {
+    "id": "closures",
+    "title": "闭包与捕获",
+    "description": "函数携带定义处的环境；对照捕获、修改外部变量与生命周期约束。",
+    "scope": "common",
+    "tags": [
+      "函数",
+      "闭包",
+      "作用域"
+    ],
+    "related": [
+      "javascript-generators",
+      "cpp-raii"
+    ],
+    "idiomIds": [
+      "closure"
+    ],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "ECMAScript 2023",
+        "versionNotes": "基线为 ECMAScript 2023；引用固定版本规范。泛型条目展示运行时通用方法，不等同于静态类型参数。",
+        "status": "native",
+        "summary": "函数表达式保留定义时的词法环境；外层调用结束后，仍能使用外层参数。",
+        "code": "function addBy(n) {\n  return function (x) { return x + n; };\n}\naddBy(2)(3);",
+        "sources": [
+          {
+            "title": "ECMAScript 2023 — Functions and Classes",
+            "url": "https://tc39.es/ecma262/2023/multipage/ecmascript-language-functions-and-classes.html#sec-runtime-semantics-instantiateordinaryfunctionexpression",
+            "section": "15.7 Class Definitions; 15.7.14 ClassDefinitionEvaluation; 15.2.5 InstantiateOrdinaryFunctionExpression; 15.5.5 generator evaluation",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3",
+        "versionNotes": "基线为 TypeScript 5.3；所选语法适用于该基线。引用持续更新的官方 Handbook，闭包引用官方旧版 Functions 章节；静态契约与运行时行为须区分。",
+        "status": "native",
+        "summary": "与 JavaScript 一样，函数可以捕获外层作用域的变量；类型注解提供静态描述。",
+        "code": "function addBy(n: number) {\n  return (x: number): number => x + n;\n}\naddBy(2)(3);",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Functions",
+            "url": "https://www.typescriptlang.org/docs/handbook/functions.html#functions",
+            "section": "Functions: captured variables (legacy handbook, official)",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12",
+        "versionNotes": "基线为 Python 3.12；示例中的 def keep[T] 语法要求 3.12。Protocol 来自标准库，类型注解一般由外部类型检查工具检查。",
+        "status": "native",
+        "summary": "嵌套函数和 lambda 可以引用外层作用域的变量。",
+        "code": "def add_by(n):\n    return lambda x: x + n\n\nadd_by(2)(3)",
+        "sources": [
+          {
+            "title": "Python 3.12 Tutorial — Control Flow",
+            "url": "https://docs.python.org/3.12/tutorial/controlflow.html#lambda-expressions",
+            "section": "Lambda Expressions",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2",
+        "versionNotes": "基线为 Ruby 3.2，引用对应版本官方文档。泛型条目展示动态集合复用，不是静态类型参数声明。",
+        "status": "native",
+        "summary": "Proc 对象保留创建时的上下文；lambda 可以使用所在方法的局部变量。",
+        "code": "def add_by(n)\n  ->(x) { x + n }\nend\nadd_by(2).call(3)",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Proc",
+            "url": "https://docs.ruby-lang.org/en/3.2/Proc.html",
+            "section": "Opening description: Proc objects are closures",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "java",
+        "baseline": "Java 21",
+        "versionNotes": "以 Java 21 的 JLS 为依据；片段均为该基线支持的语法，不表示特性首次出现于 Java 21。",
+        "status": "native",
+        "summary": "Lambda 以函数式接口为目标类型；捕获的局部变量必须是 final 或 effectively final。",
+        "code": "int offset = 2;\njava.util.function.IntUnaryOperator add = x -> x + offset;",
+        "sources": [
+          {
+            "title": "JLS 21: Lambda expressions",
+            "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.27.2",
+            "section": "15.27.2 Lambda Body; 15.27.3 Type of a Lambda Expression",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12",
+        "versionNotes": "以 C# 12 为兼容基线；Microsoft Learn 为持续更新文档，未采用更高版本或预览语法。",
+        "status": "native",
+        "summary": "Lambda 可转换为 delegate，并保留、修改捕获的外层变量。",
+        "code": "int count = 0;\nSystem.Func<int> next = () => ++count;",
+        "sources": [
+          {
+            "title": "C# Lambda expressions",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions#capture-of-outer-variables-and-variable-scope-in-lambda-expressions",
+            "section": "Capture of outer variables",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9",
+        "versionNotes": "以 Kotlin 1.9 为兼容基线；官方文档持续更新，未采用后续版本的 JVM-default 编译选项。",
+        "status": "native",
+        "summary": "Lambda 具有函数类型，可读取或修改捕获的外层变量。",
+        "code": "fun counter(): () -> Int {\n  var count = 0\n  return { ++count }\n}",
+        "sources": [
+          {
+            "title": "Kotlin Higher-order functions and lambdas",
+            "url": "https://kotlinlang.org/docs/lambdas.html#closures",
+            "section": "Closures",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.3",
+        "versionNotes": "以 PHP 8.3 为兼容基线；未采用 PHP 8.4 的接口属性等后续特性。原生泛型缺失的判断依据类型系统及类型声明文档，而非仅凭示例推断。",
+        "status": "native",
+        "summary": "匿名函数用 use 显式捕获外层局部变量；& 表示按引用捕获。",
+        "code": "$count = 0;\n$next = function () use (&$count): int { return ++$count; };",
+        "sources": [
+          {
+            "title": "PHP Anonymous functions",
+            "url": "https://www.php.net/manual/en/functions.anonymous.php",
+            "section": "Inheriting variables from the parent scope",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.21",
+        "versionNotes": "规范固定为 go1.21.0。不包含方法独立类型参数、对整数或函数使用 range，以及 Go 1.22 的循环变量语义。",
+        "status": "native",
+        "summary": "函数字面量可捕获外围变量；闭包与外围函数共享这些变量。",
+        "code": "count := 0\nnext := func() int { count++; return count }\n_ = next()",
+        "sources": [
+          {
+            "title": "Go 1.21 specification",
+            "url": "https://raw.githubusercontent.com/golang/go/go1.21.0/doc/go_spec.html#Function_literals",
+            "section": "Interface types; Type parameter declarations; Function literals; Channel types; Go statements",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.75, edition 2021",
+        "versionNotes": "以 Rust 1.75、edition 2021 为基线。查阅的是当前官方 Rust Book，条目仅使用 1.75 已支持的特性，不包含 edition 2024 变更或后续 API；网页工具无法读取 1.75 版书籍地址。",
+        "status": "native",
+        "summary": "闭包是匿名可调用值，能够捕获其定义环境中的值。",
+        "code": "let offset = 2;\nlet add = |n: i32| n + offset;\nlet result = add(3);",
+        "sources": [
+          {
+            "title": "Rust Book: Closures",
+            "url": "https://doc.rust-lang.org/book/ch13-01-closures.html",
+            "section": "Capturing the Environment",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++20",
+        "versionNotes": "以 C++20 的 N4861 工作草案为依据，已核对 cplusplus/draft 仓库 n4861 标签下的源文；HTML 转录仅辅助定位条款。工作草案并非正式出版的 ISO 标准，不采用最新草案中的后续特性。",
+        "status": "native",
+        "summary": "lambda 表达式创建闭包对象；捕获列表指定保留哪些外围值或引用。",
+        "code": "int offset = 2;\nauto add = [offset](int n) { return n + offset; };",
+        "sources": [
+          {
+            "title": "C++ working draft N4861 source",
+            "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/expressions.tex",
+            "section": "[expr.prim.lambda]",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/expr.prim.lambda",
+            "section": "[expr.prim.lambda]",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9",
+        "versionNotes": "以 Swift 5.9 为基线。查阅当前官方 Swift 语言书籍源码，示例仅使用 5.9 已支持的特性，不包含后续 Swift 6 并发或所有权扩展；因网页正文依赖 JavaScript，改读官方 swiftlang/swift-book 源码。",
+        "status": "native",
+        "summary": "闭包表达式是可调用值，能捕获外围常量和变量；参数类型通常可由上下文推断。",
+        "code": "let offset = 2\nlet add = { (n: Int) in n + offset }",
+        "sources": [
+          {
+            "title": "The Swift Programming Language: Closures",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/Closures.md",
+            "section": "Closure Expressions; Capturing Values",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "在本目录的 12 种语言中对照同一概念；语义和约束不保证相同。"
+  },
+  {
+    "id": "javascript-generators",
+    "title": "JavaScript 生成器",
+    "description": "以 yield 暂停与恢复计算，按需产生迭代值。",
+    "scope": "specific",
+    "tags": [
+      "迭代",
+      "惰性计算"
+    ],
+    "related": [
+      "closures",
+      "python-comprehensions"
+    ],
+    "idiomIds": [
+      "iterator-pattern",
+      "lazy-evaluation"
+    ],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "ECMAScript 2023",
+        "versionNotes": "基线为 ECMAScript 2023；引用固定版本规范。泛型条目展示运行时通用方法，不等同于静态类型参数。",
+        "status": "native",
+        "summary": "生成器函数用 function* 与 yield 通过迭代器逐步提供值。",
+        "code": "function* steps() { yield 1; yield 2; }\nconst iterator = steps();\niterator.next();",
+        "sources": [
+          {
+            "title": "ECMAScript 2023 — Functions and Classes",
+            "url": "https://tc39.es/ecma262/2023/multipage/ecmascript-language-functions-and-classes.html#sec-generator-function-definitions",
+            "section": "15.7 Class Definitions; 15.7.14 ClassDefinitionEvaluation; 15.2.5 InstantiateOrdinaryFunctionExpression; 15.5.5 generator evaluation",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "typescript-discriminated-unions",
+    "title": "TypeScript 判别联合",
+    "description": "用共同的字面量标签区分分支并收窄类型。",
+    "scope": "specific",
+    "tags": [
+      "类型系统",
+      "联合类型"
+    ],
+    "related": [
+      "generics",
+      "swift-optionals"
+    ],
+    "idiomIds": [
+      "pattern-matching"
+    ],
+    "entries": [
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3",
+        "versionNotes": "基线为 TypeScript 5.3；所选语法适用于该基线。引用持续更新的官方 Handbook，闭包引用官方旧版 Functions 章节；静态契约与运行时行为须区分。",
+        "status": "native",
+        "summary": "联合类型以共同的字面量属性作为判别字段，支持控制流类型收窄。",
+        "code": "type Result = { kind: 'ok'; value: number } | { kind: 'error'; message: string };\nfunction describe(r: Result): string {\n  return r.kind === 'ok' ? String(r.value) : r.message;\n}",
+        "sources": [
+          {
+            "title": "TypeScript Handbook — Narrowing",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions",
+            "section": "Discriminated unions",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "python-comprehensions",
+    "title": "Python 列表推导式",
+    "description": "用表达式、迭代和过滤组合生成列表。",
+    "scope": "specific",
+    "tags": [
+      "集合",
+      "迭代"
+    ],
+    "related": [
+      "javascript-generators"
+    ],
+    "idiomIds": [
+      "array-map",
+      "array-filter"
+    ],
+    "entries": [
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12",
+        "versionNotes": "基线为 Python 3.12；示例中的 def keep[T] 语法要求 3.12。Protocol 来自标准库，类型注解一般由外部类型检查工具检查。",
+        "status": "native",
+        "summary": "列表推导式结合表达式、迭代子句及可选的过滤条件构造新列表。",
+        "code": "squares = [n * n for n in range(6) if n % 2 == 0]",
+        "sources": [
+          {
+            "title": "Python 3.12 Tutorial — Data Structures",
+            "url": "https://docs.python.org/3.12/tutorial/datastructures.html#list-comprehensions",
+            "section": "5.1.3 List Comprehensions",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "ruby-open-classes",
+    "title": "Ruby 类的重新打开",
+    "description": "在已有类定义上添加方法，理解开放类及修改边界。",
+    "scope": "specific",
+    "tags": [
+      "面向对象",
+      "元编程"
+    ],
+    "related": [
+      "inheritance",
+      "php-traits"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.2",
+        "versionNotes": "基线为 Ruby 3.2，引用对应版本官方文档。泛型条目展示动态集合复用，不是静态类型参数声明。",
+        "status": "native",
+        "summary": "可以重新打开类以添加方法；官方文档建议仅重新打开自己拥有的类。",
+        "code": "class Note\nend\nclass Note\n  def title; 'Draft'; end\nend",
+        "sources": [
+          {
+            "title": "Ruby 3.2 — Modules and Classes",
+            "url": "https://docs.ruby-lang.org/en/3.2/syntax/modules_and_classes_rdoc.html#label-Module+Definition",
+            "section": "Modules/mix-ins; Module Definition/reopening; Defining a class; Inheritance",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "java-checked-exceptions",
+    "title": "Java 受检异常",
+    "description": "通过捕获或声明异常，把部分错误处理义务纳入编译检查。",
+    "scope": "specific",
+    "tags": [
+      "错误处理",
+      "类型系统"
+    ],
+    "related": [
+      "generics"
+    ],
+    "idiomIds": [
+      "error-handling"
+    ],
+    "entries": [
+      {
+        "languageId": "java",
+        "baseline": "Java 21",
+        "versionNotes": "以 Java 21 的 JLS 为依据；片段均为该基线支持的语法，不表示特性首次出现于 Java 21。",
+        "status": "native",
+        "summary": "本组对照特色：受检异常必须捕获或用 throws 声明；非受检异常不受此要求限制。",
+        "code": "class Loader {\n  static void load() throws java.io.IOException {\n    throw new java.io.IOException(\"missing\");\n  }\n}",
+        "sources": [
+          {
+            "title": "JLS 21: Exceptions",
+            "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.2",
+            "section": "11.2 Compile-Time Checking of Exceptions",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "csharp-events",
+    "title": "C# 事件",
+    "description": "发布者控制通知触发，订阅者通过事件登记处理逻辑。",
+    "scope": "specific",
+    "tags": [
+      "事件",
+      "委托"
+    ],
+    "related": [
+      "closures",
+      "polymorphism"
+    ],
+    "idiomIds": [
+      "observer-pattern"
+    ],
+    "entries": [
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12",
+        "versionNotes": "以 C# 12 为兼容基线；Microsoft Learn 为持续更新文档，未采用更高版本或预览语法。",
+        "status": "native",
+        "summary": "本组对照特色：event 对外开放订阅，通知的触发由发布者控制。",
+        "code": "class Counter {\n  public event System.Action Changed = delegate { };\n  public void Tick() => Changed();\n}",
+        "sources": [
+          {
+            "title": "C# event keyword",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/event",
+            "section": "Event declaration and invocation",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "kotlin-delegated-properties",
+    "title": "Kotlin 委托属性",
+    "description": "把属性的读取与写入交给委托对象，示例展示 lazy。",
+    "scope": "specific",
+    "tags": [
+      "属性",
+      "委托",
+      "惰性计算"
+    ],
+    "related": [
+      "closures",
+      "php-traits"
+    ],
+    "idiomIds": [
+      "lazy-evaluation"
+    ],
+    "entries": [
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9",
+        "versionNotes": "以 Kotlin 1.9 为兼容基线；官方文档持续更新，未采用后续版本的 JVM-default 编译选项。",
+        "status": "native",
+        "summary": "本组对照特色：by 将属性访问委托给其他对象；标准库 lazy 在首次访问时计算并缓存值。",
+        "code": "class Report {\n  val title: String by lazy { \"Annual report\" }\n}",
+        "sources": [
+          {
+            "title": "Kotlin Delegated properties",
+            "url": "https://kotlinlang.org/docs/delegated-properties.html#lazy-properties",
+            "section": "Delegated property syntax; Lazy properties",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "php-traits",
+    "title": "PHP trait 组合复用",
+    "description": "将方法实现组合进类，区别于接口契约及类继承。",
+    "scope": "specific",
+    "tags": [
+      "面向对象",
+      "组合"
+    ],
+    "related": [
+      "inheritance",
+      "polymorphism",
+      "ruby-open-classes"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.3",
+        "versionNotes": "以 PHP 8.3 为兼容基线；未采用 PHP 8.4 的接口属性等后续特性。原生泛型缺失的判断依据类型系统及类型声明文档，而非仅凭示例推断。",
+        "status": "native",
+        "summary": "本组对照特色：trait 将可复用实现组合进类；它不是 interface 契约，也不能独立实例化。",
+        "code": "trait Greeting {\n  public function greet(): string { return 'Hello'; }\n}\nclass User { use Greeting; }",
+        "sources": [
+          {
+            "title": "PHP Traits",
+            "url": "https://www.php.net/manual/en/language.oop5.traits.php",
+            "section": "Traits; Precedence",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "go-goroutines-channels",
+    "title": "Go goroutine 与通道",
+    "description": "用并发执行单元和有类型的通道传递数据。",
+    "scope": "specific",
+    "tags": [
+      "并发",
+      "通信"
+    ],
+    "related": [
+      "closures"
+    ],
+    "idiomIds": [
+      "async-await"
+    ],
+    "entries": [
+      {
+        "languageId": "go",
+        "baseline": "Go 1.21",
+        "versionNotes": "规范固定为 go1.21.0。不包含方法独立类型参数、对整数或函数使用 range，以及 Go 1.22 的循环变量语义。",
+        "status": "native",
+        "summary": "go 语句启动并发执行；带元素类型的通道用于在 goroutine 之间传递值。",
+        "code": "ch := make(chan int)\ngo func() { ch <- 42 }()\nvalue := <-ch\n_ = value",
+        "sources": [
+          {
+            "title": "Go 1.21 specification",
+            "url": "https://raw.githubusercontent.com/golang/go/go1.21.0/doc/go_spec.html#Go_statements",
+            "section": "Interface types; Type parameter declarations; Function literals; Channel types; Go statements",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "Go 1.21 specification",
+            "url": "https://raw.githubusercontent.com/golang/go/go1.21.0/doc/go_spec.html#Channel_types",
+            "section": "Interface types; Type parameter declarations; Function literals; Channel types; Go statements",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "rust-ownership",
+    "title": "Rust 所有权",
+    "description": "用编译期规则表达值的拥有者、移动与生命周期。",
+    "scope": "specific",
+    "tags": [
+      "内存管理",
+      "资源生命周期"
+    ],
+    "related": [
+      "cpp-raii"
+    ],
+    "idiomIds": [
+      "immutability"
+    ],
+    "entries": [
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.75, edition 2021",
+        "versionNotes": "以 Rust 1.75、edition 2021 为基线。查阅的是当前官方 Rust Book，条目仅使用 1.75 已支持的特性，不包含 edition 2024 变更或后续 API；网页工具无法读取 1.75 版书籍地址。",
+        "status": "native",
+        "summary": "编译器检查所有权规则以管理资源生命周期。移动非 Copy 值会转移所有权，原绑定随后不能再使用该值。",
+        "code": "let original = String::from(\"hello\");\nlet owner = original;\n// original is moved; use owner instead.",
+        "sources": [
+          {
+            "title": "Rust Book: Ownership",
+            "url": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+            "section": "What Is Ownership?",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "cpp-raii",
+    "title": "C++ RAII 资源管理",
+    "description": "把资源释放绑定到对象析构，示例使用 unique_ptr。",
+    "scope": "specific",
+    "tags": [
+      "内存管理",
+      "资源生命周期"
+    ],
+    "related": [
+      "rust-ownership",
+      "closures"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "cpp",
+        "baseline": "C++20",
+        "versionNotes": "以 C++20 的 N4861 工作草案为依据，已核对 cplusplus/draft 仓库 n4861 标签下的源文；HTML 转录仅辅助定位条款。工作草案并非正式出版的 ISO 标准，不采用最新草案中的后续特性。",
+        "status": "idiomatic",
+        "summary": "RAII 利用构造与析构将资源管理绑定到对象生命周期。本地 unique_ptr 在离开作用域时析构，释放其拥有的对象。",
+        "code": "#include <memory>\nvoid example() {\n  auto value = std::make_unique<int>(42);\n} // unique_ptr destroys the owned int",
+        "sources": [
+          {
+            "title": "C++ working draft N4861 source",
+            "url": "https://raw.githubusercontent.com/cplusplus/draft/n4861/source/classes.tex",
+            "section": "[class.derived]; [class.virtual]; [class.dtor]/15",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/class.dtor",
+            "section": "[class.dtor]/15",
+            "checkedAt": "2026-10-27"
+          },
+          {
+            "title": "C++20 working draft N4861 (HTML transcription)",
+            "url": "https://timsong-cpp.github.io/cppwp/n4861/unique.ptr.single.dtor",
+            "section": "[unique.ptr.single.dtor]",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  },
+  {
+    "id": "swift-optionals",
+    "title": "Swift 可选值",
+    "description": "以显式类型表达值可能缺失，并通过可选绑定安全解包。",
+    "scope": "specific",
+    "tags": [
+      "类型系统",
+      "空值安全"
+    ],
+    "related": [
+      "typescript-discriminated-unions"
+    ],
+    "idiomIds": [
+      "null-safety"
+    ],
+    "entries": [
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9",
+        "versionNotes": "以 Swift 5.9 为基线。查阅当前官方 Swift 语言书籍源码，示例仅使用 5.9 已支持的特性，不包含后续 Swift 6 并发或所有权扩展；因网页正文依赖 JavaScript，改读官方 swiftlang/swift-book 源码。",
+        "status": "native",
+        "summary": "T? 表示一个 T 值或值缺失。可选绑定仅在有值时解包，避免强制解包。",
+        "code": "let value: Int? = Int(\"42\")\nif let number = value {\n  print(number)\n}",
+        "sources": [
+          {
+            "title": "The Swift Programming Language: The Basics",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/TheBasics.md",
+            "section": "Optionals; Optional Binding",
+            "checkedAt": "2026-10-27"
+          }
+        ]
+      }
+    ],
+    "scopeNote": "以该语言的代表性写法深入讲解；不是“全球仅此语言支持”的断言。"
+  }
+]

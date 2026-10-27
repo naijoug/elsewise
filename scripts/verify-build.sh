@@ -19,6 +19,9 @@ try {
   if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest) || manifest.version !== 2) throw new Error('Invalid build manifest version');
   if (typeof manifest.commit !== 'string' || !/^[a-f0-9]{40}$/i.test(manifest.commit)) throw new Error('Invalid build manifest commit');
   if (typeof manifest.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/?)*$/.test(manifest.base)) throw new Error('Invalid build manifest base');
+  ids(manifest.features, 'features');
+  requireFile('dist/features/index.html');
+  for (const id of manifest.features) requireFile(`dist/feature/${id}/index.html`);
   ids(manifest.idioms, 'idioms'); ids(manifest.languages, 'languages');
   if (!Number.isInteger(manifest.implementations) || manifest.implementations < manifest.idioms.length) throw new Error('Invalid build manifest implementations');
   for (const file of ['index.html', 'languages/index.html', 'favorites/index.html', 'idioms/index.html', '404.html']) requireFile(`dist/${file}`);

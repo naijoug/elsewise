@@ -5,8 +5,10 @@ type Option = { id: string; name: string };
 export default function DetailControls({
   idiomId,
   options,
+  subject = '习语',
 }: {
   idiomId: string;
+  subject?: string;
   options: Option[];
 }) {
   const preferences = usePreferences();
@@ -50,7 +52,7 @@ export default function DetailControls({
           })
         }
       >
-        {favorite ? '★ 已收藏' : '☆ 收藏习语'}
+        {favorite ? '★ 已收藏' : `☆ 收藏${subject}`}
       </button>
       <LearnedButton id={idiomId} />
       <LearnedNotice />

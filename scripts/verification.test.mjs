@@ -43,6 +43,7 @@ const validManifest = () => ({
   commit: 'a'.repeat(40),
   base: '/elsewise',
   idioms: ['array-map'],
+  features: ['closures'],
   languages: ['javascript'],
   implementations: 1,
 });
@@ -66,6 +67,8 @@ async function buildFixture(root) {
     'languages/index.html',
     'favorites/index.html',
     'idioms/index.html',
+    'features/index.html',
+    'feature/closures/index.html',
     '404.html',
     'idiom/array-map/index.html',
     'language/javascript/index.html',
@@ -95,6 +98,8 @@ describe('build artifact verification', () => {
     'language/javascript/index.html',
     'favorites/index.html',
     'idioms/index.html',
+    'features/index.html',
+    'feature/closures/index.html',
     '404.html',
   ])(
     'rejects missing static route %s even if source data exists',

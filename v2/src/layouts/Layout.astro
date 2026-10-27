@@ -5,7 +5,7 @@ import ThemeToggle from '../components/ThemeToggle';
 interface Props { title: string; description?: string }
 const { title, description = '选择编程习语，对比不同语言的实现方式。' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const links = [{href: `${base}/`, title: '习语'}, {href: `${base}/languages/`, title: '语言'}, {href: `${base}/favorites/`, title: '收藏'}];
+const links = [{href: `${base}/`, title: '习语'}, {href: `${base}/features/`, title: '特性'}, {href: `${base}/languages/`, title: '语言'}, {href: `${base}/favorites/`, title: '收藏'}];
 ---
 <!doctype html>
 <html lang="zh-CN" data-theme="light">
