@@ -116,7 +116,7 @@ describe('localized build content', () => {
     expect(new Set(modules.map((module) => module.id)).size).toBe(
       modules.length
     );
-    expect(assignedIds).toHaveLength(28);
+    expect(assignedIds).toHaveLength(30);
     expect(new Set(assignedIds).size).toBe(assignedIds.length);
     expect([...assignedIds].sort()).toEqual(
       content('zh')
@@ -216,4 +216,28 @@ it('covers types, branches and loops as sourced beginner chapters in both locale
       }
     }
   }
+});
+
+
+describe('collection comparison chapters', () => {
+  const ids = ['sequence-collections', 'key-value-maps'];
+  it('puts one canonical collection module after foundations without duplicate language-specific tasks', () => {
+    expect(modules[1].id).toBe('collections');
+    expect(modules[1].ids).toEqual(ids);
+  });
+  it.each(['zh', 'en'] as const)('provides complete sourced examples for twelve languages (%s)', locale => {
+    const localized = content(locale);
+    for (const id of ids) {
+      const chapter = localized.features.find(feature => feature.id === id)!;
+      expect(chapter.entries.map(entry => entry.languageId).sort()).toEqual(localized.languages.map(language => language.id).sort());
+      expect(chapter.related).toContain(ids.find(other => other !== id));
+      for (const entry of chapter.entries) {
+        nonempty(entry.code, 'complete example');
+        nonempty(entry.baseline, 'runtime');
+        nonempty(entry.summary, 'explanation');
+        nonempty(entry.versionNotes, 'semantic boundaries');
+        expect(entry.sources.every(source => source.checkedAt === '2026-10-28')).toBe(true);
+      }
+    }
+  });
 });

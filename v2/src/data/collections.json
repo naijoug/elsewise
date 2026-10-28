@@ -1,0 +1,790 @@
+[
+  {
+    "id": "sequence-collections",
+    "title": "顺序集合：数组、列表与切片",
+    "description": "创建一组颜色，追加元素，再按索引读取、计数和遍历。比较可增长容器与固定长度数组。",
+    "scope": "common",
+    "scopeNote": "同一学习任务的逐语言实现；语言机制和标准库容器并不等价。仅核查所列章节，示例未执行。",
+    "tags": [
+      "集合",
+      "数组",
+      "列表",
+      "切片"
+    ],
+    "related": [
+      "key-value-maps",
+      "loops"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "Node.js 22；内置 Array",
+        "versionNotes": "使用普通密集数组；稀疏数组的 length 包含空位，并非已赋值项数。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "字面量创建，push 追加，[0] 读取首项，length 取长度，for...of 按索引顺序遍历。",
+        "code": "const colors = [\"red\", \"blue\"];\ncolors.push(\"green\");\nconsole.log(colors[0], colors.length);\nfor (const color of colors) {\n  console.log(color);\n}",
+        "sources": [
+          {
+            "title": "ECMAScript® 2024 Language Specification",
+            "url": "https://tc39.es/ecma262/2024/multipage/indexed-collections.html#sec-array.prototype.push",
+            "section": "23.1.3.23 Array.prototype.push; 23.1.3.38 values; 23.1.5.1 CreateArrayIterator",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "ECMAScript® 2024 Language Specification",
+            "url": "https://tc39.es/ecma262/2024/multipage/ordinary-and-exotic-objects-behaviours.html#sec-array-exotic-objects",
+            "section": "10.4.2 Array Exotic Objects",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Node.js 22; built-in Array",
+          "versionNotes": "Uses a dense array; sparse-array length includes holes, not just assigned elements. Example not executed; statically checked against official documentation.",
+          "summary": "Create with a literal, append with push, read index 0, inspect length, and iterate in index order with for...of."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3；target ES2022；生成的 JavaScript 用 Node.js 22 运行",
+        "versionNotes": "使用默认 lib（或提供 ES2022 与 console 类型）；类型标注不改变数组运行时语义，length 仍包含空位。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "string[] 约束元素类型；push、索引、length 与 for...of 操作内置数组。",
+        "code": "const colors: string[] = [\"red\", \"blue\"];\ncolors.push(\"green\");\nconsole.log(colors[0], colors.length);\nfor (const color of colors) {\n  console.log(color);\n}",
+        "sources": [
+          {
+            "title": "TypeScript: Documentation - Everyday Types",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays",
+            "section": "Arrays",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "TypeScript: TSConfig Option: lib",
+            "url": "https://www.typescriptlang.org/tsconfig/lib.html",
+            "section": "lib",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "TypeScript: TSConfig Option: target",
+            "url": "https://www.typescriptlang.org/tsconfig/target.html",
+            "section": "target",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "ECMAScript® 2024 Language Specification",
+            "url": "https://tc39.es/ecma262/2024/multipage/indexed-collections.html#sec-array.prototype.push",
+            "section": "23.1.3.23 Array.prototype.push; 23.1.3.38 values; 23.1.5.1 CreateArrayIterator",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "ECMAScript® 2024 Language Specification",
+            "url": "https://tc39.es/ecma262/2024/multipage/ordinary-and-exotic-objects-behaviours.html#sec-array-exotic-objects",
+            "section": "10.4.2 Array Exotic Objects",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3; target ES2022; run emitted JavaScript on Node.js 22",
+          "versionNotes": "Use default libs (or ES2022 plus console declarations). Types do not change runtime array semantics; length still includes holes. Example not executed; statically checked against official documentation.",
+          "summary": "Annotate elements with string[]; use push, indexing, length, and for...of on the built-in array."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12；内置 list",
+        "versionNotes": "list 按零起始索引；len 统计元素个数，越界索引读取抛出 IndexError。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "列表字面量创建，append 追加，[0] 读取首项，len 取长度，for 按列表顺序遍历。",
+        "code": "colors = [\"red\", \"blue\"]\ncolors.append(\"green\")\nprint(colors[0], len(colors))\nfor color in colors:\n    print(color)",
+        "sources": [
+          {
+            "title": "5. Data Structures — Python 3.12 documentation",
+            "url": "https://docs.python.org/3.12/tutorial/datastructures.html#more-on-lists",
+            "section": "5.1 More on Lists",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Built-in Types — Python 3.12 documentation",
+            "url": "https://docs.python.org/3.12/library/stdtypes.html#common-sequence-operations",
+            "section": "Common Sequence Operations; Lists",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.12; built-in list",
+          "versionNotes": "Lists use zero-based indexing; len counts elements, and out-of-range indexing raises IndexError. Example not executed; statically checked against official documentation.",
+          "summary": "Create a list literal, append an item, read index 0, get len, and traverse in list order."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.22；标准库",
+        "versionNotes": "独立 main.go；仅使用 Go 1.22 已有语法。 示例未执行。",
+        "status": "native",
+        "summary": "[]T 是可增长切片，不是定长 [N]T 数组。append 的返回值须保存；下标从 0 起，越界会 panic；range 按索引递增遍历。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    stops := []string{\"red\", \"blue\"}\n    stops = append(stops, \"green\")\n    fmt.Println(stops[0], len(stops))\n    for index, stop := range stops {\n        fmt.Println(index, stop)\n    }\n}\n",
+        "sources": [
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#Slice_types",
+            "section": "Slice types",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#Appending_to_and_copying_slices",
+            "section": "Appending to and copying slices",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#Index_expressions",
+            "section": "Index expressions",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#For_range",
+            "section": "For statements with range clause",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.22; standard library",
+          "summary": "Use a growable slice, not a fixed-size array. Save append’s result. Indexing is zero-based and panics out of bounds; range follows increasing indexes.",
+          "versionNotes": "Standalone main.go; uses features available in Go 1.22. Example not executed."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.56+；2021 edition；标准库",
+        "versionNotes": "独立 main.rs；使用 --edition=2021；不需要外部 crate。 示例未执行。",
+        "status": "native",
+        "summary": "Vec<T> 可增长，区别于定长 [T; N]。push 追加，len 计数，iter 按序借用元素；下标越界会 panic，需可选读取时使用 get。",
+        "code": "fn main() {\n    let mut stops = vec![\"red\", \"blue\"];\n    stops.push(\"green\");\n    println!(\"{} {}\", stops[0], stops.len());\n    for (index, stop) in stops.iter().enumerate() {\n        println!(\"{} {}\", index, stop);\n    }\n}\n",
+        "sources": [
+          {
+            "title": "Vec in std::vec — Rust",
+            "url": "https://doc.rust-lang.org/stable/std/vec/struct.Vec.html",
+            "section": "Examples; Indexing; push; len; iter",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Rust Edition Guide — Rust 2021",
+            "url": "https://doc.rust-lang.org/edition-guide/rust-2021/index.html",
+            "section": "Release version",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Rust 1.56+; edition 2021; standard library",
+          "summary": "Vec is growable, unlike a fixed-size array. push appends, len counts, and iter borrows in sequence order. Indexing panics out of bounds; get offers optional access.",
+          "versionNotes": "Standalone main.rs with --edition=2021; no external crates. Example not executed."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "Java 17；JDK 标准库 ArrayList。",
+        "versionNotes": "示例类保存为 Main.java。ArrayList 可增长；Arrays.asList 返回固定大小视图，不能用于追加；List.of 返回不可修改列表，不等于元素深度不可变。 示例未执行。",
+        "status": "native",
+        "summary": "用 ArrayList 创建可变、有序列表，add 追加，get(0) 读取首项，size 计数；增强 for 按列表顺序遍历。",
+        "code": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<String> colors = new ArrayList<>();\n        colors.add(\"red\");\n        colors.add(\"blue\");\n        colors.add(\"green\");\n        System.out.println(colors.get(0));\n        System.out.println(colors.size());\n        for (String color : colors) {\n            System.out.println(color);\n        }\n    }\n}",
+        "sources": [
+          {
+            "title": "ArrayList (Java SE 17 & JDK 17)",
+            "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html",
+            "section": "Class description; add(E); get(int); size(); iterator()",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Arrays (Java SE 17 & JDK 17)",
+            "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#asList(T...)",
+            "section": "asList(T...)",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "List (Java SE 17 & JDK 17)",
+            "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html",
+            "section": "Interface description; Unmodifiable Lists",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Java 17; JDK standard-library ArrayList.",
+          "summary": "Create a mutable ordered ArrayList; append with add, read the first item with get(0), count with size, and iterate in list order with enhanced for.",
+          "versionNotes": "Save the class as Main.java. ArrayList grows; Arrays.asList is a fixed-size view and cannot append. List.of is unmodifiable, not deeply immutable. Example not executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12 / .NET 8；System.Collections.Generic.List<T>。",
+        "versionNotes": "完整 Main 入口，无第三方依赖。List<T> 可增长；数组实例长度固定。IReadOnlyList<T> 只是只读访问接口，不承诺底层对象或元素不可变。 示例未执行。",
+        "status": "native",
+        "summary": "List<string> 配合集合初始化器创建列表；Add 追加，[0] 读取首项，Count 计数，foreach 按列表顺序遍历。",
+        "code": "using System;\nusing System.Collections.Generic;\n\npublic static class Program\n{\n    public static void Main()\n    {\n        var colors = new List<string> { \"red\", \"blue\" };\n        colors.Add(\"green\");\n        Console.WriteLine(colors[0]);\n        Console.WriteLine(colors.Count);\n        foreach (string color in colors)\n        {\n            Console.WriteLine(color);\n        }\n    }\n}",
+        "sources": [
+          {
+            "title": "List<T> Class",
+            "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0",
+            "section": "Examples; Remarks; Count; Item[Int32]; Add(T)",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Arrays",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/arrays",
+            "section": "Array properties",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "IReadOnlyList<T> Interface",
+            "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=net-8.0",
+            "section": "Remarks",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "What's new in C# 12",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12",
+            "section": "Introduction",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "C# 12 / .NET 8; System.Collections.Generic.List<T>.",
+          "summary": "Create List<string> with a collection initializer; Add appends, [0] reads the first item, Count gives its size, and foreach visits list order.",
+          "versionNotes": "Complete Main entry point; no third-party dependencies. List<T> grows, while an array instance has fixed length. IReadOnlyList<T> is a read-only access interface, not an immutability guarantee for the underlying object or its elements. Example not executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.3；内置 Array",
+        "versionNotes": "索引从 0 开始；length 统计元素，包括 nil；单索引越界读取返回 nil。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "数组字面量创建，<< 追加，[0] 读取首项，length 取长度，each 顺序遍历。",
+        "code": "colors = [\"red\", \"blue\"]\ncolors << \"green\"\np [colors[0], colors.length]\ncolors.each do |color|\n  puts color\nend",
+        "sources": [
+          {
+            "title": "class Array - Documentation for Ruby 3.3",
+            "url": "https://docs.ruby-lang.org/en/3.3/Array.html",
+            "section": "Creating Arrays; Array Indexes; #<<; #[]; #length; #each",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.3; built-in Array",
+          "versionNotes": "Indexes start at 0; length counts all elements including nil. An out-of-range single-index read returns nil. Example not executed; statically checked against official documentation.",
+          "summary": "Create an array literal, append with <<, read index 0, inspect length, and traverse in order with each."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.2；内建 array，使用连续的零基整数键。",
+        "versionNotes": "PHP array 是有序映射，不是固定长度数组。此例不删除或手工改动整数键；一般 array 不保证键连续，count 是元素数量而非最大索引加一。 示例未执行。",
+        "status": "native",
+        "summary": "用 [] 创建列表式 array，$names[] 追加，[0] 读取首项，count 计数，foreach 按数组顺序遍历。",
+        "code": "<?php\n$colors = ['red', 'blue'];\n$colors[] = 'green';\necho $colors[0], PHP_EOL;\necho count($colors), PHP_EOL;\nforeach ($colors as $color) {\n    echo $color, PHP_EOL;\n}\n",
+        "sources": [
+          {
+            "title": "PHP: Arrays - Manual",
+            "url": "https://www.php.net/manual/en/language.types.array.php",
+            "section": "Arrays; Syntax; Accessing array elements with square bracket syntax; Creating/modifying with square bracket syntax",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "PHP: count - Manual",
+            "url": "https://www.php.net/manual/en/function.count.php",
+            "section": "Description; Return Values",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "PHP: foreach - Manual",
+            "url": "https://www.php.net/manual/en/control-structures.foreach.php",
+            "section": "foreach forms",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.2; built-in array using consecutive zero-based integer keys.",
+          "summary": "Create a list-like array with [], append with $names[], read [0], count with count, and traverse array order with foreach.",
+          "versionNotes": "PHP array is an ordered map, not a fixed-length array. This example neither deletes nor manually changes integer keys. General arrays need not have consecutive keys; count counts entries, not the largest index plus one. Example not executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9；标准库",
+        "versionNotes": "独立 main.swift，允许顶层入口；无需 Foundation。使用 var 才能追加。 示例未执行。",
+        "status": "native",
+        "summary": "Array（[T]）是有序可增长集合，并非定长数组。append 追加，count 计数，零基下标读取，for-in 按序遍历；越界下标导致运行时错误。",
+        "code": "var stops = [\"red\", \"blue\"]\nstops.append(\"green\")\nprint(stops[0], stops.count)\nfor (index, stop) in stops.enumerated() {\n    print(index, stop)\n}\n",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — Collection Types (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/CollectionTypes.md",
+            "section": "Mutability of Collections; Arrays; Accessing and Modifying an Array; Iterating Over an Array",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5.9; standard library",
+          "summary": "Array ([T]) is ordered and growable, not fixed-size. append adds, count measures, subscripts are zero-based, and for-in preserves order. Out-of-bounds subscripts cause a runtime error.",
+          "versionNotes": "Standalone main.swift with a top-level entry point; no Foundation import. Use var to permit appending. Example not executed."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9 / JVM；Kotlin 标准库 MutableList。",
+        "versionNotes": "示例使用 1.9 已有 API。Array 长度固定；MutableList 可增长。List 是只读接口而非不可变保证；val 仅禁止重新绑定引用。 示例未执行。",
+        "status": "native",
+        "summary": "mutableListOf 创建可变顺序列表，add 追加，[0] 按零基索引读取，size 计数，for 按列表顺序遍历。",
+        "code": "import kotlin.collections.mutableListOf\n\nfun main() {\n    val colors = mutableListOf(\"red\", \"blue\")\n    colors.add(\"green\")\n    println(colors[0])\n    println(colors.size)\n    for (color in colors) {\n        println(color)\n    }\n}",
+        "sources": [
+          {
+            "title": "Collections overview",
+            "url": "https://kotlinlang.org/docs/collections-overview.html",
+            "section": "Collection types; Collection; List",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "mutableListOf",
+            "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/mutable-list-of.html",
+            "section": "vararg overload; Since Kotlin 1.0",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin 1.9 / JVM; Kotlin standard-library MutableList.",
+          "summary": "mutableListOf creates a mutable ordered list; add appends, [0] uses a zero-based index, size counts items, and for visits list order.",
+          "versionNotes": "Uses APIs available in 1.9. Array has fixed length; MutableList can grow. List is a read-only interface, not an immutability guarantee. val only prevents reference reassignment. Example not executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++20；标准库",
+        "versionNotes": "独立 .cpp；编译器及标准库启用 C++20。草案来源是滚动工作草案，不是已发布 ISO 标准。 示例未执行。",
+        "status": "native",
+        "summary": "std::vector 可增长，std::array 长度固定。push_back 追加，size 计数，范围 for 按元素顺序遍历。示例用 at 读取索引，越界抛 out_of_range；operator[] 不做此检查。",
+        "code": "#include <iostream>\n#include <string>\n#include <vector>\n\nint main() {\n    std::vector<std::string> stops{\"red\", \"blue\"};\n    stops.push_back(\"green\");\n    std::cout << stops.at(0) << ' ' << stops.size() << '\\n';\n    for (const auto& stop : stops) {\n        std::cout << stop << '\\n';\n    }\n}\n",
+        "sources": [
+          {
+            "title": "C++ working draft — Class template vector",
+            "url": "https://eel.is/c++draft/vector",
+            "section": "[vector.overview]; [vector.capacity]; [vector.modifiers]",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "C++ working draft — Sequence containers",
+            "url": "https://eel.is/c++draft/sequence.reqmts",
+            "section": "[sequence.reqmts], element access requirements",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "C++20; standard library",
+          "summary": "vector grows; array has fixed size. push_back appends, size counts, and range-for follows element order. at checks indexes and throws out_of_range; operator[] does not provide this check.",
+          "versionNotes": "Standalone .cpp; enable C++20 in compiler and library. Sources are the rolling working draft, not the published ISO standard. Example not executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "Sequences: arrays, lists and slices",
+      "description": "Create a color sequence, append an element, then index, count and iterate. Compare growable containers with fixed-length arrays.",
+      "scopeNote": "Language-by-language implementations of one learning task; mechanisms and standard-library containers are not equivalent. Only cited chapters reviewed; examples not executed.",
+      "tags": [
+        "collections",
+        "arrays",
+        "lists",
+        "slices"
+      ]
+    }
+  },
+  {
+    "id": "key-value-maps",
+    "title": "键值映射：存储、查找与遍历",
+    "description": "按名称保存数量，区分键不存在与零值或空值，再遍历键值对；不要假设所有映射都有相同顺序。",
+    "scope": "common",
+    "scopeNote": "同一学习任务的逐语言实现；语言机制和标准库容器并不等价。仅核查所列章节，示例未执行。",
+    "tags": [
+      "集合",
+      "映射",
+      "字典",
+      "查找"
+    ],
+    "related": [
+      "sequence-collections",
+      "json"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "Node.js 22；内置 Map",
+        "versionNotes": "get 对缺键返回 undefined；已存 undefined/null 不等于缺键，应用 has 判断。遍历遵循插入顺序，覆写不移位。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "new Map 创建，set 写入，has 检查键，get 读取，for...of 遍历键值对；不是普通对象属性表。",
+        "code": "const stock = new Map();\nstock.set(\"apples\", 2);\nstock.set(\"empty\", undefined);\nstock.set(\"pears\", 3);\nconsole.log(stock.has(\"empty\"), stock.get(\"empty\"));\nconsole.log(stock.has(\"missing\"), stock.get(\"missing\"));\nconsole.log(stock.get(\"apples\"));\nfor (const [item, count] of stock) {\n  console.log(item, count);\n}",
+        "sources": [
+          {
+            "title": "ECMAScript® 2024 Language Specification",
+            "url": "https://tc39.es/ecma262/2024/multipage/keyed-collections.html#sec-map-objects",
+            "section": "24.1 Map Objects; 24.1.3.6 get; 24.1.3.7 has; 24.1.3.9 set; 24.1.5.1 CreateMapIterator",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Node.js 22; built-in Map",
+          "versionNotes": "get returns undefined for missing keys; use has to distinguish absence from stored undefined/null. Iteration follows insertion order; updates keep position. Example not executed; statically checked against official documentation.",
+          "summary": "Use new Map, set, has, get, and for...of entry iteration—not ordinary object properties."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3；target ES2022；生成的 JavaScript 用 Node.js 22 运行",
+        "versionNotes": "默认 lib 包含 Map 类型；若自定义 lib，需 ES2015 或更新的集合/迭代声明及 console 类型。has 不会令 get 的结果自动排除 undefined。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "Map<string, number | undefined> 标注键值类型；set 写入、has 判断存在、get 读取，for...of 按插入顺序遍历。",
+        "code": "const stock = new Map<string, number | undefined>();\nstock.set(\"apples\", 2);\nstock.set(\"empty\", undefined);\nstock.set(\"pears\", 3);\nconsole.log(stock.has(\"empty\"), stock.get(\"empty\"));\nconsole.log(stock.has(\"missing\"), stock.get(\"missing\"));\nconst apples: number | undefined = stock.get(\"apples\");\nconsole.log(apples);\nfor (const [item, count] of stock) {\n  console.log(item, count);\n}",
+        "sources": [
+          {
+            "title": "TypeScript: TSConfig Option: lib",
+            "url": "https://www.typescriptlang.org/tsconfig/lib.html",
+            "section": "lib",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "TypeScript: TSConfig Option: target",
+            "url": "https://www.typescriptlang.org/tsconfig/target.html",
+            "section": "target",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "TypeScript: Documentation - Iterators and Generators",
+            "url": "https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html#forof-statements",
+            "section": "Iterables; for..of statements",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "ECMAScript® 2024 Language Specification",
+            "url": "https://tc39.es/ecma262/2024/multipage/keyed-collections.html#sec-map-objects",
+            "section": "24.1 Map Objects; 24.1.3.6 get; 24.1.3.7 has; 24.1.3.9 set; 24.1.5.1 CreateMapIterator",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "TypeScript 5.3.3 standard library — es2015.collection.d.ts",
+            "url": "https://raw.githubusercontent.com/microsoft/TypeScript/v5.3.3/src/lib/es2015.collection.d.ts",
+            "section": "interface Map<K, V>: get, has, set; MapConstructor",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3; target ES2022; run emitted JavaScript on Node.js 22",
+          "versionNotes": "Default libs include Map. Custom libs need ES2015+ collection/iterator declarations and console types. has does not narrow the result of get to exclude undefined. Example not executed; statically checked against official documentation.",
+          "summary": "Annotate Map<string, number | undefined>; write with set, test with has, read with get, and iterate entries in insertion order."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.12；内置 dict",
+        "versionNotes": "键存在用 in；None 值不代表缺键。[] 缺键抛 KeyError，get 默认返回 None。Python 3.7 起保证插入顺序，覆写不移位。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "{} 创建映射，索引赋值写入，in 判断存在，[] 读取，items() 遍历键值对。",
+        "code": "stock = {}\nstock[\"apples\"] = 2\nstock[\"empty\"] = None\nstock[\"pears\"] = 3\nprint(\"empty\" in stock, stock[\"empty\"])\nprint(\"missing\" in stock, stock.get(\"missing\"))\nprint(stock[\"apples\"])\nfor item, count in stock.items():\n    print(item, count)",
+        "sources": [
+          {
+            "title": "5. Data Structures — Python 3.12 documentation",
+            "url": "https://docs.python.org/3.12/tutorial/datastructures.html#dictionaries",
+            "section": "5.5 Dictionaries; 5.6 Looping Techniques",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Built-in Types — Python 3.12 documentation",
+            "url": "https://docs.python.org/3.12/library/stdtypes.html#mapping-types-dict",
+            "section": "Mapping Types — dict; get; items; insertion-order guarantee",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.12; built-in dict",
+          "versionNotes": "Use in for presence, even for None values. Missing [] raises KeyError; get defaults to None. Insertion order is guaranteed since 3.7; updates retain position. Example not executed; statically checked against official documentation.",
+          "summary": "Create with {}, assign by key, test with in, read with [], and iterate key-value pairs using items()."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.22；标准库",
+        "versionNotes": "独立 main.go；先初始化 map，不能写入 nil map。 示例未执行。",
+        "status": "native",
+        "summary": "map 下标赋值新增或覆盖；comma-ok 同时读取并判断存在性。缺键读取为值类型零值，不能用零值判断存在；遍历顺序未指定。",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    stock := map[string]int{\"apples\": 0}\n    stock[\"pears\"] = 4\n    stock[\"pears\"] = 6\n    value, exists := stock[\"apples\"]\n    fmt.Println(exists, value)\n    missing, exists := stock[\"missing\"]\n    fmt.Println(exists, missing)\n    for item, count := range stock {\n        fmt.Println(item, count)\n    }\n}\n",
+        "sources": [
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#Map_types",
+            "section": "Map types",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#Index_expressions",
+            "section": "Index expressions",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Go Programming Language Specification",
+            "url": "https://go.dev/ref/spec#For_range",
+            "section": "For statements with range clause",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.22; standard library",
+          "summary": "Assignment inserts or replaces. Comma-ok distinguishes missing keys from stored zero values. Missing reads return zero; iteration order is unspecified.",
+          "versionNotes": "Standalone main.go; initialize the map before writing because nil maps reject writes. Example not executed."
+        }
+      },
+      {
+        "languageId": "rust",
+        "baseline": "Rust 1.56+；2021 edition；标准库",
+        "versionNotes": "独立 main.rs；使用 --edition=2021；HashMap 从标准库导入。 示例未执行。",
+        "status": "native",
+        "summary": "insert 新增或覆盖，contains_key 判断存在，get 返回 Option<&V>，缺键为 None 而非零。借用遍历不消耗映射，但顺序任意。",
+        "code": "use std::collections::HashMap;\n\nfn main() {\n    let mut stock = HashMap::new();\n    stock.insert(\"apples\", 0);\n    stock.insert(\"pears\", 4);\n    stock.insert(\"pears\", 6);\n    println!(\"{}\", stock.contains_key(\"apples\"));\n    if let Some(count) = stock.get(\"pears\") {\n        println!(\"{}\", count);\n    }\n    println!(\"{:?}\", stock.get(\"missing\"));\n    for (item, count) in &stock {\n        println!(\"{} {}\", item, count);\n    }\n}\n",
+        "sources": [
+          {
+            "title": "HashMap in std::collections — Rust",
+            "url": "https://doc.rust-lang.org/stable/std/collections/struct.HashMap.html",
+            "section": "new; insert; contains_key; get; iter; IntoIterator",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "The Rust Edition Guide — Rust 2021",
+            "url": "https://doc.rust-lang.org/edition-guide/rust-2021/index.html",
+            "section": "Release version",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Rust 1.56+; edition 2021; standard library",
+          "summary": "insert adds or replaces; contains_key checks membership. get returns Option<&V>, with None for absence rather than zero. Borrowed iteration preserves the map but has arbitrary order.",
+          "versionNotes": "Standalone main.rs with --edition=2021; import HashMap from std. Example not executed."
+        }
+      },
+      {
+        "languageId": "java",
+        "baseline": "Java 17；JDK 标准库 LinkedHashMap。",
+        "versionNotes": "示例类保存为 Main.java。默认 LinkedHashMap 按键插入顺序遍历；HashMap 不保证顺序。此实现允许 null 值。 示例未执行。",
+        "status": "native",
+        "summary": "put 新增或覆盖键；containsKey 判断是否存在，不能用 get 的 null 结果代替；get 读取，entrySet 遍历键值对。",
+        "code": "import java.util.emptykedHashMap;\nimport java.util.Map;\n\npublic class Main {\n    public static void main(String[] args) {\n        Map<String, Integer> stock = new emptykedHashMap<>();\n        stock.put(\"apples\", 8);\n        stock.put(\"apples\", 9);\n        stock.put(\"empty\", null);\n        System.out.println(stock.containsKey(\"empty\"));\n        System.out.println(stock.containsKey(\"missing\"));\n        System.out.println(stock.get(\"apples\"));\n        for (Map.Entry<String, Integer> entry : stock.entrySet()) {\n            System.out.println(entry.getKey() + \"=\" + entry.getValue());\n        }\n    }\n}",
+        "sources": [
+          {
+            "title": "LinkedHashMap (Java SE 17 & JDK 17)",
+            "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html",
+            "section": "Class description: insertion order, reinsertion, null elements",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Map (Java SE 17 & JDK 17)",
+            "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html",
+            "section": "containsKey(Object); get(Object); put(K,V); entrySet()",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Java 17; JDK standard-library LinkedHashMap.",
+          "summary": "Use put to insert or replace, containsKey to distinguish absence from a stored null, get to read, and entrySet to iterate over entries.",
+          "versionNotes": "Save the class as Main.java. Default LinkedHashMap iterates in key insertion order; HashMap does not guarantee order. This implementation permits null values. Example not executed."
+        }
+      },
+      {
+        "languageId": "csharp",
+        "baseline": "C# 12 / .NET 8；Dictionary<string, int?>。",
+        "versionNotes": "完整 Main 入口。Dictionary 的公开契约不保证遍历顺序；不要依赖观察到的插入顺序。int? 明确允许 null 值。 示例未执行。",
+        "status": "native",
+        "summary": "索引器写入会新增或覆盖；ContainsKey 判断键存在，TryGetValue 同时返回是否找到和对应值，即使值为 null 也能区分缺键；foreach 读取键值对。",
+        "code": "using System;\nusing System.Collections.Generic;\n\npublic static class Program\n{\n    public static void Main()\n    {\n        var stock = new Dictionary<string, int?>();\n        stock[\"apples\"] = 8;\n        stock[\"apples\"] = 9;\n        stock[\"empty\"] = null;\n        Console.Writeemptye(stock.ContainsKey(\"empty\"));\n        if (stock.TryGetValue(\"apples\", out int? score))\n        {\n            Console.Writeemptye(score);\n        }\n        Console.Writeemptye(stock.TryGetValue(\"missing\", out _));\n        foreach (var entry in stock)\n        {\n            Console.Writeemptye($\"{entry.Key}={entry.Value}\");\n        }\n    }\n}",
+        "sources": [
+          {
+            "title": "Dictionary<TKey,TValue> Class",
+            "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2?view=net-8.0",
+            "section": "Examples; Remarks: enumeration order; Item[TKey]; ContainsKey(TKey)",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Dictionary<TKey,TValue>.TryGetValue(TKey, TValue) Method",
+            "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2.trygetvalue?view=net-8.0",
+            "section": "Parameters; Returns; Examples",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "C# 12 / .NET 8; Dictionary<string, int?>.",
+          "summary": "Indexer assignment inserts or replaces; ContainsKey tests membership. TryGetValue returns a found flag plus the value, distinguishing absence even when null is stored. foreach reads key/value pairs.",
+          "versionNotes": "Complete Main entry point. Dictionary's public contract does not guarantee enumeration order; do not rely on observed insertion order. int? explicitly permits null values. Example not executed."
+        }
+      },
+      {
+        "languageId": "ruby",
+        "baseline": "Ruby 3.3；内置 Hash",
+        "versionNotes": "key? 区分缺键与 nil 值；本例未设置默认值，缺键 [] 返回 nil。Hash 按插入顺序遍历，覆写不移位。 示例未经执行；依据官方文档静态核验。",
+        "status": "native",
+        "summary": "{} 创建映射，[]= 写入，key? 判断存在，[] 读取，each 遍历键值对。",
+        "code": "stock = {}\nstock[\"apples\"] = 2\nstock[\"empty\"] = nil\nstock[\"pears\"] = 3\np [stock.key?(\"empty\"), stock[\"empty\"]]\np [stock.key?(\"missing\"), stock[\"missing\"]]\np stock[\"apples\"]\nstock.each do |item, count|\n  p [item, count]\nend",
+        "sources": [
+          {
+            "title": "class Hash - Documentation for Ruby 3.3",
+            "url": "https://docs.ruby-lang.org/en/3.3/Hash.html",
+            "section": "Creating a Hash; Entry Order; Default Values; #[]=; #[]; #key?; #each",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Ruby 3.3; built-in Hash",
+          "versionNotes": "key? distinguishes absence from nil. With this unchanged default, missing [] returns nil. Hash iterates in insertion order; updates keep position. Example not executed; statically checked against official documentation.",
+          "summary": "Create with {}, write with []=, test with key?, read with [], and iterate key-value pairs with each."
+        }
+      },
+      {
+        "languageId": "php",
+        "baseline": "PHP 8.2；内建关联 array。",
+        "versionNotes": "array 保留条目顺序。键只能是整数或字符串，数字字符串等会发生键转换；示例使用非数字字符串键。读取缺失键在 PHP 8 发出 E_WARNING，故先检查存在性。 示例未执行。",
+        "status": "native",
+        "summary": "用 key => value 创建映射，方括号赋值新增或覆盖，array_key_exists 区分缺键与 null；isset 对 null 返回 false；foreach 同时读取键和值。",
+        "code": "<?php\n$stock = ['apples' => 8];\n$stock['apples'] = 9;\n$stock['empty'] = null;\nvar_dump(array_key_exists('empty', $stock));\nvar_dump(array_key_exists('missing', $stock));\nif (array_key_exists('apples', $stock)) {\n    echo $stock['apples'], PHP_EOL;\n}\nforeach ($stock as $name => $score) {\n    echo $name, '=', var_export($score, true), PHP_EOL;\n}\n",
+        "sources": [
+          {
+            "title": "PHP: Arrays - Manual",
+            "url": "https://www.php.net/manual/en/language.types.array.php",
+            "section": "Arrays; Syntax: key casts; Accessing array elements with square bracket syntax; Creating/modifying with square bracket syntax",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "PHP: array_key_exists - Manual",
+            "url": "https://www.php.net/manual/en/function.array-key-exists.php",
+            "section": "Description; Example #2 array_key_exists() vs isset()",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "PHP: foreach - Manual",
+            "url": "https://www.php.net/manual/en/control-structures.foreach.php",
+            "section": "Key/value foreach form",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "PHP 8.2; built-in associative array.",
+          "summary": "Create with key => value and insert or replace using brackets. array_key_exists distinguishes absence from null, unlike isset, which is false for null. foreach retrieves keys and values.",
+          "versionNotes": "array preserves entry order. Keys are integers or strings, with coercions such as numeric-string conversion; this example uses nonnumeric strings. Reading a missing key emits E_WARNING in PHP 8, so check existence first. Example not executed."
+        }
+      },
+      {
+        "languageId": "swift",
+        "baseline": "Swift 5.9；标准库",
+        "versionNotes": "独立 main.swift；值类型为非可选 Int，使用 Optional 绑定读取。 示例未执行。",
+        "status": "native",
+        "summary": "Dictionary 下标赋值新增或覆盖。读取返回 Optional，缺键为 nil，不是零；与 nil 比较判断存在，if let 解包读取。for-in 产生键值对，不保证顺序。",
+        "code": "var stock: [String: Int] = [\"apples\": 0]\nstock[\"pears\"] = 4\nstock[\"pears\"] = 6\nprint(stock[\"apples\"] != nil)\nif let count = stock[\"pears\"] {\n    print(count)\n}\nprint(stock[\"missing\"] == nil)\nfor (item, count) in stock {\n    print(item, count)\n}\n",
+        "sources": [
+          {
+            "title": "The Swift Programming Language — Collection Types (official source)",
+            "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/CollectionTypes.md",
+            "section": "Dictionaries; Accessing and Modifying a Dictionary; Iterating Over a Dictionary",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Swift 5.9; standard library",
+          "summary": "Subscript assignment inserts or replaces. Reads return Optional, with nil for missing keys rather than zero. Compare with nil for membership and use if let to unwrap. Dictionary iteration yields pairs without an ordering guarantee.",
+          "versionNotes": "Standalone main.swift; values are nonoptional Int and reads use optional binding. Example not executed."
+        }
+      },
+      {
+        "languageId": "kotlin",
+        "baseline": "Kotlin 1.9 / JVM；标准库 linkedMapOf。",
+        "versionNotes": "linkedMapOf 返回可变 LinkedHashMap，按插入顺序遍历。Map 是只读接口，不保证底层不可变；Int? 允许 null。示例不使用滚动文档中的较新 API。 示例未执行。",
+        "status": "native",
+        "summary": "方括号赋值新增或覆盖；containsKey 区分缺键与 null 值；方括号读取，for 解构遍历键值对。",
+        "code": "import kotlin.collections.linkedMapOf\n\nfun main() {\n    val stock = linkedMapOf<String, Int?>(\"apples\" to 8)\n    stock[\"apples\"] = 9\n    stock[\"empty\"] = null\n    println(stock.containsKey(\"empty\"))\n    println(stock.containsKey(\"missing\"))\n    println(stock[\"apples\"])\n    for ((name, score) in stock) {\n        println(\"$name=$score\")\n    }\n}",
+        "sources": [
+          {
+            "title": "linkedMapOf",
+            "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/linked-map-of.html",
+            "section": "vararg overload; iteration order; Since Kotlin 1.0",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Map-specific operations",
+            "url": "https://kotlinlang.org/docs/map-operations.html",
+            "section": "Retrieve keys and values; Map write operations",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "containsKey",
+            "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/contains-key.html",
+            "section": "containsKey; Since Kotlin",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Collections overview",
+            "url": "https://kotlinlang.org/docs/collections-overview.html",
+            "section": "Collection types; Map",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "LinkedHashMap",
+            "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-linked-hash-map/",
+            "section": "JVM typealias; Iteration order",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "Kotlin 1.9 / JVM; standard-library linkedMapOf.",
+          "summary": "Bracket assignment inserts or replaces; containsKey distinguishes absence from null. Brackets read values, and a destructuring for loop visits key/value pairs.",
+          "versionNotes": "linkedMapOf returns a mutable LinkedHashMap with insertion-order iteration. Map is a read-only interface, not an underlying immutability guarantee; Int? permits null. The example avoids newer APIs in rolling documentation. Example not executed."
+        }
+      },
+      {
+        "languageId": "cpp",
+        "baseline": "C++20；标准库",
+        "versionNotes": "独立 .cpp；contains 要求 C++20。草案为滚动版本；Microsoft 实现文档补证版本。 示例未执行。",
+        "status": "native",
+        "summary": "unordered_map 不保证遍历顺序。下标赋值新增或覆盖，但缺键时单独 operator[] 也会插入值初始化值（int 为 0）；contains 检查、at 读取不会插入，at 缺键抛 out_of_range。",
+        "code": "#include <iostream>\n#include <string>\n#include <unordered_map>\n\nint main() {\n    std::unordered_map<std::string, int> stock{{\"apples\", 0}};\n    stock[\"pears\"] = 4;\n    stock[\"pears\"] = 6;\n    std::cout << std::boolalpha << stock.contains(\"apples\") << '\\n';\n    if (stock.contains(\"pears\")) {\n        std::cout << stock.at(\"pears\") << '\\n';\n    }\n    std::cout << stock.contains(\"missing\") << '\\n';\n    for (const auto& [item, count] : stock) {\n        std::cout << item << ' ' << count << '\\n';\n    }\n}\n",
+        "sources": [
+          {
+            "title": "C++ working draft — Class template unordered_map",
+            "url": "https://eel.is/c++draft/unord.map",
+            "section": "[unord.map.overview]; [unord.map.elem]",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "C++ working draft — Unordered associative containers",
+            "url": "https://eel.is/c++draft/unord.req",
+            "section": "[unord.req.general], ordering and contains",
+            "checkedAt": "2026-10-28"
+          },
+          {
+            "title": "Microsoft Learn — unordered_map Class",
+            "url": "https://learn.microsoft.com/en-us/cpp/standard-library/unordered-map-class?view=msvc-170#contains",
+            "section": "Members; unordered_map::contains",
+            "checkedAt": "2026-10-28"
+          }
+        ],
+        "en": {
+          "baseline": "C++20; standard library",
+          "summary": "unordered_map has unspecified iteration order. Subscript assignment inserts or replaces; reading a missing key with operator[] also inserts a value-initialized value (0 for int). contains and at do not insert; at throws on absence.",
+          "versionNotes": "Standalone .cpp; contains requires C++20. The rolling draft is supplemented by Microsoft implementation documentation for version support. Example not executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "Key-value maps: store, look up and iterate",
+      "description": "Store quantities by name, distinguish missing keys from zero or null-like values, and iterate pairs without assuming a universal ordering guarantee.",
+      "scopeNote": "Language-by-language implementations of one learning task; mechanisms and standard-library containers are not equivalent. Only cited chapters reviewed; examples not executed.",
+      "tags": [
+        "collections",
+        "maps",
+        "dictionaries",
+        "lookup"
+      ]
+    }
+  }
+]

@@ -15,7 +15,8 @@ const conceptual = JSON.parse(
 const foundations = JSON.parse(
   readFileSync(new URL('../v2/src/data/foundations.json', import.meta.url))
 );
-const documents = [...foundations, ...practical, ...conceptual];
+const collections = JSON.parse(readFileSync(new URL('../v2/src/data/collections.json', import.meta.url)));
+const documents = [...foundations, ...collections, ...practical, ...conceptual];
 const english = JSON.parse(
   readFileSync(new URL('../v2/src/data/english-content.json', import.meta.url))
 );
@@ -937,6 +938,35 @@ test('basic types, conditions and loops navigate as one beginner sequence withou
       await expect(page.locator('.docs-sidebar [aria-current="page"]')).toHaveAttribute('href', `${base}${prefix}feature/${id}/`);
       await expectNoHorizontalOverflow(page, page.viewportSize().width);
       if (locale === 'en') await expectEnglishProse(page);
+    }
+  }
+});
+
+
+test('collections keep twelve examples, sources and selected languages across related chapters and locales', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+  await page.addInitScript((ids) => localStorage.setItem('elsewise_preferences', JSON.stringify({ selectedLanguages: ids })), languages.map(language => language.id));
+  for (const locale of ['zh', 'en']) {
+    const prefix = locale === 'en' ? 'en/' : '';
+    await open(page, `${prefix}feature/sequence-collections/`);
+    for (const [index, doc] of collections.entries()) {
+      if (index) {
+        await page.locator(`.related-docs a[href="${base}${prefix}feature/${doc.id}/"]`).click();
+        await hydrated(page);
+      }
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(locale === 'en' ? doc.en.title : doc.title);
+      await expect(page.locator('[data-language-card]:visible')).toHaveCount(12);
+      for (const entry of doc.entries) {
+        const card = page.locator(`[data-language-card="${entry.languageId}"]`);
+        expect(await card.locator('pre code').textContent()).toBe(entry.code);
+        await expect(card).toContainText(locale === 'en' ? entry.en.summary : entry.summary);
+        await expect(card.locator('.source-details a')).toHaveCount(entry.sources.length);
+      }
+      for (const theme of ['light', 'dark']) {
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme) await page.locator('#theme-toggle').click();
+        await expectNoHorizontalOverflow(page, page.viewportSize().width);
+        if (locale === 'en') await expectEnglishProse(page);
+      }
     }
   }
 });
