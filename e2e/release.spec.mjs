@@ -1219,6 +1219,10 @@ test('canonical closure topic preserves legacy progress, favorites, examples and
 test('directory visual acceptance in both locales and themes with dismissible language filter', async ({
   page,
 }, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
   for (const locale of ['', 'en/']) {
     await open(page, locale);
     for (const theme of ['light', 'dark']) {
@@ -1246,7 +1250,7 @@ test('directory visual acceptance in both locales and themes with dismissible la
       );
       await expectNoHorizontalOverflow(
         page,
-        testInfo.project.name === 'mobile' ? 393 : 1280
+        testInfo.project.name === 'mobile' ? 375 : 1280
       );
       await page.screenshot({
         path: testInfo.outputPath(
