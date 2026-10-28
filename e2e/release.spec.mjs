@@ -543,8 +543,12 @@ test('documents retain learning/favorites, related idioms and language navigatio
   await open(page, 'features/');
   await expect(cards(page)).toHaveCount(50);
   await page.getByLabel('搜索知识点').fill('所有权');
-  await expect(cards(page)).toHaveCount(1);
-  await cards(page).first().locator('.knowledge-title').click();
+  // Full-text search also finds discussions of ownership in other topics.
+  const ownership = cards(page).filter({
+    has: page.locator('a[href$="/feature/rust-ownership/"]'),
+  });
+  await expect(ownership).toHaveCount(1);
+  await ownership.locator('.knowledge-title').click();
   await hydrated(page);
   await expect(
     page.getByRole('heading', { name: 'Rust 所有权', exact: true })
@@ -1210,4 +1214,45 @@ test('canonical closure topic preserves legacy progress, favorites, examples and
   await expect(
     page.getByRole('button', { name: '已学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('directory visual acceptance in both locales and themes with dismissible language filter', async ({
+  page,
+}, testInfo) => {
+  for (const locale of ['', 'en/']) {
+    await open(page, locale);
+    for (const theme of ['light', 'dark']) {
+      const toggle = page.getByRole('button', {
+        name: locale ? 'Toggle light and dark theme' : '切换明暗主题',
+      });
+      const current = await page.locator('html').getAttribute('data-theme');
+      if (current !== theme) await toggle.click();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await page.locator('.knowledge-language summary').click();
+      await expect(page.locator('.knowledge-language')).toHaveAttribute(
+        'open',
+        ''
+      );
+      await page.locator('.knowledge-language summary').press('Escape');
+      await expect(page.locator('.knowledge-language')).not.toHaveAttribute(
+        'open',
+        ''
+      );
+      await page.locator('.knowledge-language summary').click();
+      await page.locator('.knowledge-heading h1').click();
+      await expect(page.locator('.knowledge-language')).not.toHaveAttribute(
+        'open',
+        ''
+      );
+      await expectNoHorizontalOverflow(
+        page,
+        testInfo.project.name === 'mobile' ? 393 : 1280
+      );
+      await page.screenshot({
+        path: testInfo.outputPath(
+          `directory-${locale ? 'en' : 'zh'}-${theme}.png`
+        ),
+      });
+    }
+  }
 });

@@ -51,11 +51,11 @@ jobs:
       - name: Verify final Pages build in desktop and mobile browsers
         run: npm run test:e2e
 
-      - name: Upload browser failure evidence
-        if: failure()
+      - name: Upload browser acceptance evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pages-browser-failures
+          name: pages-browser-evidence
           path: test-results/
           if-no-files-found: ignore
 
