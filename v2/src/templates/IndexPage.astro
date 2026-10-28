@@ -7,6 +7,6 @@ interface Props {locale?:Locale}
 const {locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);
 ---
 <Layout title={en?'Programming knowledge directory':'编程知识目录'} locale={locale}>
-<header class="knowledge-heading"><div><p class="eyebrow">{en?'ELSEWISE / LEARN BY COMPARISON':'异曲 / 对照着学'}</p><h1>{en?'One topic. Many languages.':'一个知识点，多种语言。'}</h1><p>{en?'Find a topic, choose your languages, and compare how it works.':'找到知识点，选择语言，一起看懂不同的实现。'}</p></div><div class="directory-stats"><strong>{knowledge(locale).length}</strong><span>{en?'topics':'个知识点'}</span><strong>{content(locale).languages.length}</strong><span>{en?'languages':'种语言'}</span></div></header>
+<header class="knowledge-heading"><div><h1>{en?'Programming knowledge':'编程知识目录'}</h1><p>{en?'Find a topic, choose your languages, and compare how it works.':'找到知识点，选择语言，一起看懂不同的实现。'}</p></div><div class="directory-stats"><strong>{knowledge(locale).length}</strong><span>{en?'topics':'个知识点'}</span><strong>{content(locale).languages.length}</strong><span>{en?'languages':'种语言'}</span></div></header>
 <KnowledgeCatalog items={knowledge(locale)} chapters={chapters.map(c=>({id:c.id,title:c[locale]}))} languages={content(locale).languages.map(l=>({id:l.id,name:l.name}))} base={base} locale={locale} client:load />
 </Layout>

@@ -623,7 +623,7 @@ test('home unifies documentation and patterns into an ordered searchable curricu
   const response = await open(page);
   expect(response.status()).toBe(200);
   await expect(
-    page.getByRole('heading', { name: '一个知识点，多种语言。' })
+    page.getByRole('heading', { name: '编程知识目录' })
   ).toBeVisible();
   await expect(cards(page)).toHaveCount(50);
   await expect(page.locator('.knowledge-chapter')).toHaveCount(10);
