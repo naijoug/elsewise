@@ -600,7 +600,7 @@
         "versionNotes": "完整 Main 入口。Dictionary 的公开契约不保证遍历顺序；不要依赖观察到的插入顺序。int? 明确允许 null 值。 示例未执行。",
         "status": "native",
         "summary": "索引器写入会新增或覆盖；ContainsKey 判断键存在，TryGetValue 同时返回是否找到和对应值，即使值为 null 也能区分缺键；foreach 读取键值对。",
-        "code": "using System;\nusing System.Collections.Generic;\n\npublic static class Program\n{\n    public static void Main()\n    {\n        var stock = new Dictionary<string, int?>();\n        stock[\"apples\"] = 8;\n        stock[\"apples\"] = 9;\n        stock[\"empty\"] = null;\n        Console.Writeemptye(stock.ContainsKey(\"empty\"));\n        if (stock.TryGetValue(\"apples\", out int? score))\n        {\n            Console.Writeemptye(score);\n        }\n        Console.Writeemptye(stock.TryGetValue(\"missing\", out _));\n        foreach (var entry in stock)\n        {\n            Console.Writeemptye($\"{entry.Key}={entry.Value}\");\n        }\n    }\n}",
+        "code": "using System;\nusing System.Collections.Generic;\n\npublic static class Program\n{\n    public static void Main()\n    {\n        var stock = new Dictionary<string, int?>();\n        stock[\"apples\"] = 8;\n        stock[\"apples\"] = 9;\n        stock[\"empty\"] = null;\n        Console.WriteLine(stock.ContainsKey(\"empty\"));\n        if (stock.TryGetValue(\"apples\", out int? score))\n        {\n            Console.WriteLine(score);\n        }\n        Console.WriteLine(stock.TryGetValue(\"missing\", out _));\n        foreach (var entry in stock)\n        {\n            Console.WriteLine($\"{entry.Key}={entry.Value}\");\n        }\n    }\n}",
         "sources": [
           {
             "title": "Dictionary<TKey,TValue> Class",

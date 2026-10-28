@@ -1,9 +1,12 @@
 ---
-import {content,modules,routeBase,type Locale} from '../lib/localized-content';
+import {routeBase,type Locale} from '../lib/localized-content';
+import {knowledge,chapters} from '../lib/knowledge';
 interface Props {locale:Locale;active?:string}
-const {locale,active}=Astro.props; const {features}=content(locale);const base=routeBase(locale);
+const {locale,active}=Astro.props;const items=knowledge(locale);const base=routeBase(locale);
+const key=active?.startsWith('idiom:')?active.slice(6):active?`feature:${active}`:undefined;
+const current=items.find(i=>i.id===key || (key==='closure'&&i.id==='feature:closures'));
 ---
-<aside class="docs-sidebar"><details open><summary>{locale==='en'?'Contents':'文档目录'}</summary><nav aria-label={locale==='en'?'Documentation contents':'文档目录'}>{modules.map(module=><section><h2>{module[locale]}</h2><ul>{module.ids.map(id=>features.find(f=>f.id===id)).filter(Boolean).map(doc=><li><a href={`${base}/feature/${doc!.id}/`} aria-current={active===doc!.id?'page':undefined}>{doc!.title}</a></li>)}</ul></section>)}</nav></details></aside>
+<aside class="docs-sidebar"><details open><summary>{locale==='en'?'Contents':'知识目录'}</summary><nav aria-label={locale==='en'?'Documentation contents':'知识目录'}><a class="directory-back" href={`${base}/`}>← {locale==='en'?'All topics':'全部知识'}</a>{chapters.map((chapter,n)=><section><h2><a href={`${base}/?chapter=${chapter.id}`}>{String(n+1).padStart(2,'0')} · {chapter[locale]}</a></h2>{chapter.id===current?.chapter&&<ul>{items.filter(i=>i.chapter===chapter.id).map(item=><li><a href={`${base}${item.href}`} aria-current={item.id===current.id?'page':undefined}>{item.title}</a></li>)}</ul>}</section>)}</nav></details></aside>
 <script>
 const narrow=window.matchMedia('(max-width: 850px)');
 document.querySelectorAll<HTMLDetailsElement>('.docs-sidebar details').forEach(item=>{if(narrow.matches)item.open=false;});

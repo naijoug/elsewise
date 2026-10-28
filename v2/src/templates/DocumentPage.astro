@@ -3,12 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import DocsNav from '../components/DocsNav.astro';
 import DetailControls from '../components/DetailControls';
 import CopyCode from '../components/CopyCode';
-import {content,modules,routeBase,type Locale} from '../lib/localized-content';
+import {content,routeBase,type Locale} from '../lib/localized-content';
+import {chapters,knowledge} from '../lib/knowledge';
 import {highlight} from '../lib/content';
 interface Props {id:string;locale?:Locale}
 const {id,locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);
 const {features,languages}=content(locale);const doc=features.find(f=>f.id===id)!;
-const module=modules.find(m=>m.ids.includes(id));
+const module=chapters.find(m=>m.id===knowledge(locale).find(i=>i.id===`feature:${id}`)?.chapter);
 const labels=en?{native:'Built-in / standard library',idiomatic:'Library / idiomatic approach','not-applicable':'Not applicable',undocumented:'Not yet documented'}:{native:'原生机制 / 标准库',idiomatic:'库 / 惯用实现','not-applicable':'不适用',undocumented:'尚未收录'};
 ---
 <Layout title={doc.title} description={doc.description} locale={locale}>
@@ -23,6 +24,6 @@ const labels=en?{native:'Built-in / standard library',idiomatic:'Library / idiom
     {entry.code&&<pre tabindex="0" aria-label={`${language.name} ${en?'example code':'示例代码'}`}><code id={codeId} class={`language-${language.id}`} set:html={highlight(entry.code,language.id)}/></pre>}
     <div class="implementation-body"><h3>{en?'Environment & boundaries':'环境与边界'}</h3><p>{entry.versionNotes}</p><details class="source-details"><summary>{en?'Sources and documentation':'来源与文档'} ({entry.sources.length})</summary><ul>{entry.sources.map(source=><li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span class="sr-only">{en?' (new window)':'（新窗口）'}</span> ↗</a><p class="muted">{en?'Reviewed':'核查于'} {source.checkedAt}</p></li>)}</ul></details></div>
   </article>})}</div>
-  <section class="related-docs"><h2>{en?'Continue reading':'继续阅读'}</h2><ul>{doc.related.map(id=>features.find(f=>f.id===id)!).map(f=><li><a href={`${base}/feature/${f.id}/`}>{f.title}</a></li>)}{doc.idiomIds.map(id=><li><a href={`${base}/idiom/${id}/`}>{content(locale).idioms.find(i=>i.id===id)!.title}</a></li>)}</ul></section>
+  <section class="related-docs"><h2>{en?'Continue reading':'继续阅读'}</h2><ul>{doc.related.map(id=>features.find(f=>f.id===id)!).map(f=><li><a href={`${base}/feature/${f.id}/`}>{f.title}</a></li>)}{doc.idiomIds.map(id=><li><a href={`${base}/idiom/${id}/`}>{id==='closure'?(en?'Stateful closure examples':'有状态闭包示例'):content(locale).idioms.find(i=>i.id===id)!.title}</a></li>)}</ul></section>
 </div></div>
 </Layout>

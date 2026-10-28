@@ -1,16 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import DocsNav from '../components/DocsNav.astro';
+import {knowledge,chapters} from '../lib/knowledge';
 import DetailControls from '../components/DetailControls';
 import CopyCode from '../components/CopyCode';
 import {content,routeBase,type Locale} from '../lib/localized-content';
 import {highlight} from '../lib/content';
 interface Props {id:string;locale?:Locale}
 const {id,locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);const {idioms,languages,features}=content(locale);const idiom=idioms.find(i=>i.id===id)!;
+const chapter=chapters.find(c=>knowledge(locale).find(i=>i.id===id || (id==='closure'&&i.id==='feature:closures'))?.chapter===c.id);
 const options=idiom.implementations.map(i=>({id:i.languageId,name:languages.find(l=>l.id===i.languageId)!.name}));
 ---
 <Layout title={idiom.title} description={idiom.description} locale={locale}>
-<a class="back-link" href={`${base}/idioms/`}>← {en?'Patterns & idioms':'模式与习语'}</a>
-<header class="document-heading"><p class="eyebrow">{idiom.category}</p><h1>{idiom.title}</h1><p>{idiom.description}</p></header>
+<div class="docs-workspace"><DocsNav locale={locale} active={`idiom:${id}`}/><div class="docs-article">
+<a class="back-link" href={`${base}/?chapter=${chapter?.id||''}`}>← {en?'Knowledge directory':'知识目录'}</a>
+<header class="document-heading"><p class="eyebrow">{chapter?.[locale]}</p><h1>{idiom.title}</h1><p>{idiom.description}</p></header>
 <DetailControls idiomId={id} options={options} locale={locale} client:load />
 <p class="doc-context">{en?'Only collected implementations are listed; absence does not mean unsupported. Outputs are static examples, not execution results.':'这里只列出已收录实现，未收录不代表不支持。输出为静态示例，不是现场执行结果。'}</p>
 <noscript><p>{en?'All implementations are shown. Enable JavaScript to choose languages and save progress.':'当前显示全部实现。启用 JavaScript 后可选择语言和保存学习记录。'}</p></noscript>
@@ -23,4 +27,5 @@ const options=idiom.implementations.map(i=>({id:i.languageId,name:languages.find
 {implementation.references?.length?<section><h3>{en?'References':'参考资料'}</h3><ul>{implementation.references.map(r=><li><a href={r.url} target="_blank" rel="noopener noreferrer">{r.title}<span class="sr-only">{en?' (new window)':'（新窗口）'}</span> ↗</a></li>)}</ul></section>:null}
 </div></article>})}</div>
 {features.some(f=>f.idiomIds.includes(id))&&<section class="related-docs"><h2>{en?'Related documentation':'相关文档'}</h2><ul>{features.filter(f=>f.idiomIds.includes(id)).map(f=><li><a href={`${base}/feature/${f.id}/`}>{f.title}</a></li>)}</ul></section>}
+</div></div>
 </Layout>

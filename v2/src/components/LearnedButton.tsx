@@ -1,3 +1,4 @@
+import { hasTopic } from '../lib/knowledge-identity';
 import { toggleLearned, useLearned } from '../lib/learned';
 import { text, type Locale } from '../lib/ui-i18n';
 export default function LearnedButton({
@@ -9,7 +10,7 @@ export default function LearnedButton({
   title?: string;
   locale?: Locale;
 }) {
-  const learned = useLearned().ids.includes(id);
+  const learned = hasTopic(useLearned().ids, id);
   const label = learned
     ? text(locale, '已学会', 'Learned')
     : text(locale, '标记学会', 'Mark as learned');

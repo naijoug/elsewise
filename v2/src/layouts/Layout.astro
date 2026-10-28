@@ -10,7 +10,7 @@ const root=import.meta.env.BASE_URL.replace(/\/$/,'');
 const path=Astro.url.pathname.slice(root.length).replace(/^\/en(?=\/|$)/,'') || '/';
 const alternatePath=/^\/404(?:\.html|\/)?$/.test(path)?(en?'/404.html':'/404/'):path;
 const alternate=`${root}${en?'':'/en'}${alternatePath}${Astro.url.search}`;
-const links = [{href: `${base}/`, title: en?'Docs':'文档'}, {href: `${base}/idioms/`, title: en?'Patterns & idioms':'模式与习语'}, {href: `${base}/languages/`, title: en?'Languages':'语言'}, {href: `${base}/favorites/`, title: en?'Saved':'收藏'}];
+const links = [{href: `${base}/`, title: en?'Knowledge':'知识目录'}, {href: `${base}/languages/`, title: en?'Languages':'语言'}, {href: `${base}/favorites/`, title: en?'Saved':'收藏'}];
 ---
 <!doctype html>
 <html lang={en?'en':'zh-CN'} data-theme="light">

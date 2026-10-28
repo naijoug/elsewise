@@ -1,3 +1,4 @@
+import { hasTopic, toggledTopic } from '../lib/knowledge-identity';
 import { text, type Locale } from '../lib/ui-i18n';
 import { useEffect, useRef, useState } from 'react';
 import { usePreferences, updatePreferences } from '../lib/preferences';
@@ -37,7 +38,7 @@ export default function DetailControls({
       .toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase())
   );
-  const favorite = preferences.favoriteIdioms.includes(idiomId);
+  const favorite = hasTopic(preferences.favoriteIdioms, idiomId);
   useEffect(() => {
     const grid = document.querySelector<HTMLElement>('.code-grid');
     if (grid) grid.dataset.columns = String(Math.min(selected.length, 2));
@@ -59,9 +60,7 @@ export default function DetailControls({
         aria-pressed={favorite}
         onClick={() =>
           updatePreferences({
-            favoriteIdioms: favorite
-              ? preferences.favoriteIdioms.filter((id) => id !== idiomId)
-              : [...new Set([...preferences.favoriteIdioms, idiomId])],
+            favoriteIdioms: toggledTopic(preferences.favoriteIdioms, idiomId),
           })
         }
       >
