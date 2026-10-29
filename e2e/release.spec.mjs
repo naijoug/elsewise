@@ -474,7 +474,7 @@ test('Get marks are separate, persist across detail navigation/reload, and compo
   await open(page);
   const first = cards(page).first();
   const title = (await first.locator('.knowledge-title').innerText())
-    .replace('↗', '')
+    .replace(/[↗→]/g, '')
     .trim();
   await first.getByRole('button', { name: `标记学会: ${title}` }).click();
   await expect(

@@ -5,7 +5,7 @@ body { font-size: 15px; -webkit-font-smoothing: antialiased; }
 main, .site-header, .site-footer { max-width: var(--reading-width); padding-inline: 36px; }
 main { padding-top: 38px; }
 .site-header { min-height: 80px; gap: 32px; padding-block: 12px; border-color: var(--border); }
-.site-header .brand { display: inline-flex; align-items: center; gap: 10px; margin: 0; min-width: 202px; font-size: 23px; letter-spacing: -.045em; font-weight: 700; }
+.site-header .brand { display: inline-flex; align-items: center; gap: 10px; margin: 0; min-width: 218px; font-size: 23px; letter-spacing: -.045em; font-weight: 700; }
 .brand-mark { width: 27px; height: 27px; color: var(--accent); }
 .site-header nav { gap: 28px; }
 .site-header nav a { padding: 8px 0; border-radius: 0; font-size: 14px; font-weight: 500; position: relative; }
@@ -32,11 +32,11 @@ button[aria-pressed='true'] { color: var(--accent); }
 .directory-stats strong { font-size: 17px; color: var(--text); font-variant-numeric: tabular-nums; }
 .directory-stats span { font-size: 12px; }
 .directory-stats span:first-of-type { margin-right: 16px; }
-.knowledge-workspace { grid-template-columns: 202px minmax(0, 1fr); gap: 32px; }
+.knowledge-workspace { grid-template-columns: 218px minmax(0, 1fr); gap: 32px; }
 .chapter-rail { padding-right: 16px; border-right: 1px solid var(--border); }
 .rail-label { letter-spacing: .06em; padding-left: 10px; font-size: 11px; }
 .chapter-rail nav { gap: 2px; }
-.chapter-rail button { min-height: 42px; font-size: 12px; border-radius: 4px; padding: 8px 10px; gap: 9px; }
+.chapter-rail button { min-height: 42px; font-size: 12px; white-space: normal; border-radius: 4px; padding: 8px 10px; gap: 9px; }
 .chapter-rail button[aria-pressed='true'] { background: var(--tint); box-shadow: inset 2px 0 var(--accent); }
 .chapter-rail button:hover { background: var(--tint); }
 .chapter-number { font-size: 10px; }
@@ -95,7 +95,7 @@ button[aria-pressed='true'] { color: var(--accent); }
  .directory-stats { display: none; }
  .chapter-rail { border: 0; padding: 0; margin-bottom: 20px; }
  .chapter-rail nav { gap: 6px; padding-bottom: 7px; }
- .chapter-rail button { font-size: 12px; min-height: 44px; border-color: transparent; border-radius: 4px; padding: 8px 12px; background: var(--code); }
+ .chapter-rail button { white-space: nowrap; font-size: 12px; min-height: 44px; border-color: transparent; border-radius: 4px; padding: 8px 12px; background: var(--code); }
  .chapter-rail button[aria-pressed='true'] { background: var(--accent); color: var(--bg); box-shadow: none; }
  .knowledge-search input { font-size: 16px; }
  .knowledge-toolbar { gap: 6px; }
@@ -134,3 +134,5 @@ button[aria-pressed='true'] { color: var(--accent); }
 [data-theme='dark'] .token.attr-value { color: #c4b0ef; }
 [data-theme='dark'] .token.regex,
 [data-theme='dark'] .token.important { color: #f2a8bd; }
+
+.chapter-rail button > span { flex-shrink: 0; }
