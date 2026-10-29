@@ -164,3 +164,5 @@ button.icon-action[aria-pressed='true'] { color: var(--accent); background: var(
 .copy-code .action-tip, .knowledge-chapter .action-tip { left: auto; right: 0; }
 .detail-controls > .icon-action + .icon-action { margin-left: 6px; }
 .reset-knowledge .action-tip { left: auto; right: 0; }
+
+.detail-controls .toolbar .action-tip { left: auto; right: 0; }
