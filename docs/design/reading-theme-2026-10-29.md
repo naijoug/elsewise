@@ -18,3 +18,7 @@
 ## 用户追加：常用操作只保留图标
 
 在实际标注的 HTTP GET 详情上，将收藏、标记学会、恢复默认、复制代码统一为 44px 内联 SVG 图标操作；目录学会与重置使用同一模式。语言名称与知识章节文字保留，不将内容导航图标化。鼠标 hover 和键盘 focus 可见本地化提示；ARIA 名称、按下状态、复制成功/失败 live feedback 与原存储契约保持。复制按钮成功后显示勾选图标，不能把点击尝试当成已复制。
+
+### Directory saved-topic follow-up
+
+The user explicitly removed the directory's learned/not-learned filters. The directory now offers All and an icon-only saved-topic filter, plus a bookmark on each topic. These use the existing favorites identity/storage (including historical aliases), not learned records. Existing learned records and detail controls remain intact; old `learning` query parameters fall back to the unfiltered directory. The new `saved=1` filter survives reload, back and locale switching. Saved topics can be removed directly, including from the saved view.

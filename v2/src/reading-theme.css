@@ -166,3 +166,7 @@ button.icon-action[aria-pressed='true'] { color: var(--accent); background: var(
 .reset-knowledge .action-tip { left: auto; right: 0; }
 
 .detail-controls .toolbar .action-tip { left: auto; right: 0; }
+/* Keep saving a topic distinct from learning it: a compact directory filter. */
+.saved-filter { display: flex; align-items: center; gap: 4px; margin-right: auto; }
+.saved-filter > button:not(.icon-action) { min-height: 44px; padding: 8px 14px; border: 0; background: transparent; color: var(--muted); }
+.saved-filter > button[aria-pressed='true']:not(.icon-action) { background: var(--tint); color: var(--accent); }

@@ -3,9 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { KnowledgeItem } from '../lib/knowledge';
 import type { Locale } from '../lib/ui-i18n';
 import { hasTopic } from '../lib/knowledge-identity';
-import { useLearned } from '../lib/learned';
 import { usePreferences } from '../lib/preferences';
-import LearnedButton, { LearnedNotice } from './LearnedButton';
+import FavoriteButton from './FavoriteButton';
 type Chapter = { id: string; title: string };
 export default function KnowledgeCatalog({
   items,
@@ -48,14 +47,13 @@ export default function KnowledgeCatalog({
   const [query, setQuery] = useState('');
   const [chapter, setChapter] = useState('');
   const [language, setLanguage] = useState('');
-  const [learning, setLearning] = useState('all');
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [ready, setReady] = useState(false);
   const [index, setIndex] = useState<{ id: string; text: string }[] | null>(
     null
   );
   const [failed, setFailed] = useState(false);
   const [retry, setRetry] = useState(0);
-  const learned = useLearned();
   const preferences = usePreferences();
   useEffect(() => {
     const restore = () => {
@@ -69,11 +67,7 @@ export default function KnowledgeCatalog({
           ? p.get('language')!
           : ''
       );
-      setLearning(
-        ['learned', 'unlearned'].includes(p.get('learning') || '')
-          ? p.get('learning')!
-          : 'all'
-      );
+      setOnlyFavorites(p.get('saved') === '1');
       setReady(true);
     };
     restore();
@@ -87,11 +81,13 @@ export default function KnowledgeCatalog({
   useEffect(() => {
     if (!ready) return;
     const url = new URL(location.href);
+    // Old learning-filter links return to the directory; learning records stay untouched.
+    url.searchParams.delete('learning');
     for (const [key, value] of Object.entries({
       q: query,
       chapter,
       language,
-      learning: learning === 'all' ? '' : learning,
+      saved: onlyFavorites ? '1' : '',
     })) {
       if (value) url.searchParams.set(key, value);
       else url.searchParams.delete(key);
@@ -104,7 +100,7 @@ export default function KnowledgeCatalog({
       href.search = url.search;
       alternate.href = href.href;
     }
-  }, [query, chapter, language, learning, ready]);
+  }, [query, chapter, language, onlyFavorites, ready]);
   useEffect(() => {
     if (!query.trim() || index) return;
     const controller = new AbortController();
@@ -133,9 +129,7 @@ export default function KnowledgeCatalog({
     (item) =>
       (!chapter || item.chapter === chapter) &&
       (!language || item.languageIds.includes(language)) &&
-      (!savedOnly || hasTopic(preferences.favoriteIdioms, item.id)) &&
-      (learning === 'all' ||
-        hasTopic(learned.ids, item.id) === (learning === 'learned')) &&
+      (!(savedOnly || onlyFavorites) || hasTopic(preferences.favoriteIdioms, item.id)) &&
       (!term ||
         item.search.includes(term) ||
         index?.find((e) => e.id === item.id)?.text.includes(term))
@@ -144,7 +138,7 @@ export default function KnowledgeCatalog({
     setQuery('');
     setChapter('');
     setLanguage('');
-    setLearning('all');
+    setOnlyFavorites(false);
   };
   return (
     <div className="knowledge-workspace">
@@ -193,25 +187,15 @@ export default function KnowledgeCatalog({
           />
         </div>
         <div className="knowledge-toolbar">
-          <div
-            className="learning-tabs"
-            role="group"
-            aria-label={t('学习状态', 'Learning status')}
-          >
-            {[
-              ['all', t('全部', 'All')],
-              ['unlearned', t('未学会', 'Not learned')],
-              ['learned', t('已学会', 'Learned')],
-            ].map(([id, label]) => (
-              <button
-                key={id}
-                aria-pressed={learning === id}
-                onClick={() => setLearning(id)}
-              >
-                {label}
+          {!savedOnly && (
+            <div className="saved-filter" role="group" aria-label={t('收藏筛选', 'Saved filter')}>
+              <button aria-pressed={!onlyFavorites} onClick={() => setOnlyFavorites(false)}>{t('全部', 'All')}</button>
+              <button className="icon-action favorite-action" aria-label={t('仅看收藏', 'Show saved only')} aria-pressed={onlyFavorites} onClick={() => setOnlyFavorites(!onlyFavorites)}>
+                <ActionIcon name="bookmark" />
+                <span className="action-tip" aria-hidden="true">{t('仅看收藏', 'Show saved only')}</span>
               </button>
-            ))}
-          </div>
+            </div>
+          )}
           <details className="knowledge-language" ref={languagePicker}>
             <summary>
               {language
@@ -249,8 +233,8 @@ export default function KnowledgeCatalog({
               : ''}
           </span>
           <span>
-            {items.filter((i) => hasTopic(learned.ids, i.id)).length}/
-            {items.length} {t('已学会', 'learned')}
+            {items.filter((i) => hasTopic(preferences.favoriteIdioms, i.id)).length}/
+            {items.length} {t('已收藏', 'saved')}
           </span>
         </div>
         {failed && (
@@ -325,7 +309,7 @@ export default function KnowledgeCatalog({
                           )}
                         </div>
                       </div>
-                      <LearnedButton
+                      <FavoriteButton
                         id={item.id}
                         title={item.title}
                         locale={locale}
@@ -337,7 +321,6 @@ export default function KnowledgeCatalog({
             )
           );
         })}
-        <LearnedNotice locale={locale} />
         <p className="doc-context">
           {t(
             '目录持续补充中，不是完整语言手册。只统计已收录实现，未收录不代表不支持。',

@@ -22,10 +22,8 @@ const documents = [...foundations, ...collections, ...practical, ...conceptual];
 const english = JSON.parse(
   readFileSync(new URL('../v2/src/data/english-content.json', import.meta.url))
 );
-const learningFilter = (page, name) =>
-  page
-    .getByRole('group', { name: '学习状态', exact: true })
-    .getByRole('button', { name, exact: true });
+const savedFilter = (page) =>
+  page.getByRole('button', { name: '仅看收藏', exact: true });
 const base = (process.env.GHP_BASE || '/').replace(/\/$/, '') + '/';
 const cards = (page) => page.locator('[data-knowledge-id]');
 async function hydrated(page) {
@@ -468,7 +466,7 @@ test('without JavaScript, complete detail source and links remain available', as
   }
 });
 
-test('Get marks are separate, persist across detail navigation/reload, and compose with filters', async ({
+test('catalog bookmarks persist across detail navigation and reload without changing learned records', async ({
   page,
 }) => {
   await open(page);
@@ -476,38 +474,86 @@ test('Get marks are separate, persist across detail navigation/reload, and compo
   const title = (await first.locator('.knowledge-title').innerText())
     .replace(/[↗→]/g, '')
     .trim();
-  await first.getByRole('button', { name: `标记学会: ${title}` }).click();
   await expect(
-    first.getByRole('button', { name: `已学会: ${title}` })
-  ).toHaveAttribute('aria-pressed', 'true');
-  await learningFilter(page, '已学会').click();
-  await expect(cards(page)).toHaveCount(1);
-  await cards(page).first().getByRole('link').click();
-  await hydrated(page);
+    page.getByRole('button', { name: '未学会', exact: true })
+  ).toHaveCount(0);
   await expect(
     page.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveCount(0);
+  await first
+    .getByRole('button', { name: `收藏: ${title}`, exact: true })
+    .click();
+  await expect(
+    first.getByRole('button', { name: `取消收藏: ${title}`, exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await savedFilter(page).click();
+  await expect(cards(page)).toHaveCount(1);
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get('saved'))
+    .toBe('1');
+  await cards(page).first().locator('.knowledge-title').click();
+  await hydrated(page);
+  await expect(
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
-    page.getByRole('button', { name: '收藏文档' })
+    page.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
+  await page.getByRole('button', { name: '标记学会', exact: true }).click();
   await page.reload();
   await hydrated(page);
   await expect(
     page.getByRole('button', { name: '已学会', exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: '已学会', exact: true }).click();
+  ).toHaveAttribute('aria-pressed', 'true');
+  const learned = await page.evaluate(() =>
+    localStorage.getItem('elsewise_learned_v1')
+  );
   await page.goBack();
   await hydrated(page);
-  await learningFilter(page, '已学会').click();
+  await expect(savedFilter(page)).toHaveAttribute('aria-pressed', 'true');
+  await expect(cards(page)).toHaveCount(1);
+  await cards(page)
+    .first()
+    .getByRole('button', { name: `取消收藏: ${title}`, exact: true })
+    .click();
   await expect(cards(page)).toHaveCount(0);
-  await page.getByRole('button', { name: '未学会', exact: true }).click();
+  expect(
+    await page.evaluate(() => localStorage.getItem('elsewise_learned_v1'))
+  ).toBe(learned);
+  await page.getByRole('button', { name: '全部', exact: true }).click();
   await expect(cards(page)).toHaveCount(50);
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(0);
   await page.getByRole('button', { name: '重置', exact: true }).click();
   await expect(cards(page)).toHaveCount(0);
+});
+
+test('legacy learning URL falls back to all topics without deleting learned records', async ({
+  page,
+}) => {
   await open(page);
-  await expect(cards(page)).toHaveCount(50);
+  const saved = JSON.stringify({
+    version: 1,
+    ids: ['array-map', 'feature:variables', 'unknown-future-topic'],
+  });
+  await page.evaluate(
+    (value) => localStorage.setItem('elsewise_learned_v1', value),
+    saved
+  );
+  for (const learning of ['learned', 'unlearned']) {
+    await open(page, `?learning=${learning}`);
+    await expect(cards(page)).toHaveCount(50);
+    await expect
+      .poll(() => new URL(page.url()).searchParams.has('learning'))
+      .toBe(false);
+    expect(
+      await page.evaluate(() => localStorage.getItem('elsewise_learned_v1'))
+    ).toBe(saved);
+  }
+  await open(page, 'idiom/array-map/');
+  await expect(
+    page.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('learned state synchronizes another tab and ignores malformed data without affecting favorites', async ({
@@ -524,16 +570,22 @@ test('learned state synchronizes another tab and ignores malformed data without 
     page.getByText('已保存的学习记录格式异常', { exact: false })
   ).toBeVisible();
   const second = await context.newPage();
-  await open(second);
-  await learningFilter(second, '已学会').click();
-  await expect(cards(second)).toHaveCount(0);
-  await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await expect(cards(second)).toHaveCount(1);
+  await open(second, './idiom/array-map/');
   await expect(
-    page.getByRole('button', { name: '收藏文档' })
+    second.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
+  await page.getByRole('button', { name: '标记学会', exact: true }).click();
+  await expect(
+    second.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: '收藏文档' })).toHaveAttribute(
+    'aria-pressed',
+    'false'
+  );
   await page.getByRole('button', { name: '已学会', exact: true }).click();
-  await expect(cards(second)).toHaveCount(0);
+  await expect(
+    second.getByRole('button', { name: '标记学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'false');
   await second.close();
 });
 
@@ -558,15 +610,21 @@ test('documents retain learning/favorites, related idioms and language navigatio
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(1);
   await expect(cards(page).first()).toContainText('Rust 所有权');
-  await learningFilter(page, '已学会').click();
-  await expect(cards(page)).toHaveCount(1);
+  await expect(
+    cards(page)
+      .first()
+      .getByRole('button', { name: '取消收藏: Rust 所有权', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
   await page.locator('.knowledge-language summary').click();
   await page
     .getByRole('group', { name: '按语言筛选' })
     .getByRole('button', { name: 'Rust', exact: true })
     .click();
   await expect(cards(page)).toHaveCount(1);
-  await learningFilter(page, '未学会').click();
+  await page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Python', exact: true })
+    .click();
   await expect(cards(page)).toHaveCount(0);
   await page.getByRole('button', { name: '重置', exact: true }).click();
   await expect(cards(page)).toHaveCount(1);
@@ -1076,7 +1134,7 @@ test('collections keep twelve examples, sources and selected languages across re
   }
 });
 
-test('catalog chapter, language, learning and query survive detail back, reload and locale switch', async ({
+test('catalog chapter, language, saved and query survive detail back, reload and locale switch', async ({
   page,
 }, testInfo) => {
   await page.setViewportSize({
@@ -1099,14 +1157,18 @@ test('catalog chapter, language, learning and query survive detail back, reload 
   await languagePicker.locator('summary').click();
   await expect(languagePicker).not.toHaveAttribute('open');
   await page.getByRole('searchbox', { name: '搜索知识点' }).fill('map');
-  await learningFilter(page, '未学会').click();
+  await page
+    .locator('[data-knowledge-id="array-map"]')
+    .getByRole('button', { name: /^收藏:/ })
+    .click();
+  await savedFilter(page).click();
   const checkParams = () => {
     const params = new URL(page.url()).searchParams;
     expect(Object.fromEntries(params)).toEqual({
       chapter: 'collections',
       language: 'python',
       q: 'map',
-      learning: 'unlearned',
+      saved: '1',
     });
   };
   await expect
@@ -1135,6 +1197,14 @@ test('catalog chapter, language, learning and query survive detail back, reload 
     page.getByRole('searchbox', { name: 'Search knowledge' })
   ).toHaveValue('map');
   await expectEnglishProse(page);
+  await expect(
+    page.getByRole('button', { name: 'Show saved only', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page
+      .locator('[data-knowledge-id="array-map"]')
+      .getByRole('button', { name: /^Unsave:/ })
+  ).toHaveAttribute('aria-pressed', 'true');
   for (const theme of ['dark', 'light']) {
     if ((await page.locator('html').getAttribute('data-theme')) !== theme)
       await page.locator('#theme-toggle').click();
@@ -1173,10 +1243,9 @@ test('canonical closure topic preserves legacy progress, favorites, examples and
   await expect(closure).toBeVisible();
   await expect(page.locator('[data-knowledge-id="closure"]')).toHaveCount(0);
   await expect(closure).toContainText('12 种语言可对照');
-  await expect(closure.getByRole('button', { name: /已学会/ })).toHaveAttribute(
-    'aria-pressed',
-    'true'
-  );
+  await expect(
+    closure.getByRole('button', { name: '取消收藏: 闭包与捕获', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
   await closure
     .getByRole('link', { name: '有状态闭包示例', exact: true })
     .click();
@@ -1261,89 +1330,173 @@ test('directory visual acceptance in both locales and themes with dismissible la
   }
 });
 
-test('reading theme keeps navigation aligned, controls named and text readable', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+test('reading theme keeps navigation aligned, controls named and text readable', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
   await open(page);
   for (const theme of ['light', 'dark']) {
     const toggle = page.getByRole('button', { name: '切换明暗主题' });
-    if (await page.locator('html').getAttribute('data-theme') !== theme) await toggle.click();
+    if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+      await toggle.click();
     await toggle.focus();
     await page.keyboard.press('Tab');
     await page.keyboard.press('Shift+Tab');
     await expect(toggle).toBeFocused();
     const measured = await page.evaluate(() => {
-      const color = (value) => value.match(/[\d.]+/g).slice(0, 3).map(Number).map(n => {
-        const v = n / 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;
-      }).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const color = (value) =>
+        value
+          .match(/[\d.]+/g)
+          .slice(0, 3)
+          .map(Number)
+          .map((n) => {
+            const v = n / 255;
+            return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+          })
+          .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
       const root = getComputedStyle(document.documentElement);
       const bg = color(root.backgroundColor);
-      const nodes = ['.knowledge-title', '.knowledge-row-text p', '.knowledge-meta', '.locale-switch'];
-      const ratios = nodes.map(selector => {
-        const foreground = color(getComputedStyle(document.querySelector(selector)).color);
-        return (Math.max(bg, foreground) + .05) / (Math.min(bg, foreground) + .05);
+      const nodes = [
+        '.knowledge-title',
+        '.knowledge-row-text p',
+        '.knowledge-meta',
+        '.locale-switch',
+      ];
+      const ratios = nodes.map((selector) => {
+        const foreground = color(
+          getComputedStyle(document.querySelector(selector)).color
+        );
+        return (
+          (Math.max(bg, foreground) + 0.05) / (Math.min(bg, foreground) + 0.05)
+        );
       });
       const main = document.querySelector('main').getBoundingClientRect();
-      const header = document.querySelector('.site-header').getBoundingClientRect();
-      const button = document.querySelector('#theme-toggle').getBoundingClientRect();
-      return { ratios, aligned: Math.abs(main.left - header.left) < 1 && Math.abs(main.width - header.width) < 1, target: button.width >= 44 && button.height >= 44, focus: getComputedStyle(document.activeElement).outlineStyle };
+      const header = document
+        .querySelector('.site-header')
+        .getBoundingClientRect();
+      const button = document
+        .querySelector('#theme-toggle')
+        .getBoundingClientRect();
+      return {
+        ratios,
+        aligned:
+          Math.abs(main.left - header.left) < 1 &&
+          Math.abs(main.width - header.width) < 1,
+        target: button.width >= 44 && button.height >= 44,
+        focus: getComputedStyle(document.activeElement).outlineStyle,
+      };
     });
     expect(measured.aligned).toBe(true);
     expect(measured.target).toBe(true);
     expect(measured.focus).not.toBe('none');
-    for (const ratio of measured.ratios) expect(ratio).toBeGreaterThanOrEqual(4.5);
+    for (const ratio of measured.ratios)
+      expect(ratio).toBeGreaterThanOrEqual(4.5);
   }
   await page.locator('#docs-query').fill('变量');
   await page.locator('.knowledge-language summary').click();
-  await page.getByRole('group', { name: '按语言筛选' }).getByRole('button', { name: 'Python', exact: true }).click();
+  await page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Python', exact: true })
+    .click();
   await page.locator('.knowledge-language summary').press('Escape');
-  await page.screenshot({ path: testInfo.outputPath('reading-search-selected.png') });
+  await page.screenshot({
+    path: testInfo.outputPath('reading-search-selected.png'),
+  });
   await page.getByRole('link', { name: '变量与赋值', exact: true }).click();
   await hydrated(page);
-  await page.screenshot({ path: testInfo.outputPath('reading-comparison-dark.png') });
-  await expectNoHorizontalOverflow(page, testInfo.project.name === 'mobile' ? 375 : 1280);
+  await page.screenshot({
+    path: testInfo.outputPath('reading-comparison-dark.png'),
+  });
+  await expectNoHorizontalOverflow(
+    page,
+    testInfo.project.name === 'mobile' ? 375 : 1280
+  );
 });
 
-test('directory remains operable with enlarged text', async ({ page }, testInfo) => {
+test('directory remains operable with enlarged text', async ({
+  page,
+}, testInfo) => {
   const width = testInfo.project.name === 'mobile' ? 375 : 1280;
   await page.setViewportSize({ width, height: 900 });
   await open(page, 'en/');
   // Enlarge computed font sizes once, including px-based labels, to test text-only reflow.
   await page.evaluate(() => {
-    const entries = [...document.querySelectorAll('body *')].map(element => [element, parseFloat(getComputedStyle(element).fontSize)]);
-    for (const [element, size] of entries) element.style.fontSize = `${size * 2}px`;
+    const entries = [...document.querySelectorAll('body *')].map((element) => [
+      element,
+      parseFloat(getComputedStyle(element).fontSize),
+    ]);
+    for (const [element, size] of entries)
+      element.style.fontSize = `${size * 2}px`;
   });
   await expectNoHorizontalOverflow(page, width);
-  await expect(page.getByRole('button', { name: 'Toggle light and dark theme' })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Toggle light and dark theme' })
+  ).toBeVisible();
   await page.locator('#docs-query').fill('variables');
-  await expect(page.getByRole('link', { name: 'Variables and assignment', exact: true })).toBeVisible();
-  await page.screenshot({ path: testInfo.outputPath('reading-enlarged-text.png') });
+  await expect(
+    page.getByRole('link', { name: 'Variables and assignment', exact: true })
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath('reading-enlarged-text.png'),
+  });
 });
 
-test('HTTP documentation icon actions retain tooltips, names and touch targets', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+test('HTTP documentation icon actions retain tooltips, names and touch targets', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
   for (const locale of ['', 'en/']) {
     await open(page, `${locale}feature/http-get/`);
-    const theme = page.getByRole('button', { name: locale ? 'Toggle light and dark theme' : '切换明暗主题' });
-    if (await page.locator('html').getAttribute('data-theme') !== 'dark') await theme.click();
+    const theme = page.getByRole('button', {
+      name: locale ? 'Toggle light and dark theme' : '切换明暗主题',
+    });
+    if ((await page.locator('html').getAttribute('data-theme')) !== 'dark')
+      await theme.click();
     await expandLanguagePicker(page);
-    await page.screenshot({ path: testInfo.outputPath(`http-controls-${locale ? 'en' : 'zh'}-dark.png`) });
-    for (const name of locale ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code'] : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
+    await page.screenshot({
+      path: testInfo.outputPath(
+        `http-controls-${locale ? 'en' : 'zh'}-dark.png`
+      ),
+    });
+    for (const name of locale
+      ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code']
+      : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
       const button = page.getByRole('button', { name, exact: true }).first();
-      await expect(button.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+      await expect(button.locator('svg')).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      );
       const size = await button.boundingBox();
       expect(size.width).toBeGreaterThanOrEqual(44);
       expect(size.height).toBeGreaterThanOrEqual(44);
       await button.hover();
-      await expect(button.locator('.action-tip')).toHaveCSS('visibility', 'visible');
+      await expect(button.locator('.action-tip')).toHaveCSS(
+        'visibility',
+        'visible'
+      );
       await expect(button.locator('.action-tip')).toHaveText(name);
       await page.mouse.move(0, 0);
       await button.focus();
       await page.keyboard.press('Tab');
       await page.keyboard.press('Shift+Tab');
       await expect(button).toBeFocused();
-      await expect(button.locator('.action-tip')).toHaveCSS('visibility', 'visible');
+      await expect(button.locator('.action-tip')).toHaveCSS(
+        'visibility',
+        'visible'
+      );
     }
-    await page.screenshot({ path: testInfo.outputPath(`http-icons-${locale ? 'en' : 'zh'}-dark.png`) });
-    await expectNoHorizontalOverflow(page, testInfo.project.name === 'mobile' ? 375 : 1280);
+    await page.screenshot({
+      path: testInfo.outputPath(`http-icons-${locale ? 'en' : 'zh'}-dark.png`),
+    });
+    await expectNoHorizontalOverflow(
+      page,
+      testInfo.project.name === 'mobile' ? 375 : 1280
+    );
   }
 });
