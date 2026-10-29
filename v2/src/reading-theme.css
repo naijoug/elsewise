@@ -1,0 +1,119 @@
+/* A quiet reading surface. Shared by the directory, language pages and comparisons. */
+:root { --reading-width: 1320px; --control-border: #969d90; }
+:root[data-theme='dark'] { --control-border: #828b7c; }
+body { font-size: 15px; -webkit-font-smoothing: antialiased; }
+main, .site-header, .site-footer { max-width: var(--reading-width); padding-inline: 36px; }
+main { padding-top: 38px; }
+.site-header { min-height: 80px; gap: 32px; padding-block: 12px; border-color: var(--border); }
+.site-header .brand { display: inline-flex; align-items: center; gap: 10px; margin: 0; min-width: 202px; font-size: 23px; letter-spacing: -.045em; font-weight: 700; }
+.brand-mark { width: 27px; height: 27px; color: var(--accent); }
+.site-header nav { gap: 28px; }
+.site-header nav a { padding: 8px 0; border-radius: 0; font-size: 14px; font-weight: 500; position: relative; }
+.site-header nav a[aria-current='page'] { background: transparent; color: var(--text); }
+.site-header nav a[aria-current='page']::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent); }
+.site-header nav a:hover { color: var(--accent); }
+.header-tools { gap: 14px; }
+.locale-switch { display: inline-flex; gap: 6px; align-items: center; min-height: 44px; text-decoration: none; color: var(--muted); }
+.locale-switch svg { width: 17px; height: 17px; }
+.header-tools .theme-toggle { display: inline-grid; place-items: center; padding: 0; width: 44px; height: 44px; background: transparent; border-color: transparent; border-radius: 50%; }
+.theme-toggle svg { width: 20px; height: 20px; }
+.header-tools .theme-toggle:hover { background: var(--tint); }
+.repository-link { text-decoration: none; color: var(--muted); border-left: 1px solid var(--border); padding-left: 18px; }
+.site-footer { margin-top: 24px; padding-block: 24px; }
+button, input, select, .button-link { border-radius: 6px; }
+input, select { border-color: var(--control-border); }
+button:hover, .button-link:hover { border-color: var(--control-border); }
+button[aria-pressed='true'] { color: var(--accent); }
+:focus-visible { outline-width: 2px; outline-offset: 3px; }
+.knowledge-heading { margin: 0 0 32px; padding-bottom: 26px; align-items: flex-end; }
+.knowledge-heading h1 { font-size: 30px; font-weight: 650; letter-spacing: -.04em; margin: 0 0 10px; }
+.knowledge-heading p { font-size: 14px; line-height: 1.7; }
+.directory-stats { display: flex; gap: 8px; border: 0; padding: 0; color: var(--muted); }
+.directory-stats strong { font-size: 17px; color: var(--text); font-variant-numeric: tabular-nums; }
+.directory-stats span { font-size: 12px; }
+.directory-stats span:first-of-type { margin-right: 16px; }
+.knowledge-workspace { grid-template-columns: 202px minmax(0, 1fr); gap: 32px; }
+.chapter-rail { padding-right: 16px; border-right: 1px solid var(--border); }
+.rail-label { letter-spacing: .06em; padding-left: 10px; font-size: 11px; }
+.chapter-rail nav { gap: 2px; }
+.chapter-rail button { min-height: 42px; font-size: 12px; border-radius: 4px; padding: 8px 10px; gap: 9px; }
+.chapter-rail button[aria-pressed='true'] { background: var(--tint); box-shadow: inset 2px 0 var(--accent); }
+.chapter-rail button:hover { background: var(--tint); }
+.chapter-number { font-size: 10px; }
+.rail-note { font-size: 11px; line-height: 1.9; padding-inline: 10px; }
+.knowledge-search label { font-size: 12px; font-weight: 500; margin-bottom: 8px; color: var(--muted); }
+.knowledge-search input { min-height: 48px; padding: 11px 16px; border-radius: 6px; border-color: var(--control-border); box-shadow: none; background: var(--surface); font-size: 15px; }
+.knowledge-toolbar { margin: 12px 0; gap: 10px; align-items: center; }
+.learning-tabs { border: 0; border-radius: 6px; padding: 3px; background: var(--code); }
+.learning-tabs button { min-height: 36px; font-size: 12px; border-radius: 4px; padding-inline: 13px; color: var(--muted); }
+.learning-tabs button[aria-pressed='true'] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px #00000012; }
+.knowledge-language summary { background: transparent; border-radius: 6px; min-height: 44px; border-color: var(--control-border); padding: 10px 12px; }
+.knowledge-language > div { border-radius: 8px; box-shadow: 0 8px 24px #00000018; top: 50px; }
+.knowledge-language button[aria-pressed='true'] { border-color: var(--accent); }
+.reset-knowledge { border-color: transparent; color: var(--muted); min-height: 44px; }
+.knowledge-status { margin: 18px 0 26px; font-size: 12px; }
+.knowledge-chapter { margin-bottom: 32px; }
+.knowledge-chapter > header { padding-bottom: 12px; border-bottom: 1px solid var(--text); gap: 10px; }
+.knowledge-chapter h2 { font-size: 16px; font-weight: 650; letter-spacing: -.02em; }
+.knowledge-chapter ul { border: 0; border-radius: 0; background: transparent; overflow: visible; }
+.knowledge-chapter li { padding: 16px 2px; gap: 24px; border-bottom: 1px solid var(--border); }
+.knowledge-chapter li:last-child { border-bottom: 1px solid var(--border); }
+.knowledge-title { font-size: 15px; font-weight: 600; gap: 10px; line-height: 1.55; }
+.knowledge-title span { color: var(--accent); font-size: 15px; }
+.knowledge-row-text > p { font-size: 13px; margin: 4px 0; line-height: 1.65; max-width: 72ch; }
+.knowledge-meta { font-size: 11px; }
+.knowledge-chapter .learned-button { border-color: transparent; background: transparent; color: var(--muted); font-size: 11px; padding: 6px 8px; min-height: 44px; }
+.knowledge-chapter .learned-button:hover { background: var(--tint); color: var(--accent); }
+.knowledge-chapter .learned-button[aria-pressed='true'] { color: var(--accent); background: var(--tint); }
+.card, .filters, .comparison-controls, .detail-controls, .implementation { border-radius: 6px; }
+.docs-sidebar { border-color: var(--border); }
+.docs-sidebar a[aria-current='page'] { box-shadow: inset 2px 0 var(--accent); }
+.document-heading h1 { font-size: clamp(27px, 3vw, 36px); font-weight: 650; }
+.detail-controls { background: var(--bg); }
+.implementation-header { background: var(--surface); }
+.implementation-header h2 a { color: var(--text); }
+.badge { background: var(--code); color: var(--muted); border-radius: 3px; }
+.language-directory a strong { color: var(--text); }
+@media (max-width: 1100px) {
+ .site-header .brand { min-width: auto; margin-right: 14px; }
+ .site-header nav { gap: 24px; }
+ .header-tools { gap: 10px; }
+}
+@media (max-width: 850px) {
+ main, .site-header, .site-footer { padding-inline: 20px; }
+ main { padding-top: 24px; }
+ .site-header { min-height: auto; padding-block: 10px 0; gap: 2px 16px; }
+ .site-header .brand { min-height: 44px; font-size: 22px; gap: 8px; }
+ .brand-mark { width: 24px; height: 24px; }
+ .header-tools { gap: 8px; }
+ .header-tools .locale-switch { font-size: 12px; }
+ .site-header nav { gap: 28px; flex-wrap: nowrap; margin-top: 2px; }
+ .site-header nav a { padding: 10px 0; font-size: 13px; flex: 0 0 auto; min-height: 44px; }
+ .knowledge-heading { padding-bottom: 18px; margin-bottom: 20px; }
+ .knowledge-heading h1 { font-size: 25px; margin-bottom: 8px; }
+ .knowledge-heading p { font-size: 13px; max-width: 30ch; }
+ .directory-stats { display: none; }
+ .chapter-rail { border: 0; padding: 0; margin-bottom: 20px; }
+ .chapter-rail nav { gap: 6px; padding-bottom: 7px; }
+ .chapter-rail button { font-size: 12px; min-height: 44px; border-color: transparent; border-radius: 4px; padding: 8px 12px; background: var(--code); }
+ .chapter-rail button[aria-pressed='true'] { background: var(--accent); color: var(--bg); box-shadow: none; }
+ .knowledge-search input { font-size: 16px; }
+ .knowledge-toolbar { gap: 6px; }
+ .learning-tabs { padding: 2px; }
+ .learning-tabs button { min-height: 40px; padding-inline: 8px; font-size: 11px; }
+ .knowledge-language summary { font-size: 11px; padding-inline: 9px; }
+ .reset-knowledge { font-size: 11px; padding-inline: 6px; }
+ .knowledge-status { font-size: 11px; margin-block: 18px 24px; }
+ .knowledge-chapter li { padding: 15px 0; gap: 12px; }
+ .knowledge-title { font-size: 14px; }
+ .knowledge-row-text > p { font-size: 12px; }
+ .knowledge-chapter .learned-button { font-size: 10px; padding-inline: 4px; }
+ .knowledge-chapter > header { padding-bottom: 10px; }
+ .knowledge-chapter h2 { font-size: 15px; }
+}
+@media (max-width: 390px) {
+ main, .site-header, .site-footer { padding-inline: 16px; }
+ .knowledge-toolbar { gap: 4px; }
+ .learning-tabs button { padding-inline: 6px; }
+ .knowledge-language summary { padding-inline: 7px; }
+}

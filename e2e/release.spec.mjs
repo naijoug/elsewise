@@ -1260,3 +1260,42 @@ test('directory visual acceptance in both locales and themes with dismissible la
     }
   }
 });
+
+test('reading theme keeps navigation aligned, controls named and text readable', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+  await open(page);
+  for (const theme of ['light', 'dark']) {
+    const toggle = page.getByRole('button', { name: '切换明暗主题' });
+    if (await page.locator('html').getAttribute('data-theme') !== theme) await toggle.click();
+    await toggle.focus();
+    const measured = await page.evaluate(() => {
+      const color = (value) => value.match(/[\d.]+/g).slice(0, 3).map(Number).map(n => {
+        const v = n / 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;
+      }).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const root = getComputedStyle(document.documentElement);
+      const bg = color(root.backgroundColor);
+      const nodes = ['.knowledge-title', '.knowledge-row-text p', '.knowledge-meta', '.locale-switch'];
+      const ratios = nodes.map(selector => {
+        const foreground = color(getComputedStyle(document.querySelector(selector)).color);
+        return (Math.max(bg, foreground) + .05) / (Math.min(bg, foreground) + .05);
+      });
+      const main = document.querySelector('main').getBoundingClientRect();
+      const header = document.querySelector('.site-header').getBoundingClientRect();
+      const button = document.querySelector('#theme-toggle').getBoundingClientRect();
+      return { ratios, aligned: Math.abs(main.left - header.left) < 1 && Math.abs(main.width - header.width) < 1, target: button.width >= 44 && button.height >= 44, focus: getComputedStyle(document.activeElement).outlineStyle };
+    });
+    expect(measured.aligned).toBe(true);
+    expect(measured.target).toBe(true);
+    expect(measured.focus).not.toBe('none');
+    for (const ratio of measured.ratios) expect(ratio).toBeGreaterThanOrEqual(4.5);
+  }
+  await page.locator('#docs-query').fill('变量');
+  await page.locator('.knowledge-language summary').click();
+  await page.getByRole('group', { name: '按语言筛选' }).getByRole('button', { name: 'Python', exact: true }).click();
+  await page.locator('.knowledge-language summary').press('Escape');
+  await page.screenshot({ path: testInfo.outputPath('reading-search-selected.png') });
+  await page.getByRole('link', { name: '变量与赋值', exact: true }).click();
+  await hydrated(page);
+  await page.screenshot({ path: testInfo.outputPath('reading-comparison-dark.png') });
+  await expectNoHorizontalOverflow(page, testInfo.project.name === 'mobile' ? 375 : 1280);
+});

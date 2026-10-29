@@ -1,5 +1,6 @@
 ---
 import '../styles.css';
+import '../reading-theme.css';
 import { brand } from '../../../src/config/brand';
 import ThemeToggle from '../components/ThemeToggle';
 import {routeBase, type Locale} from '../lib/localized-content';
@@ -25,9 +26,9 @@ const links = [{href: `${base}/`, title: en?'Knowledge':'知识目录'}, {href: 
   <body>
     <a class="skip-link" href="#main">{en?'Skip to content':'跳转到主内容'}</a>
     <header class="site-header">
-      <a class="brand" href={`${base}/`}>{en?'Elsewise':'异曲'}</a>
+      <a class="brand" href={`${base}/`}><svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h7v12H4V6Zm9 0h7v12h-7V6Z" stroke="currentColor" stroke-width="1.5"/><path d="M7 9h1m8 0h1M7 12h1m8 0h1" stroke="currentColor" stroke-linecap="round"/></svg>{en?'Elsewise':'异曲'}</a>
       <nav aria-label={en?'Main navigation':'主导航'}>{links.map(link => <a href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>{link.title}</a>)}</nav>
-      <div class="header-tools"><a class="locale-switch" href={alternate} lang={en?'zh-CN':'en'} aria-label={en?'Switch to Chinese':'切换至英文'}>{en?'中文':'English'}</a><ThemeToggle locale={locale} client:load /><a class="repository-link" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></div>
+      <div class="header-tools"><a class="locale-switch" href={alternate} lang={en?'zh-CN':'en'} aria-label={en?'Switch to Chinese':'切换至英文'}><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor"/><path d="M3 10h14M10 3c4 4 4 10 0 14-4-4-4-10 0-14Z" stroke="currentColor"/></svg>{en?'中文':'English'}</a><ThemeToggle locale={locale} client:load /><a class="repository-link" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></div>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
     <footer class="site-footer">{en?'One task, many languages. Learning records and favorites stay in this browser.':'同一个任务，不同语言的做法。学习记录与收藏仅保存在当前浏览器。'}<a class="footer-repository" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></footer>

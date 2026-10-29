@@ -299,7 +299,7 @@ export default function KnowledgeCatalog({
                           href={`${base}${item.href}`}
                         >
                           {item.title}
-                          <span aria-hidden="true">↗</span>
+                          <span aria-hidden="true">→</span>
                         </a>
                         <p>{item.description}</p>
                         <div className="knowledge-meta">

@@ -9,29 +9,29 @@
     'PingFang SC',
     'Microsoft YaHei',
     sans-serif;
-  color: #172033;
-  background: #f7f9fc;
-  --bg: #f7f9fc;
+  color: #292b26;
+  background: #faf9f6;
+  --bg: #faf9f6;
   --surface: #fff;
-  --text: #172033;
-  --muted: #536176;
-  --border: #cbd5e1;
-  --accent: #2456b8;
-  --tint: #eaf1ff;
-  --code: #f1f5fa;
+  --text: #292b26;
+  --muted: #62675e;
+  --border: #dcded5;
+  --accent: #35614d;
+  --tint: #eaf0e7;
+  --code: #f1f2ed;
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  color: #e2e8f0;
-  background: #111827;
-  --bg: #111827;
-  --surface: #1e293b;
-  --text: #e2e8f0;
-  --muted: #b2bfd3;
-  --border: #475569;
-  --accent: #9bbdff;
-  --tint: #263b62;
-  --code: #152033;
+  color: #eceee6;
+  background: #1c1e1b;
+  --bg: #1c1e1b;
+  --surface: #242723;
+  --text: #eceee6;
+  --muted: #b3b9ad;
+  --border: #454b42;
+  --accent: #b2cfaa;
+  --tint: #303e31;
+  --code: #20251f;
   color-scheme: dark;
 }
 * {

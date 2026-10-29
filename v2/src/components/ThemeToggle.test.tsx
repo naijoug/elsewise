@@ -82,7 +82,8 @@ it('localizes English theme controls while retaining stored preferences', async 
   const toggle = host.querySelector<HTMLButtonElement>(
     '[aria-label="Toggle light and dark theme"]'
   )!;
-  expect(toggle.textContent).toBe('Light / Dark');
+  expect(toggle.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+  expect(toggle.title).toBe('Toggle light and dark theme');
   expect(host.innerHTML).not.toMatch(/[一-鿿]/);
   act(() => toggle.click());
   expect(JSON.parse(localStorage.getItem('elsewise_preferences')!)).toEqual({
