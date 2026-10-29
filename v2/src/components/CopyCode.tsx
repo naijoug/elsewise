@@ -1,3 +1,4 @@
+import ActionIcon from './ActionIcon';
 import { text, type Locale } from '../lib/ui-i18n';
 import { useId, useRef, useState } from 'react';
 /** Code stays in static HTML, not duplicated in island props. */
@@ -34,11 +35,14 @@ export default function CopyCode({ targetId, locale = 'zh' }: { targetId: string
     <div className="copy-code">
       <button
         type="button"
+        className="icon-action"
+        aria-label={busy ? text(locale, '复制中…', 'Copying…') : text(locale, '复制代码', 'Copy code')}
         onClick={copy}
         disabled={busy}
         aria-describedby={statusId}
       >
-        {busy ? text(locale, '复制中…', 'Copying…') : text(locale, '复制代码', 'Copy code')}
+        <ActionIcon name={message === text(locale, '代码已复制。', 'Code copied.') ? 'check' : 'copy'} />
+        <span className="action-tip" aria-hidden="true">{busy ? text(locale, '复制中…', 'Copying…') : text(locale, '复制代码', 'Copy code')}</span>
       </button>
       <span id={statusId} role="status" aria-live="polite" aria-atomic="true">
         {message}

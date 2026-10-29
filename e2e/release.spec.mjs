@@ -229,11 +229,11 @@ test('favorites persist, appear in their dedicated scope, and stay removed', asy
   page,
 }) => {
   await open(page, 'idiom/array-map/');
-  await page.getByRole('button', { name: '☆ 收藏文档', exact: true }).click();
+  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
   await page.reload();
   await hydrated(page);
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toBeVisible();
   await page
     .getByRole('navigation', { name: '主导航' })
@@ -248,7 +248,7 @@ test('favorites persist, appear in their dedicated scope, and stay removed', asy
     .getByRole('link', { name: /数组映射/ })
     .click();
   await hydrated(page);
-  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
+  await page.getByRole('button', { name: '已收藏', exact: true }).click();
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(0);
 });
@@ -333,7 +333,7 @@ test('ByteBite preferences migrate without losing legacy data or resurrecting re
   }, legacy);
   await open(page, 'idiom/array-map/');
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toBeVisible();
   await expect(page.locator('#code-array-map-python')).toBeVisible();
   await expect(page.locator('#code-array-map-rust')).toBeVisible();
@@ -348,11 +348,11 @@ test('ByteBite preferences migrate without losing legacy data or resurrecting re
       JSON.parse(localStorage.getItem('bytebite_preferences'))
     )
   ).toEqual(legacy);
-  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
+  await page.getByRole('button', { name: '已收藏', exact: true }).click();
   await page.reload();
   await hydrated(page);
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档', exact: true })
+    page.getByRole('button', { name: '收藏文档', exact: true })
   ).toBeVisible();
 });
 
@@ -488,7 +488,7 @@ test('Get marks are separate, persist across detail navigation/reload, and compo
     page.getByRole('button', { name: '已学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档' })
+    page.getByRole('button', { name: '收藏文档' })
   ).toHaveAttribute('aria-pressed', 'false');
   await page.reload();
   await hydrated(page);
@@ -530,7 +530,7 @@ test('learned state synchronizes another tab and ignores malformed data without 
   await page.getByRole('button', { name: '标记学会', exact: true }).click();
   await expect(cards(second)).toHaveCount(1);
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档' })
+    page.getByRole('button', { name: '收藏文档' })
   ).toHaveAttribute('aria-pressed', 'false');
   await page.getByRole('button', { name: '已学会', exact: true }).click();
   await expect(cards(second)).toHaveCount(0);
@@ -554,7 +554,7 @@ test('documents retain learning/favorites, related idioms and language navigatio
     page.getByRole('heading', { name: 'Rust 所有权', exact: true })
   ).toBeVisible();
   await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await page.getByRole('button', { name: '☆ 收藏文档', exact: true }).click();
+  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(1);
   await expect(cards(page).first()).toContainText('Rust 所有权');
@@ -734,7 +734,7 @@ test('document language selection and learned/favorite IDs survive Chinese to En
 }) => {
   await open(page, 'feature/read-text-file/');
   await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await page.getByRole('button', { name: '☆ 收藏文档', exact: true }).click();
+  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
   await expandLanguagePicker(page);
   for (const name of ['Rust', 'C++'])
     await page.getByRole('button', { name, exact: true }).click();
@@ -754,7 +754,7 @@ test('document language selection and learned/favorite IDs survive Chinese to En
     page.getByRole('button', { name: 'Learned', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
-    page.getByRole('button', { name: '★ Favorited', exact: true })
+    page.getByRole('button', { name: 'Favorited', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await page.reload();
   await hydrated(page);
@@ -788,7 +788,7 @@ test('document language selection and learned/favorite IDs survive Chinese to En
     page.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -1187,16 +1187,16 @@ test('canonical closure topic preserves legacy progress, favorites, examples and
     page.getByRole('button', { name: '已学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: '已学会', exact: true }).click();
-  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
+  await page.getByRole('button', { name: '已收藏', exact: true }).click();
   await open(page, 'feature/closures/');
   await expect(
     page.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档', exact: true })
+    page.getByRole('button', { name: '收藏文档', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
   expect(
     await page.evaluate(
@@ -1317,4 +1317,33 @@ test('directory remains operable with enlarged text', async ({ page }, testInfo)
   await page.locator('#docs-query').fill('variables');
   await expect(page.getByRole('link', { name: 'Variables and assignment', exact: true })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('reading-enlarged-text.png') });
+});
+
+test('HTTP documentation icon actions retain tooltips, names and touch targets', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+  for (const locale of ['', 'en/']) {
+    await open(page, `${locale}feature/http-get/`);
+    const theme = page.getByRole('button', { name: locale ? 'Toggle light and dark theme' : '切换明暗主题' });
+    if (await page.locator('html').getAttribute('data-theme') !== 'dark') await theme.click();
+    await expandLanguagePicker(page);
+    await page.screenshot({ path: testInfo.outputPath(`http-controls-${locale ? 'en' : 'zh'}-dark.png`) });
+    for (const name of locale ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code'] : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
+      const button = page.getByRole('button', { name, exact: true }).first();
+      await expect(button.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+      const size = await button.boundingBox();
+      expect(size.width).toBeGreaterThanOrEqual(44);
+      expect(size.height).toBeGreaterThanOrEqual(44);
+      await button.hover();
+      await expect(button.locator('.action-tip')).toHaveCSS('visibility', 'visible');
+      await expect(button.locator('.action-tip')).toHaveText(name);
+      await page.mouse.move(0, 0);
+      await button.focus();
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Shift+Tab');
+      await expect(button).toBeFocused();
+      await expect(button.locator('.action-tip')).toHaveCSS('visibility', 'visible');
+    }
+    await page.screenshot({ path: testInfo.outputPath(`http-icons-${locale ? 'en' : 'zh'}-dark.png`) });
+    await expectNoHorizontalOverflow(page, testInfo.project.name === 'mobile' ? 375 : 1280);
+  }
 });

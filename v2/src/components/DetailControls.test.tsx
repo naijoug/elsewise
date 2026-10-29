@@ -42,7 +42,7 @@ async function mount(locale: 'zh' | 'en' = 'zh') {
 }
 function button(text: string) {
   return [...host.querySelectorAll('button')].find(
-    (button) => button.textContent === text
+    (button) => (button.getAttribute('aria-label') || button.textContent) === text
   )!;
 }
 it('keeps one visible language and uses full width', async () => {
@@ -99,7 +99,7 @@ it('favorite updates do not overwrite language or theme', async () => {
     })
   );
   await mount();
-  act(() => button('☆ 收藏文档').click());
+  act(() => button('收藏文档').click());
   expect(JSON.parse(localStorage.getItem('elsewise_preferences')!)).toEqual({
     selectedLanguages: ['go'],
     favoriteIdioms: ['a'],
@@ -114,7 +114,7 @@ it('toggles learned independently of favorites and reports temporary saves', asy
   expect(
     host.querySelector('[aria-label="已学会"]')?.getAttribute('aria-pressed')
   ).toBe('true');
-  expect(button('☆ 收藏文档').getAttribute('aria-pressed')).toBe('false');
+  expect(button('收藏文档').getAttribute('aria-pressed')).toBe('false');
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
     throw new Error('quota');
   });
@@ -128,8 +128,8 @@ it('keeps English comparison, favorites and learning controls free of Chinese te
   await mount('en');
   expect(host.querySelector('h2')?.textContent).toBe('Compare languages');
   expect(host.innerHTML).not.toMatch(/[一-鿿]/);
-  act(() => button('☆ Favorite').click());
-  expect(button('★ Favorited').getAttribute('aria-pressed')).toBe('true');
+  act(() => button('Favorite').click());
+  expect(button('Favorited').getAttribute('aria-pressed')).toBe('true');
   act(() =>
     host
       .querySelector<HTMLButtonElement>('[aria-label="Mark as learned"]')!

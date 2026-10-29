@@ -1,3 +1,4 @@
+import ActionIcon from './ActionIcon';
 import { useEffect, useRef, useState } from 'react';
 import type { KnowledgeItem } from '../lib/knowledge';
 import type { Locale } from '../lib/ui-i18n';
@@ -235,8 +236,9 @@ export default function KnowledgeCatalog({
               ))}
             </div>
           </details>
-          <button className="reset-knowledge" onClick={reset}>
-            {t('重置', 'Reset')}
+          <button className="reset-knowledge icon-action" aria-label={t('重置', 'Reset')} onClick={reset}>
+            <ActionIcon name="reset" />
+            <span className="action-tip" aria-hidden="true">{t('重置', 'Reset')}</span>
           </button>
         </div>
         <div className="knowledge-status" role="status">

@@ -1,3 +1,4 @@
+import ActionIcon from './ActionIcon';
 import { hasTopic } from '../lib/knowledge-identity';
 import { toggleLearned, useLearned } from '../lib/learned';
 import { text, type Locale } from '../lib/ui-i18n';
@@ -17,14 +18,14 @@ export default function LearnedButton({
   return (
     <button
       type="button"
-      className="learned-button"
+      className="learned-button icon-action"
       aria-pressed={learned}
       aria-label={`${label}${title ? `: ${title}` : ''}`}
       title={learned ? text(locale, '再次点击可撤销', 'Click again to undo') : text(locale, '标记这个知识点已学会', 'Mark this topic as learned')}
       onClick={() => toggleLearned(id)}
     >
-      <span aria-hidden="true">{learned ? '✓' : '+'}</span>{' '}
-      {label}
+      <ActionIcon name="check" />
+      <span className="action-tip" aria-hidden="true">{label}</span>
     </button>
   );
 }

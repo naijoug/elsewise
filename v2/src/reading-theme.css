@@ -139,3 +139,28 @@ button[aria-pressed='true'] { color: var(--accent); }
 /* Text-only zoom must reflow long English words rather than widen the page. */
 .knowledge-heading > div:first-child { min-width: 0; }
 h1, h2, h3, .knowledge-title { overflow-wrap: anywhere; }
+/* Icon actions use the same labelled, keyboard-accessible control in every view. */
+button.icon-action,
+.detail-controls button.icon-action,
+.knowledge-chapter button.icon-action {
+  position: relative; display: inline-grid; place-items: center;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  padding: 0; vertical-align: middle; border: 1px solid transparent;
+  color: var(--muted); background: transparent; border-radius: 6px;
+}
+button.icon-action > svg { width: 19px; height: 19px; pointer-events: none; }
+button.icon-action:hover { background: var(--tint); color: var(--accent); }
+button.icon-action[aria-pressed='true'] { color: var(--accent); background: var(--tint); }
+.favorite-action[aria-pressed='true'] svg { fill: currentColor; }
+.action-tip {
+  position: absolute; top: calc(100% + 7px); left: 0; z-index: 20;
+  width: max-content; max-width: min(240px, calc(100vw - 40px));
+  padding: 5px 9px; border-radius: 4px; background: var(--text); color: var(--bg);
+  font-size: 12px; line-height: 1.5; font-weight: 400; white-space: normal;
+  pointer-events: none; opacity: 0; visibility: hidden;
+  box-shadow: 0 2px 8px #00000018;
+}
+.icon-action:hover .action-tip, .icon-action:focus-visible .action-tip { opacity: 1; visibility: visible; }
+.copy-code .action-tip, .knowledge-chapter .action-tip { left: auto; right: 0; }
+.detail-controls > .icon-action + .icon-action { margin-left: 6px; }
+.reset-knowledge .action-tip { left: auto; right: 0; }
