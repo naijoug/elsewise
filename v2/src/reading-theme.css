@@ -136,3 +136,6 @@ button[aria-pressed='true'] { color: var(--accent); }
 [data-theme='dark'] .token.important { color: #f2a8bd; }
 
 .chapter-rail button > span { flex-shrink: 0; }
+/* Text-only zoom must reflow long English words rather than widen the page. */
+.knowledge-heading > div:first-child { min-width: 0; }
+h1, h2, h3, .knowledge-title { overflow-wrap: anywhere; }
