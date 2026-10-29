@@ -1268,6 +1268,9 @@ test('reading theme keeps navigation aligned, controls named and text readable',
     const toggle = page.getByRole('button', { name: '切换明暗主题' });
     if (await page.locator('html').getAttribute('data-theme') !== theme) await toggle.click();
     await toggle.focus();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Shift+Tab');
+    await expect(toggle).toBeFocused();
     const measured = await page.evaluate(() => {
       const color = (value) => value.match(/[\d.]+/g).slice(0, 3).map(Number).map(n => {
         const v = n / 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;
@@ -1298,4 +1301,20 @@ test('reading theme keeps navigation aligned, controls named and text readable',
   await hydrated(page);
   await page.screenshot({ path: testInfo.outputPath('reading-comparison-dark.png') });
   await expectNoHorizontalOverflow(page, testInfo.project.name === 'mobile' ? 375 : 1280);
+});
+
+test('directory remains operable with enlarged text', async ({ page }, testInfo) => {
+  const width = testInfo.project.name === 'mobile' ? 375 : 1280;
+  await page.setViewportSize({ width, height: 900 });
+  await open(page, 'en/');
+  // Enlarge computed font sizes once, including px-based labels, to test text-only reflow.
+  await page.evaluate(() => {
+    const entries = [...document.querySelectorAll('body *')].map(element => [element, parseFloat(getComputedStyle(element).fontSize)]);
+    for (const [element, size] of entries) element.style.fontSize = `${size * 2}px`;
+  });
+  await expectNoHorizontalOverflow(page, width);
+  await expect(page.getByRole('button', { name: 'Toggle light and dark theme' })).toBeVisible();
+  await page.locator('#docs-query').fill('variables');
+  await expect(page.getByRole('link', { name: 'Variables and assignment', exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('reading-enlarged-text.png') });
 });

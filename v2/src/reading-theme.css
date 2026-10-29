@@ -1,5 +1,5 @@
 /* A quiet reading surface. Shared by the directory, language pages and comparisons. */
-:root { --reading-width: 1320px; --control-border: #969d90; }
+:root { --reading-width: 1320px; --control-border: #858e80; }
 :root[data-theme='dark'] { --control-border: #828b7c; }
 body { font-size: 15px; -webkit-font-smoothing: antialiased; }
 main, .site-header, .site-footer { max-width: var(--reading-width); padding-inline: 36px; }
@@ -117,3 +117,20 @@ button[aria-pressed='true'] { color: var(--accent); }
  .learning-tabs button { padding-inline: 6px; }
  .knowledge-language summary { padding-inline: 7px; }
 }
+/* Every semantic token group has a dark counterpart, including less common grammars. */
+[data-theme='dark'] .token.prolog,
+[data-theme='dark'] .token.doctype,
+[data-theme='dark'] .token.cdata { color: #a2b5a8; }
+[data-theme='dark'] .token.property,
+[data-theme='dark'] .token.tag,
+[data-theme='dark'] .token.constant,
+[data-theme='dark'] .token.symbol { color: #efb66d; }
+[data-theme='dark'] .token.selector,
+[data-theme='dark'] .token.attr-name,
+[data-theme='dark'] .token.char { color: #9bd5a6; }
+[data-theme='dark'] .token.entity,
+[data-theme='dark'] .token.url { color: #decc83; }
+[data-theme='dark'] .token.atrule,
+[data-theme='dark'] .token.attr-value { color: #c4b0ef; }
+[data-theme='dark'] .token.regex,
+[data-theme='dark'] .token.important { color: #f2a8bd; }
