@@ -14,8 +14,14 @@ export const features = [
   ...data,
 ] as Feature[];
 export function validateFeatures(values: Feature[]) {
-  const ids = values.map((feature) => feature.id);
-  if (new Set(ids).size !== ids.length) throw new Error('Duplicate feature id');
+  const ids = new Set<string>();
+  for (const feature of values) {
+    if (ids.has(feature.id)) {
+      throw new Error(`Duplicate feature id: '${feature.id}'`);
+    }
+    ids.add(feature.id);
+  }
+  const idList = [...ids];
   for (const feature of values) {
     if (
       !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(feature.id) ||
@@ -23,26 +29,44 @@ export function validateFeatures(values: Feature[]) {
       !feature.description ||
       !feature.scopeNote
     )
-      throw new Error('Invalid feature metadata');
+      throw new Error(`Feature '${feature.id}': Invalid feature metadata`);
     if (!['common', 'shared', 'specific'].includes(feature.scope))
-      throw new Error('Invalid feature scope');
-    if (
-      new Set(feature.entries.map((entry) => entry.languageId)).size !==
-      feature.entries.length
-    )
-      throw new Error('Duplicate feature language');
-    if (!feature.entries.length) throw new Error('Empty feature');
+      throw new Error(
+        `Feature '${feature.id}': Invalid feature scope '${feature.scope}'`
+      );
+    const langIds = new Set<string>();
+    for (const entry of feature.entries) {
+      if (langIds.has(entry.languageId)) {
+        throw new Error(
+          `Feature '${feature.id}': Duplicate feature language '${entry.languageId}'`
+        );
+      }
+      langIds.add(entry.languageId);
+    }
+    if (!feature.entries.length) {
+      throw new Error(`Feature '${feature.id}': Empty feature`);
+    }
     if (
       feature.scope === 'common' &&
       feature.entries.length !== languages.length
     )
       throw new Error(
-        'Common features require a reviewed entry for every catalog language'
+        `Feature '${feature.id}': Common features require a reviewed entry for every catalog language`
       );
-    if (feature.related.some((id) => !ids.includes(id) || id === feature.id))
-      throw new Error('Unknown related feature');
-    if (feature.idiomIds.some((id) => !idioms.some((idiom) => idiom.id === id)))
-      throw new Error('Unknown related idiom');
+    const unknownRelated = feature.related.find(
+      (id) => !idList.includes(id) || id === feature.id
+    );
+    if (unknownRelated)
+      throw new Error(
+        `Feature '${feature.id}': Unknown related feature '${unknownRelated}'`
+      );
+    const unknownIdiom = feature.idiomIds.find(
+      (id) => !idioms.some((idiom) => idiom.id === id)
+    );
+    if (unknownIdiom)
+      throw new Error(
+        `Feature '${feature.id}': Unknown related idiom '${unknownIdiom}'`
+      );
     for (const entry of feature.entries) {
       if (
         !languages.some((language) => language.id === entry.languageId) ||
@@ -50,13 +74,17 @@ export function validateFeatures(values: Feature[]) {
         !entry.summary ||
         !entry.sources.length
       )
-        throw new Error('Incomplete feature evidence');
+        throw new Error(
+          `Feature '${feature.id}' entry '${entry.languageId}': Incomplete feature evidence`
+        );
       if (
         !['native', 'idiomatic', 'not-applicable', 'undocumented'].includes(
           entry.status
         )
       )
-        throw new Error('Invalid support status');
+        throw new Error(
+          `Feature '${feature.id}' entry '${entry.languageId}': Invalid support status '${entry.status}'`
+        );
       for (const source of entry.sources)
         if (
           !source.title ||
@@ -64,7 +92,9 @@ export function validateFeatures(values: Feature[]) {
           !/^https:\/\//.test(source.url) ||
           !/^\d{4}-\d{2}-\d{2}$/.test(source.checkedAt)
         )
-          throw new Error('Invalid feature source');
+          throw new Error(
+            `Feature '${feature.id}' entry '${entry.languageId}': Invalid feature source '${source.title || source.url || 'untitled'}'`
+          );
     }
   }
 }

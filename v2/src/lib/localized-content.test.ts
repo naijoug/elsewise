@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { content, modules } from './localized-content';
+import { content, modules, validateModules } from './localized-content';
 import type { Implementation } from '../../../src/types';
 
 const practicalIds = ['read-text-file', 'write-text-file', 'json', 'http-get'];
@@ -123,6 +123,20 @@ describe('localized build content', () => {
         .features.map((feature) => feature.id)
         .sort()
     );
+  });
+
+  it('rejects incomplete or unknown module assignments', () => {
+    const copy = structuredClone(modules);
+    copy[0].ids.push('unknown-feature');
+    expect(() => validateModules(copy, content('zh').features)).toThrow(
+      /Unknown feature 'unknown-feature'/
+    );
+
+    const missingFeature = structuredClone(modules);
+    missingFeature[0].ids.shift();
+    expect(() =>
+      validateModules(missingFeature, content('zh').features)
+    ).toThrow(/is not assigned to any module/);
   });
 
   it('preserves every populated optional implementation prose field in English', () => {

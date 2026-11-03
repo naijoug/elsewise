@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { knowledge, chapters, knowledgeSearch } from './knowledge';
+import {
+  knowledge,
+  chapters,
+  knowledgeSearch,
+  validateChapters,
+} from './knowledge';
 import { content } from './localized-content';
 import { hasTopic, toggledTopic } from './knowledge-identity';
 describe('unified knowledge directory', () => {
@@ -67,6 +72,23 @@ describe('unified knowledge directory', () => {
       'unknown',
       'feature:closures',
     ]);
+  });
+  it('enforces complete and valid chapter assignments', () => {
+    const copy = structuredClone(chapters);
+    copy[0].items.push('unknown-item');
+    expect(() =>
+      validateChapters(copy, content('zh').features, content('zh').idioms)
+    ).toThrow(/Unknown idiom 'unknown-item'/);
+
+    const missingFeature = structuredClone(chapters);
+    missingFeature[0].items.shift();
+    expect(() =>
+      validateChapters(
+        missingFeature,
+        content('zh').features,
+        content('zh').idioms
+      )
+    ).toThrow(/is not assigned to any chapter/);
   });
 });
 

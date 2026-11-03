@@ -52,6 +52,15 @@ describe('reviewed feature catalog', () => {
     noEvidence[0].entries[0].sources = [];
     expect(() => validateFeatures(noEvidence)).toThrow(/evidence/);
   });
+  it('reports specific feature and language ID in validation errors', () => {
+    const copy = structuredClone(features);
+    copy[0].entries[0].baseline = '';
+    expect(() => validateFeatures(copy)).toThrow(
+      new RegExp(
+        `Feature '${copy[0].id}' entry '${copy[0].entries[0].languageId}': Incomplete feature evidence`
+      )
+    );
+  });
   it('does not conflate lack of subclassing with lack of polymorphism', () => {
     for (const id of ['go', 'rust']) {
       expect(

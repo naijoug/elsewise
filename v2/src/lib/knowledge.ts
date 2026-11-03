@@ -107,6 +107,59 @@ export const chapters = [
   { id: 'data', zh: '数据格式', en: 'Data formats', items: ['f:json'] },
   { id: 'network', zh: '网络请求', en: 'Networking', items: ['f:http-get'] },
 ];
+
+export function validateChapters(
+  chaps: typeof chapters,
+  features: { id: string }[],
+  idioms: { id: string }[]
+) {
+  const chapterIds = new Set<string>();
+  const allItemKeys = new Set<string>();
+  const featureIdSet = new Set(features.map((f) => f.id));
+  const idiomIdSet = new Set(idioms.map((i) => i.id));
+
+  for (const chap of chaps) {
+    if (!chap.id || !chap.zh || !chap.en) {
+      throw new Error(`Chapter '${chap.id}': Invalid chapter metadata`);
+    }
+    if (chapterIds.has(chap.id)) {
+      throw new Error(`Duplicate chapter id: '${chap.id}'`);
+    }
+    chapterIds.add(chap.id);
+
+    for (const itemKey of chap.items) {
+      if (allItemKeys.has(itemKey)) {
+        throw new Error(`Duplicate chapter item: '${itemKey}'`);
+      }
+      allItemKeys.add(itemKey);
+
+      if (itemKey.startsWith('f:')) {
+        const featId = itemKey.slice(2);
+        if (!featureIdSet.has(featId)) {
+          throw new Error(`Chapter '${chap.id}': Unknown feature '${featId}'`);
+        }
+      } else {
+        if (!idiomIdSet.has(itemKey)) {
+          throw new Error(`Chapter '${chap.id}': Unknown idiom '${itemKey}'`);
+        }
+      }
+    }
+  }
+
+  for (const feat of features) {
+    if (!allItemKeys.has(`f:${feat.id}`)) {
+      throw new Error(`Feature '${feat.id}' is not assigned to any chapter`);
+    }
+  }
+
+  for (const idiom of idioms) {
+    if (idiom.id !== 'closure' && !allItemKeys.has(idiom.id)) {
+      throw new Error(`Idiom '${idiom.id}' is not assigned to any chapter`);
+    }
+  }
+}
+validateChapters(chapters, content('zh').features, content('zh').idioms);
+
 export type KnowledgeItem = {
   id: string;
   title: string;

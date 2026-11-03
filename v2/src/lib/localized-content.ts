@@ -2,8 +2,8 @@
 import { idioms, languages } from './content';
 import { features } from './feature-content';
 import englishData from '../data/english-content.json';
-import type { Idiom, Language } from '../../../src/types';
-import type { Feature } from './features';
+import type { Idiom, Language, Implementation } from '../../../src/types';
+import type { Feature, FeatureEntry } from './features';
 export type Locale = 'zh' | 'en';
 const english = englishData as unknown as {
   idioms: Record<
@@ -27,36 +27,69 @@ function buildLocalizedContent(locale: Locale) {
   const localizedIdioms = idioms.map((item) => {
     if (locale === 'zh') return item;
     const value = english.idioms[item.id];
-    if (!value) throw new Error(`Missing English idiom ${item.id}`);
+    if (!value || !value.title?.trim() || !value.description?.trim()) {
+      throw new Error(`Missing English idiom '${item.id}'`);
+    }
     return {
       ...item,
       ...value,
-      implementations: item.implementations.map((entry) => ({
-        ...entry,
-        ...value.implementations[entry.languageId],
-      })),
+      implementations: item.implementations.map((entry) => {
+        const entryEn = value.implementations?.[entry.languageId] as
+          | Partial<Implementation>
+          | undefined;
+        if (!entryEn || !entryEn.explanation?.trim()) {
+          throw new Error(
+            `Missing English implementation for idiom '${item.id}' (${entry.languageId})`
+          );
+        }
+        return {
+          ...entry,
+          ...entryEn,
+        };
+      }),
     } as Idiom;
   });
-  const localizedLanguages = languages.map((item) =>
-    locale === 'zh' ? item : { ...item, ...english.languages[item.id] }
-  );
+  const localizedLanguages = languages.map((item) => {
+    if (locale === 'zh') return item;
+    const langEn = english.languages[item.id];
+    if (!langEn || !langEn.description?.trim()) {
+      throw new Error(`Missing English language '${item.id}'`);
+    }
+    return { ...item, ...langEn };
+  });
   const langNameMap = new Map(languages.map((l) => [l.id, l.name]));
   const localizedFeatures = features.map((item) => {
     if (locale === 'zh') return item;
     const value =
       (item as Feature & { en?: Partial<Feature> }).en ||
       english.features[item.id];
-    if (!value) throw new Error(`Missing English document ${item.id}`);
+    if (!value || !value.title?.trim() || !value.description?.trim()) {
+      throw new Error(`Missing English document '${item.id}'`);
+    }
     return {
       ...item,
       ...value,
-      entries: item.entries.map((entry) => ({
-        ...entry,
-        ...((entry as typeof entry & { en?: object }).en ||
-          (value.entries as unknown as Record<string, object>)[
+      entries: item.entries.map((entry) => {
+        const entryEn =
+          (entry as typeof entry & { en?: Partial<FeatureEntry> }).en ||
+          (value.entries as unknown as Record<string, Partial<FeatureEntry>>)?.[
             entry.languageId
-          ]),
-      })),
+          ];
+        if (
+          !entryEn ||
+          !entryEn.summary?.trim() ||
+          !entryEn.versionNotes?.trim() ||
+          !entryEn.baseline?.trim()
+        ) {
+          throw new Error(
+            `Missing English entry for document '${item.id}' (${entry.languageId})`
+          );
+        }
+        return {
+          ...entry,
+          ...entryEn,
+        };
+      }),
     } as Feature;
   });
   return {
@@ -158,3 +191,39 @@ export const modules = [
   { id: 'data', zh: '数据格式', en: 'Data formats', ids: ['json'] },
   { id: 'network', zh: '网络请求', en: 'Networking', ids: ['http-get'] },
 ];
+
+export function validateModules(
+  moduleList: typeof modules,
+  featureList: { id: string }[]
+) {
+  const modIds = new Set<string>();
+  const assignedIds = new Set<string>();
+  const featureIdSet = new Set(featureList.map((f) => f.id));
+
+  for (const mod of moduleList) {
+    if (!mod.id || !mod.zh || !mod.en) {
+      throw new Error(`Module '${mod.id}': Invalid module metadata`);
+    }
+    if (modIds.has(mod.id)) {
+      throw new Error(`Duplicate module id: '${mod.id}'`);
+    }
+    modIds.add(mod.id);
+
+    for (const featId of mod.ids) {
+      if (assignedIds.has(featId)) {
+        throw new Error(`Duplicate module feature: '${featId}'`);
+      }
+      assignedIds.add(featId);
+      if (!featureIdSet.has(featId)) {
+        throw new Error(`Module '${mod.id}': Unknown feature '${featId}'`);
+      }
+    }
+  }
+
+  for (const feat of featureList) {
+    if (!assignedIds.has(feat.id)) {
+      throw new Error(`Feature '${feat.id}' is not assigned to any module`);
+    }
+  }
+}
+validateModules(modules, features);
