@@ -117,7 +117,10 @@ export default function KnowledgeCatalog({
           )
         )
           throw Error();
-        if (!controller.signal.aborted) { setIndex(data); setFailed(false); }
+        if (!controller.signal.aborted) {
+          setIndex(data);
+          setFailed(false);
+        }
       })
       .catch(() => {
         if (!controller.signal.aborted) setFailed(true);
@@ -129,7 +132,8 @@ export default function KnowledgeCatalog({
     (item) =>
       (!chapter || item.chapter === chapter) &&
       (!language || item.languageIds.includes(language)) &&
-      (!(savedOnly || onlyFavorites) || hasTopic(preferences.favoriteIdioms, item.id)) &&
+      (!(savedOnly || onlyFavorites) ||
+        hasTopic(preferences.favoriteIdioms, item.id)) &&
       (!term ||
         item.search.includes(term) ||
         index?.find((e) => e.id === item.id)?.text.includes(term))
@@ -188,11 +192,27 @@ export default function KnowledgeCatalog({
         </div>
         <div className="knowledge-toolbar">
           {!savedOnly && (
-            <div className="saved-filter" role="group" aria-label={t('收藏筛选', 'Saved filter')}>
-              <button aria-pressed={!onlyFavorites} onClick={() => setOnlyFavorites(false)}>{t('全部', 'All')}</button>
-              <button className="icon-action favorite-action" aria-label={t('仅看收藏', 'Show saved only')} aria-pressed={onlyFavorites} onClick={() => setOnlyFavorites(!onlyFavorites)}>
+            <div
+              className="saved-filter"
+              role="group"
+              aria-label={t('收藏筛选', 'Saved filter')}
+            >
+              <button
+                aria-pressed={!onlyFavorites}
+                onClick={() => setOnlyFavorites(false)}
+              >
+                {t('全部', 'All')}
+              </button>
+              <button
+                className="icon-action favorite-action"
+                aria-label={t('仅看收藏', 'Show saved only')}
+                aria-pressed={onlyFavorites}
+                onClick={() => setOnlyFavorites(!onlyFavorites)}
+              >
                 <ActionIcon name="bookmark" />
-                <span className="action-tip" aria-hidden="true">{t('仅看收藏', 'Show saved only')}</span>
+                <span className="action-tip" aria-hidden="true">
+                  {t('仅看收藏', 'Show saved only')}
+                </span>
               </button>
             </div>
           )}
@@ -220,9 +240,15 @@ export default function KnowledgeCatalog({
               ))}
             </div>
           </details>
-          <button className="reset-knowledge icon-action" aria-label={t('重置', 'Reset')} onClick={reset}>
+          <button
+            className="reset-knowledge icon-action"
+            aria-label={t('重置', 'Reset')}
+            onClick={reset}
+          >
             <ActionIcon name="reset" />
-            <span className="action-tip" aria-hidden="true">{t('重置', 'Reset')}</span>
+            <span className="action-tip" aria-hidden="true">
+              {t('重置', 'Reset')}
+            </span>
           </button>
         </div>
         <div className="knowledge-status" role="status">
@@ -233,8 +259,11 @@ export default function KnowledgeCatalog({
               : ''}
           </span>
           <span>
-            {items.filter((i) => hasTopic(preferences.favoriteIdioms, i.id)).length}/
-            {items.length} {t('已收藏', 'saved')}
+            {
+              items.filter((i) => hasTopic(preferences.favoriteIdioms, i.id))
+                .length
+            }
+            /{items.length} {t('已收藏', 'saved')}
           </span>
         </div>
         {failed && (

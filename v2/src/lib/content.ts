@@ -15,30 +15,40 @@ export const catalog = idioms.map(({ implementations, ...summary }) => ({
     (implementation) => implementation.languageId
   ),
 }));
-const searchable = (values: string[]) =>
-  values.map((value) => value.toLocaleLowerCase());
-export const searchIndex = idioms.map((idiom) => ({
-  id: idiom.id,
-  fields: {
-    title: searchable([idiom.title]),
-    description: searchable([idiom.description]),
-    category: searchable([idiom.category]),
-    tags: searchable(idiom.tags),
-    languages: searchable(
-      idiom.implementations.flatMap((implementation) => [
-        implementation.languageId,
-        languages.find((language) => language.id === implementation.languageId)!
-          .name,
-      ])
-    ),
-    code: searchable(
-      idiom.implementations.map((implementation) => implementation.code)
-    ),
-    explanation: searchable(
-      idiom.implementations.map((implementation) => implementation.explanation)
-    ),
-  },
-}));
+
+export function buildSearchIndex(
+  items: Idiom[],
+  langs: { id: string; name: string }[]
+) {
+  const langMap = new Map(langs.map((l) => [l.id, l.name]));
+  const searchable = (values: string[]) =>
+    values.map((value) => value.toLocaleLowerCase());
+  return items.map((idiom) => ({
+    id: idiom.id,
+    fields: {
+      title: searchable([idiom.title]),
+      description: searchable([idiom.description]),
+      category: searchable([idiom.category]),
+      tags: searchable(idiom.tags),
+      languages: searchable(
+        idiom.implementations.flatMap((implementation) => [
+          implementation.languageId,
+          langMap.get(implementation.languageId) || implementation.languageId,
+        ])
+      ),
+      code: searchable(
+        idiom.implementations.map((implementation) => implementation.code)
+      ),
+      explanation: searchable(
+        idiom.implementations.map(
+          (implementation) => implementation.explanation
+        )
+      ),
+    },
+  }));
+}
+
+export const searchIndex = buildSearchIndex(idioms, languages);
 const grammarIds = [
   ...new Set(
     idioms.flatMap((idiom) =>

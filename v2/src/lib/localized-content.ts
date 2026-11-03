@@ -18,7 +18,12 @@ const english = englishData as unknown as {
     Partial<Feature> & { entries: Record<string, Record<string, unknown>> }
   >;
 };
-export function content(locale: Locale) {
+const contentCache = new Map<
+  Locale,
+  ReturnType<typeof buildLocalizedContent>
+>();
+
+function buildLocalizedContent(locale: Locale) {
   const localizedIdioms = idioms.map((item) => {
     if (locale === 'zh') return item;
     const value = english.idioms[item.id];
@@ -35,6 +40,7 @@ export function content(locale: Locale) {
   const localizedLanguages = languages.map((item) =>
     locale === 'zh' ? item : { ...item, ...english.languages[item.id] }
   );
+  const langNameMap = new Map(languages.map((l) => [l.id, l.name]));
   const localizedFeatures = features.map((item) => {
     if (locale === 'zh') return item;
     const value =
@@ -65,10 +71,19 @@ export function content(locale: Locale) {
       ...summary,
       languageIds: entries.map((e) => e.languageId),
       languageNames: entries.map(
-        (e) => languages.find((l) => l.id === e.languageId)!.name
+        (e) => langNameMap.get(e.languageId) || e.languageId
       ),
     })),
   };
+}
+
+export function content(locale: Locale) {
+  let cached = contentCache.get(locale);
+  if (!cached) {
+    cached = buildLocalizedContent(locale);
+    contentCache.set(locale, cached);
+  }
+  return cached;
 }
 export function routeBase(locale: Locale) {
   return (
@@ -80,7 +95,16 @@ export const modules = [
     id: 'basics',
     zh: '基础语法',
     en: 'Language basics',
-    ids: ['syntax-basics', 'variables', 'constants', 'basic-types', 'operators', 'conditions', 'loops', 'functions'],
+    ids: [
+      'syntax-basics',
+      'variables',
+      'constants',
+      'basic-types',
+      'operators',
+      'conditions',
+      'loops',
+      'functions',
+    ],
   },
   {
     id: 'collections',

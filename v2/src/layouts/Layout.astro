@@ -9,8 +9,13 @@ const { title, description, locale='zh' } = Astro.props;
 const en=locale==='en'; const base=routeBase(locale);
 const root=import.meta.env.BASE_URL.replace(/\/$/,'');
 const path=Astro.url.pathname.slice(root.length).replace(/^\/en(?=\/|$)/,'') || '/';
-const alternatePath=/^\/404(?:\.html|\/)?$/.test(path)?(en?'/404.html':'/404/'):path;
+const is404 = /^\/404(?:\.html|\/)?$/.test(path);
+const alternatePath=is404?(en?'/404.html':'/404/'):path;
 const alternate=`${root}${en?'':'/en'}${alternatePath}${Astro.url.search}`;
+const siteUrl = Astro.site ? new URL(Astro.site) : null;
+const zhUrl = siteUrl ? new URL(`${root}${alternatePath}`, siteUrl).href : `${root}${alternatePath}`;
+const enUrl = siteUrl ? new URL(`${root}/en${alternatePath}`, siteUrl).href : `${root}/en${alternatePath}`;
+const canonicalUrl = en ? enUrl : zhUrl;
 const links = [{href: `${base}/`, title: en?'Knowledge':'知识目录'}, {href: `${base}/languages/`, title: en?'Languages':'语言'}, {href: `${base}/favorites/`, title: en?'Saved':'收藏'}];
 ---
 <!doctype html>
@@ -19,6 +24,16 @@ const links = [{href: `${base}/`, title: en?'Knowledge':'知识目录'}, {href: 
     <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description || (en?'Learn one task. Compare implementations across programming languages.':'围绕同一个任务，对照不同编程语言的实现与用法。')} />
     <title>{title} · {en?'Elsewise':'异曲'}</title>
+    {is404 ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="canonical" href={canonicalUrl} />
+        <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
+        <link rel="alternate" hreflang="en" href={enUrl} />
+        <link rel="alternate" hreflang="x-default" href={zhUrl} />
+      </>
+    )}
     <script is:inline>
       try { const stored = localStorage.getItem('elsewise_preferences') ?? localStorage.getItem('bytebite_preferences'); const preferences = stored ? JSON.parse(stored) : null; document.documentElement.dataset.theme = preferences?.theme === 'dark' ? 'dark' : 'light'; } catch { }
     </script>

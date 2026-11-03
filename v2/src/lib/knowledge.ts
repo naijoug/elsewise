@@ -112,8 +112,11 @@ export type KnowledgeItem = {
   search: string;
   example?: { title: string; href: string };
 };
-export function knowledge(locale: Locale): KnowledgeItem[] {
+const knowledgeCache = new Map<Locale, KnowledgeItem[]>();
+
+function buildKnowledge(locale: Locale): KnowledgeItem[] {
   const { features, idioms, languages } = content(locale);
+  const langMap = new Map(languages.map((l) => [l.id, l.name]));
   return chapters.flatMap((chapter) =>
     chapter.items.map((key) => {
       const feature = key.startsWith('f:');
@@ -138,10 +141,7 @@ export function knowledge(locale: Locale): KnowledgeItem[] {
           item.description,
           ...item.tags,
           chapter[locale],
-          ...languageIds.flatMap((id) => [
-            id,
-            languages.find((l) => l.id === id)!.name,
-          ]),
+          ...languageIds.flatMap((lid) => [lid, langMap.get(lid) || lid]),
           ...(id === 'closures'
             ? [idioms.find((i) => i.id === 'closure')!.title]
             : []),
@@ -162,6 +162,15 @@ export function knowledge(locale: Locale): KnowledgeItem[] {
       };
     })
   );
+}
+
+export function knowledge(locale: Locale): KnowledgeItem[] {
+  let cached = knowledgeCache.get(locale);
+  if (!cached) {
+    cached = buildKnowledge(locale);
+    knowledgeCache.set(locale, cached);
+  }
+  return cached;
 }
 export function knowledgeSearch(locale: Locale) {
   const { features, idioms } = content(locale);

@@ -171,16 +171,28 @@ describe('localized build content', () => {
   });
 });
 
-
 describe('foundations-first learning path', () => {
-  const ids = ['syntax-basics', 'variables', 'constants', 'basic-types', 'operators', 'conditions', 'loops', 'functions'];
+  const ids = [
+    'syntax-basics',
+    'variables',
+    'constants',
+    'basic-types',
+    'operators',
+    'conditions',
+    'loops',
+    'functions',
+  ];
   it('starts with real foundation chapters, not practical APIs or empty placeholders', () => {
     expect(modules[0].ids).toEqual(ids);
     for (const locale of ['zh', 'en'] as const) {
       const localized = content(locale);
       for (const id of ids) {
-        const chapter = localized.features.find(feature => feature.id === id)!;
-        expect(chapter.entries.map(entry => entry.languageId).sort()).toEqual(localized.languages.map(language => language.id).sort());
+        const chapter = localized.features.find(
+          (feature) => feature.id === id
+        )!;
+        expect(chapter.entries.map((entry) => entry.languageId).sort()).toEqual(
+          localized.languages.map((language) => language.id).sort()
+        );
         for (const entry of chapter.entries) {
           nonempty(entry.code, `${locale}/${id}/${entry.languageId}`);
           nonempty(entry.summary, 'summary');
@@ -191,8 +203,13 @@ describe('foundations-first learning path', () => {
     }
   });
   it('distinguishes constants from universally immutable values', () => {
-    const entries = content('en').features.find(feature => feature.id === 'constants')!.entries;
-    const prose = (id: string) => { const e = entries.find(entry => entry.languageId === id)!; return `${e.summary} ${e.versionNotes}`; };
+    const entries = content('en').features.find(
+      (feature) => feature.id === 'constants'
+    )!.entries;
+    const prose = (id: string) => {
+      const e = entries.find((entry) => entry.languageId === id)!;
+      return `${e.summary} ${e.versionNotes}`;
+    };
     expect(prose('javascript')).toMatch(/binding|reassign/i);
     expect(prose('python')).toMatch(/convention|runtime|run.time/i);
     expect(prose('cpp')).toMatch(/constexpr/);
@@ -202,22 +219,34 @@ describe('foundations-first learning path', () => {
 
 it('covers types, branches and loops as sourced beginner chapters in both locales', () => {
   for (const locale of ['zh', 'en'] as const) {
-    const chapters = content(locale).features.filter(feature => ['basic-types', 'conditions', 'loops'].includes(feature.id));
+    const chapters = content(locale).features.filter((feature) =>
+      ['basic-types', 'conditions', 'loops'].includes(feature.id)
+    );
     expect(chapters).toHaveLength(3);
-    expect(chapters.reduce((count, chapter) => count + chapter.entries.length, 0)).toBe(36);
-    expect(chapters.find(chapter => chapter.id === 'basic-types')!.related).toContain('conditions');
-    expect(chapters.find(chapter => chapter.id === 'conditions')!.related).toContain('loops');
+    expect(
+      chapters.reduce((count, chapter) => count + chapter.entries.length, 0)
+    ).toBe(36);
+    expect(
+      chapters.find((chapter) => chapter.id === 'basic-types')!.related
+    ).toContain('conditions');
+    expect(
+      chapters.find((chapter) => chapter.id === 'conditions')!.related
+    ).toContain('loops');
     for (const chapter of chapters) {
       expect(chapter.scope).toBe('common');
       for (const entry of chapter.entries) {
         nonempty(entry.baseline, 'documented environment');
         nonempty(entry.versionNotes, 'execution and semantic boundaries');
-        expect(entry.sources.every(source => source.url.startsWith('https://') && source.section.trim())).toBe(true);
+        expect(
+          entry.sources.every(
+            (source) =>
+              source.url.startsWith('https://') && source.section.trim()
+          )
+        ).toBe(true);
       }
     }
   }
 });
-
 
 describe('collection comparison chapters', () => {
   const ids = ['sequence-collections', 'key-value-maps'];
@@ -225,19 +254,28 @@ describe('collection comparison chapters', () => {
     expect(modules[1].id).toBe('collections');
     expect(modules[1].ids).toEqual(ids);
   });
-  it.each(['zh', 'en'] as const)('provides complete sourced examples for twelve languages (%s)', locale => {
-    const localized = content(locale);
-    for (const id of ids) {
-      const chapter = localized.features.find(feature => feature.id === id)!;
-      expect(chapter.entries.map(entry => entry.languageId).sort()).toEqual(localized.languages.map(language => language.id).sort());
-      expect(chapter.related).toContain(ids.find(other => other !== id));
-      for (const entry of chapter.entries) {
-        nonempty(entry.code, 'complete example');
-        nonempty(entry.baseline, 'runtime');
-        nonempty(entry.summary, 'explanation');
-        nonempty(entry.versionNotes, 'semantic boundaries');
-        expect(entry.sources.every(source => source.checkedAt === '2026-10-28')).toBe(true);
+  it.each(['zh', 'en'] as const)(
+    'provides complete sourced examples for twelve languages (%s)',
+    (locale) => {
+      const localized = content(locale);
+      for (const id of ids) {
+        const chapter = localized.features.find(
+          (feature) => feature.id === id
+        )!;
+        expect(chapter.entries.map((entry) => entry.languageId).sort()).toEqual(
+          localized.languages.map((language) => language.id).sort()
+        );
+        expect(chapter.related).toContain(ids.find((other) => other !== id));
+        for (const entry of chapter.entries) {
+          nonempty(entry.code, 'complete example');
+          nonempty(entry.baseline, 'runtime');
+          nonempty(entry.summary, 'explanation');
+          nonempty(entry.versionNotes, 'semantic boundaries');
+          expect(
+            entry.sources.every((source) => source.checkedAt === '2026-10-28')
+          ).toBe(true);
+        }
       }
     }
-  });
+  );
 });

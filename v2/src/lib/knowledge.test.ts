@@ -71,7 +71,9 @@ describe('unified knowledge directory', () => {
 });
 
 it('retains valid Console.WriteLine calls in the C# map example', () => {
-  const code = content('en').features.find(f => f.id === 'key-value-maps')!.entries.find(e => e.languageId === 'csharp')!.code!;
+  const code = content('en')
+    .features.find((f) => f.id === 'key-value-maps')!
+    .entries.find((e) => e.languageId === 'csharp')!.code!;
   expect(code).not.toContain('Writeemptye');
   expect(code.match(/Console\.WriteLine\(/g)).toHaveLength(4);
 });

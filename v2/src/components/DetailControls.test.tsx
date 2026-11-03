@@ -42,7 +42,8 @@ async function mount(locale: 'zh' | 'en' = 'zh') {
 }
 function button(text: string) {
   return [...host.querySelectorAll('button')].find(
-    (button) => (button.getAttribute('aria-label') || button.textContent) === text
+    (button) =>
+      (button.getAttribute('aria-label') || button.textContent) === text
   )!;
 }
 it('keeps one visible language and uses full width', async () => {

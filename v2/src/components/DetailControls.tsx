@@ -55,7 +55,9 @@ export default function DetailControls({
       : [...selected, id];
     if (next.length) updatePreferences({ selectedLanguages: next });
   }
-  const favoriteLabel = favorite ? text(locale, '已收藏', 'Favorited') : text(locale, `收藏${subject || '文档'}`, 'Favorite');
+  const favoriteLabel = favorite
+    ? text(locale, '已收藏', 'Favorited')
+    : text(locale, `收藏${subject || '文档'}`, 'Favorite');
   return (
     <div className="detail-controls">
       <button
@@ -69,7 +71,9 @@ export default function DetailControls({
         }
       >
         <ActionIcon name="bookmark" />
-        <span className="action-tip" aria-hidden="true">{favoriteLabel}</span>
+        <span className="action-tip" aria-hidden="true">
+          {favoriteLabel}
+        </span>
       </button>
       <LearnedButton id={idiomId} locale={locale} />
       <LearnedNotice locale={locale} />
@@ -108,7 +112,9 @@ export default function DetailControls({
             }}
           >
             <ActionIcon name="reset" />
-            <span className="action-tip" aria-hidden="true">{text(locale, '恢复默认', 'Reset selection')}</span>
+            <span className="action-tip" aria-hidden="true">
+              {text(locale, '恢复默认', 'Reset selection')}
+            </span>
           </button>
         </div>
         {!visibleOptions.length && (
