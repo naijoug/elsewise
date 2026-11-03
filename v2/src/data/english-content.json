@@ -1240,176 +1240,176 @@
   },
   "languages": {
     "javascript": {
-      "description": "A lightweight, interpreted programming language used primarily for web development.",
+      "description": "A dynamic multi-paradigm language based on prototype inheritance and the event loop, widely used in browsers, server environments, and cloud edge runtimes.",
       "paradigms": [
         "Object-oriented",
         "Functional",
         "Event-driven"
       ],
       "features": [
-        "Prototypal inheritance",
-        "Closures",
-        "Asynchronous programming",
-        "Dynamic typing",
-        "First-class functions"
+        "Prototypal inheritance and prototype chains",
+        "Lexical closures and scopes",
+        "Event loop and async Promises",
+        "First-class functions",
+        "Proxy and Reflect metaprogramming"
       ]
     },
     "typescript": {
-      "description": "A superset of JavaScript that adds a static type system.",
+      "description": "A typed superset of JavaScript that provides compile-time static type checking and advanced type inference.",
       "paradigms": [
         "Object-oriented",
         "Functional"
       ],
       "features": [
         "Static type checking",
-        "Interfaces and type aliases",
-        "Generics",
-        "Decorators",
-        "Advanced type inference"
+        "Structural type contracts",
+        "Generics and type inference",
+        "Discriminated unions and narrowing",
+        "Conditional and mapped types"
       ]
     },
     "python": {
-      "description": "A high-level, general-purpose programming language that emphasizes code readability.",
+      "description": "A high-level, general-purpose programming language emphasizing readability and developer productivity with rich multi-paradigm support.",
       "paradigms": [
         "Object-oriented",
         "Functional",
         "Procedural"
       ],
       "features": [
-        "Concise syntax",
-        "Rich standard library",
-        "Dynamic typing",
-        "List comprehensions",
-        "Decorators"
+        "Dynamic typing and duck typing",
+        "Comprehensions and generators",
+        "Context managers",
+        "Decorators and metaprogramming",
+        "Structural pattern matching"
       ]
     },
     "go": {
-      "description": "A statically typed, compiled language developed by Google, focused on simplicity and concurrency.",
+      "description": "A statically typed compiled language focused on simplicity, rapid compilation, and lightweight concurrency.",
       "paradigms": [
         "Concurrent",
         "Procedural"
       ],
       "features": [
-        "Goroutine concurrency",
-        "Channel communication",
-        "Implicit interface implementation",
-        "Garbage collection",
-        "Fast compilation"
+        "Goroutine and channel concurrency",
+        "Implicit structural interfaces",
+        "Deferred resource cleanup with defer",
+        "Explicit multi-value error handling",
+        "Fast compilation and garbage collection"
       ]
     },
     "rust": {
-      "description": "A systems programming language focused on safety, concurrency, and performance.",
+      "description": "A modern systems programming language focused on memory safety, concurrency without data races, and zero-cost abstractions.",
       "paradigms": [
         "Functional",
         "Concurrent",
         "Procedural"
       ],
       "features": [
-        "Ownership system",
-        "Zero-cost abstraction",
-        "Memory safety",
-        "No data races",
-        "Pattern matching"
+        "Ownership and borrow checking",
+        "Zero-cost abstractions",
+        "Compile-time memory safety without data races",
+        "Exhaustive pattern matching",
+        "Trait abstraction system"
       ]
     },
     "java": {
-      "description": "A widely used object-oriented programming language that emphasizes cross-platform portability.",
+      "description": "A cross-platform, enterprise-grade object-oriented language backed by the robust JVM ecosystem.",
       "paradigms": [
         "Object-oriented"
       ],
       "features": [
-        "JVM",
-        "Strong type system",
-        "Garbage collection",
-        "Rich ecosystem",
-        "Enterprise support"
+        "JVM cross-platform runtime",
+        "Strong static types and generics",
+        "Generational low-latency garbage collection",
+        "Virtual threads (Loom)",
+        "Record classes and sealed pattern matching"
       ]
     },
     "csharp": {
-      "description": "A modern object-oriented programming language developed by Microsoft for the .NET platform.",
+      "description": "A modern, type-safe, multi-paradigm language developed by Microsoft for the .NET platform.",
       "paradigms": [
         "Object-oriented",
         "Functional",
         "Event-driven"
       ],
       "features": [
-        "LINQ queries",
-        "Asynchronous programming",
-        "Properties and events",
-        "Generics",
-        "Garbage collection"
+        "LINQ declarative queries",
+        "async/await streams and concurrency",
+        "Properties, delegates, and events",
+        "Record types and pattern matching",
+        "Generics and garbage collection"
       ]
     },
     "ruby": {
-      "description": "A dynamic, open-source programming language focused on simplicity and productivity.",
+      "description": "A dynamic object-oriented language guided by the everything-is-an-object philosophy, focusing on programmer joy and productivity.",
       "paradigms": [
         "Object-oriented",
         "Functional"
       ],
       "features": [
-        "Elegant syntax",
-        "Metaprogramming",
-        "Blocks and iterators",
-        "Mixin modules",
-        "Duck typing"
+        "Pure object-oriented philosophy",
+        "Blocks, Procs, and closures",
+        "Open classes and monkey patching",
+        "Metaprogramming and dynamic dispatch",
+        "Mixin module composition"
       ]
     },
     "php": {
-      "description": "A server-side scripting language widely used for web development.",
+      "description": "A dynamic server-side web scripting language featuring modern object-oriented and type capabilities.",
       "paradigms": [
         "Object-oriented",
         "Procedural"
       ],
       "features": [
-        "HTML embedding",
-        "Rich web framework ecosystem",
-        "Database integration",
-        "Dynamic typing",
-        "Namespaces"
+        "Dynamic typing with strict type mode",
+        "Trait composition and conflict resolution",
+        "Native attributes metadata",
+        "Constructor property promotion",
+        "Union and intersection types"
       ]
     },
     "swift": {
-      "description": "A modern programming language developed by Apple for iOS and macOS development.",
+      "description": "A modern type-safe programming language developed by Apple, emphasizing protocol-oriented design and value semantics.",
       "paradigms": [
         "Object-oriented",
         "Functional",
         "Protocol-oriented"
       ],
       "features": [
-        "Type safety",
-        "Optional types",
-        "Protocol extensions",
-        "Value types first",
-        "Automatic reference counting"
+        "Protocol-oriented programming and extensions",
+        "Optional types and compile-time null safety",
+        "Struct value semantics and copy-on-write",
+        "Actor concurrency and data isolation",
+        "Automatic reference counting (ARC)"
       ]
     },
     "kotlin": {
-      "description": "A modern programming language developed by JetBrains, fully interoperable with Java.",
+      "description": "A modern statically typed language developed by JetBrains, fully interoperable with Java and featuring first-class modern language idioms.",
       "paradigms": [
         "Object-oriented",
         "Functional"
       ],
       "features": [
-        "Null safety",
-        "Extension functions",
-        "Coroutines",
-        "Data classes",
-        "Smart casts"
+        "Null safety in the type system",
+        "Extension functions and properties",
+        "Structured concurrency with coroutines",
+        "Delegated properties and lazy evaluation",
+        "Smart casts and data classes"
       ]
     },
     "cpp": {
-      "description": "A high-performance, general-purpose programming language supporting low-level memory operations.",
+      "description": "A high-performance systems compiled language supporting direct hardware access and modern multi-paradigm abstractions.",
       "paradigms": [
         "Object-oriented",
         "Procedural",
         "Generic programming"
       ],
       "features": [
-        "Manual memory management",
-        "Template metaprogramming",
-        "Multiple inheritance",
-        "RAII",
-        "Zero-overhead abstractions"
+        "RAII deterministic resource management",
+        "Concepts and type constraints",
+        "Move semantics and rvalue references",
+        "constexpr compile-time computation",
+        "Template metaprogramming and zero-overhead abstractions"
       ]
     }
   },

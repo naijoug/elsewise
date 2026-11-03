@@ -5,8 +5,8 @@
     "version": "ES2023",
     "paradigms": ["面向对象", "函数式", "事件驱动"],
     "typeSystem": "dynamic",
-    "description": "一种轻量级、解释型的编程语言，主要用于Web开发",
-    "features": ["原型继承", "闭包", "异步编程", "动态类型", "一等函数"],
+    "description": "基于原型继承与事件循环的动态多范式语言，广泛应用于浏览器、服务端及云端环境",
+    "features": ["原型继承与原型链", "词法闭包与作用域", "事件循环与异步 Promise", "一等公民函数", "Proxy 与 Reflect 元编程"],
     "officialDocs": "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript"
   },
   {
@@ -15,8 +15,8 @@
     "version": "5.3",
     "paradigms": ["面向对象", "函数式"],
     "typeSystem": "static",
-    "description": "JavaScript的超集，添加了静态类型系统",
-    "features": ["静态类型检查", "接口和类型别名", "泛型", "装饰器", "高级类型推断"],
+    "description": "JavaScript 的强类型超集，在编译期提供静态类型检查与高级类型推断",
+    "features": ["静态类型检查", "结构化类型契约", "泛型与类型推断", "判别联合与类型收窄", "条件类型与映射类型"],
     "officialDocs": "https://www.typescriptlang.org/docs/"
   },
   {
@@ -25,8 +25,8 @@
     "version": "3.12",
     "paradigms": ["面向对象", "函数式", "过程式"],
     "typeSystem": "dynamic",
-    "description": "一种高级、通用的编程语言，强调代码可读性",
-    "features": ["简洁的语法", "丰富的标准库", "动态类型", "列表推导式", "装饰器"],
+    "description": "强调代码可读性与生产力的高级通用编程语言，支持多范式与庞大的标准库",
+    "features": ["动态类型与鸭子类型", "推导式与生成器", "上下文管理器", "装饰器与元编程", "结构化模式匹配"],
     "officialDocs": "https://docs.python.org/zh-cn/3/"
   },
   {
@@ -35,8 +35,8 @@
     "version": "1.21",
     "paradigms": ["并发", "过程式"],
     "typeSystem": "static",
-    "description": "Google开发的静态类型编译语言，专注于简洁和并发",
-    "features": ["Goroutines并发", "Channel通信", "接口隐式实现", "垃圾回收", "快速编译"],
+    "description": "专注于简洁性、高效编译与轻量级高并发的静态编译语言",
+    "features": ["Goroutine 与 Channel 并发", "隐式结构化接口", "defer 延迟资源释放", "显式多返回值错误处理", "快速编译与垃圾回收"],
     "officialDocs": "https://go.dev/doc/"
   },
   {
@@ -45,8 +45,8 @@
     "version": "1.75",
     "paradigms": ["函数式", "并发", "过程式"],
     "typeSystem": "static",
-    "description": "专注于安全、并发和性能的系统编程语言",
-    "features": ["所有权系统", "零成本抽象", "内存安全", "无数据竞争", "模式匹配"],
+    "description": "专注于内存安全、并发与无开销抽象的现代系统级编程语言",
+    "features": ["所有权与借用检查", "零成本抽象", "编译期无数据竞争保证", "穷尽模式匹配", "Trait 特征抽象系统"],
     "officialDocs": "https://doc.rust-lang.org/"
   },
   {
@@ -55,8 +55,8 @@
     "version": "21",
     "paradigms": ["面向对象"],
     "typeSystem": "static",
-    "description": "广泛使用的面向对象编程语言，强调跨平台性",
-    "features": ["JVM虚拟机", "强类型系统", "垃圾回收", "丰富的生态系统", "企业级支持"],
+    "description": "跨平台、面向对象的企业级编程语言，依托强大而成熟的 JVM 生态",
+    "features": ["JVM 虚拟机跨平台", "强静态类型与泛型", "分代低延迟垃圾回收", "虚拟线程 (Loom)", "记录类与密封类模式匹配"],
     "officialDocs": "https://docs.oracle.com/en/java/"
   },
   {
@@ -65,8 +65,8 @@
     "version": "12.0",
     "paradigms": ["面向对象", "函数式", "事件驱动"],
     "typeSystem": "static",
-    "description": "微软开发的现代面向对象编程语言，用于.NET平台",
-    "features": ["LINQ查询", "异步编程", "属性和事件", "泛型", "垃圾回收"],
+    "description": "微软为 .NET 平台打造的现代类型安全、多范式面向对象语言",
+    "features": ["LINQ 声明式查询", "async/await 异步流", "属性、委托与事件系统", "记录类型与模式匹配", "泛型与垃圾回收"],
     "officialDocs": "https://learn.microsoft.com/zh-cn/dotnet/csharp/"
   },
   {
@@ -75,8 +75,8 @@
     "version": "3.2",
     "paradigms": ["面向对象", "函数式"],
     "typeSystem": "dynamic",
-    "description": "一种动态、开源的编程语言，注重简洁和生产力",
-    "features": ["优雅的语法", "元编程", "块和迭代器", "Mixin模块", "鸭子类型"],
+    "description": "秉承一切皆对象理念的动态面向对象语言，注重开发者的愉悦感与生产力",
+    "features": ["纯面向对象哲学", "代码块 (Block) 与闭包", "开放类与猴子补丁", "元编程与动态方法调度", "Mixin 模块组合"],
     "officialDocs": "https://www.ruby-lang.org/zh_cn/documentation/"
   },
   {
@@ -85,8 +85,8 @@
     "version": "8.3",
     "paradigms": ["面向对象", "过程式"],
     "typeSystem": "dynamic",
-    "description": "广泛用于Web开发的服务器端脚本语言",
-    "features": ["嵌入HTML", "丰富的Web框架", "数据库集成", "动态类型", "命名空间"],
+    "description": "广泛应用于服务端 Web 开发的动态脚本语言，具备现代面向对象特性",
+    "features": ["灵活动态类型与严格类型模式", "Trait 组合与冲突裁决", "原生属性 (Attributes)", "构造函数属性提升", "联合类型与交集类型"],
     "officialDocs": "https://www.php.net/manual/zh/"
   },
   {
@@ -95,8 +95,8 @@
     "version": "5.9",
     "paradigms": ["面向对象", "函数式", "协议导向"],
     "typeSystem": "static",
-    "description": "苹果开发的现代编程语言，用于iOS和macOS开发",
-    "features": ["类型安全", "可选类型", "协议扩展", "值类型优先", "自动引用计数"],
+    "description": "苹果主导的现代类型安全编程语言，强调协议导向与值语义优先",
+    "features": ["协议导向编程与协议扩展", "可选类型与编译期空安全", "结构体值语义与写时复制", "Actor 并发与数据隔离", "自动引用计数 (ARC)"],
     "officialDocs": "https://swift.org/documentation/"
   },
   {
@@ -105,8 +105,8 @@
     "version": "1.9",
     "paradigms": ["面向对象", "函数式"],
     "typeSystem": "static",
-    "description": "JetBrains开发的现代编程语言，与Java完全互操作",
-    "features": ["空安全", "扩展函数", "协程", "数据类", "智能类型转换"],
+    "description": "JetBrains 开发的现代静态类型语言，与 Java 完全互操作且内置现代语言特性",
+    "features": ["类型系统内置空安全", "扩展函数与扩展属性", "结构化并发与协程", "属性委托与惰性求值", "智能类型转换与数据类"],
     "officialDocs": "https://kotlinlang.org/docs/"
   },
   {
@@ -115,8 +115,8 @@
     "version": "C++20",
     "paradigms": ["面向对象", "过程式", "泛型编程"],
     "typeSystem": "static",
-    "description": "高性能的通用编程语言，支持底层内存操作",
-    "features": ["手动内存管理", "模板元编程", "多重继承", "RAII", "零开销抽象"],
+    "description": "高性能系统级编译语言，支持底层硬件操作与多范式现代高级抽象",
+    "features": ["RAII 确定性资源管理", "概念与类型约束 (Concepts)", "移动语义与右值引用", "constexpr 编译期计算", "模板元编程与零开销抽象"],
     "officialDocs": "https://en.cppreference.com/"
   }
 ]
