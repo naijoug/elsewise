@@ -173,7 +173,11 @@ export default function Catalog({
           className="search"
           type="search"
           aria-label={text(locale, '搜索习语', 'Search idioms')}
-          placeholder={text(locale, '搜索特性、实现代码或语言…', 'Search features, code, or languages…')}
+          placeholder={text(
+            locale,
+            '搜索特性、实现代码或语言…',
+            'Search features, code, or languages…'
+          )}
           value={query}
           onChange={(event) => {
             setError(false);
@@ -187,10 +191,16 @@ export default function Catalog({
             value={sort}
             onChange={(event) => setSort(event.target.value as Sort)}
           >
-            <option value="original">{text(locale, '原始顺序', 'Original order')}</option>
+            <option value="original">
+              {text(locale, '原始顺序', 'Original order')}
+            </option>
             <option value="title">{text(locale, '名称', 'Name')}</option>
-            <option value="difficulty">{text(locale, '难度由低到高', 'Difficulty: easy to hard')}</option>
-            <option value="implementations">{text(locale, '实现数量', 'Implementation count')}</option>
+            <option value="difficulty">
+              {text(locale, '难度由低到高', 'Difficulty: easy to hard')}
+            </option>
+            <option value="implementations">
+              {text(locale, '实现数量', 'Implementation count')}
+            </option>
           </select>
         </label>
         <button
@@ -213,7 +223,11 @@ export default function Catalog({
           {text(locale, '重置', 'Reset')}
         </button>
       </div>
-      <div className="learning-filter" role="group" aria-label={text(locale, '学习状态', 'Learning status')}>
+      <div
+        className="learning-filter"
+        role="group"
+        aria-label={text(locale, '学习状态', 'Learning status')}
+      >
         {(
           [
             ['all', text(locale, '全部', 'All')],
@@ -238,9 +252,19 @@ export default function Catalog({
       </div>
       <LearnedNotice locale={locale} />
       <details className="filter-panel">
-        <summary>{text(locale, `筛选条件（${Object.values(filters).flat().length}）`, `Filters (${Object.values(filters).flat().length})`)}</summary>
+        <summary>
+          {text(
+            locale,
+            `筛选条件（${Object.values(filters).flat().length}）`,
+            `Filters (${Object.values(filters).flat().length})`
+          )}
+        </summary>
         <p>
-          {text(locale, '同组多选满足任一项，不同组同时满足。语言筛选表示已收录实现，不表示语言支持边界。', 'Match any option within a group and all selected groups. Language filters reflect included implementations, not language capability limits.')}
+          {text(
+            locale,
+            '同组多选满足任一项，不同组同时满足。语言筛选表示已收录实现，不表示语言支持边界。',
+            'Match any option within a group and all selected groups. Language filters reflect included implementations, not language capability limits.'
+          )}
         </p>
         <div className="filter-groups">
           {groups.map(([key, title, options]) => (
@@ -261,7 +285,10 @@ export default function Catalog({
         </div>
       </details>
       {!!Object.values(filters).flat().length && (
-        <div className="active-filters" aria-label={text(locale, '已选条件', 'Active filters')}>
+        <div
+          className="active-filters"
+          aria-label={text(locale, '已选条件', 'Active filters')}
+        >
           {groups.flatMap(([key, title, options]) =>
             filters[key].map((value) => (
               <button
@@ -276,11 +303,21 @@ export default function Catalog({
         </div>
       )}
       {term && !index && !error && (
-        <p role="status">{text(locale, '正在加载代码搜索索引，先显示摘要匹配…', 'Loading code search. Showing summary matches for now…')}</p>
+        <p role="status">
+          {text(
+            locale,
+            '正在加载代码搜索索引，先显示摘要匹配…',
+            'Loading code search. Showing summary matches for now…'
+          )}
+        </p>
       )}
       {term && error && (
         <p role="alert">
-          {text(locale, '代码搜索暂不可用，当前仅匹配摘要。', 'Code search is temporarily unavailable. Only summaries are being matched.')}
+          {text(
+            locale,
+            '代码搜索暂不可用，当前仅匹配摘要。',
+            'Code search is temporarily unavailable. Only summaries are being matched.'
+          )}
           <button
             onClick={() => {
               setError(false);
@@ -291,15 +328,24 @@ export default function Catalog({
           </button>
         </p>
       )}
-      <p role="status">{text(locale, `${results.length} 个习语`, `${results.length} idioms`)}</p>
-      <div className="catalog" role="list" aria-label={text(locale, '编程习语列表', 'Programming idioms')}>
+      <p role="status">
+        {text(locale, `${results.length} 个习语`, `${results.length} idioms`)}
+      </p>
+      <div
+        className="catalog"
+        role="list"
+        aria-label={text(locale, '编程习语列表', 'Programming idioms')}
+      >
         {results.map((item) => (
           <article className="card" role="listitem" key={item.id}>
             <h2>
               <a href={`${base}/idiom/${encodeURIComponent(item.id)}/`}>
                 {item.title}
                 {favorites.includes(item.id) && (
-                  <span aria-label={text(locale, '已收藏', 'Favorited')}> ★</span>
+                  <span aria-label={text(locale, '已收藏', 'Favorited')}>
+                    {' '}
+                    ★
+                  </span>
                 )}
               </a>
             </h2>
@@ -315,7 +361,13 @@ export default function Catalog({
             <div className="metadata">
               <span className="badge">{item.category}</span>
               <span className="badge">{difficulty[item.difficulty]}</span>
-              <span className="badge">{text(locale, `${item.languageIds.length} 种实现`, `${item.languageIds.length} implementations`)}</span>
+              <span className="badge">
+                {text(
+                  locale,
+                  `${item.languageIds.length} 种实现`,
+                  `${item.languageIds.length} implementations`
+                )}
+              </span>
               {item.languageIds.map((id) => (
                 <span className="badge" key={id}>
                   {languageName(id)}
@@ -331,7 +383,13 @@ export default function Catalog({
         ))}
       </div>
       {!results.length && (
-        <p className="notice">{text(locale, '没有匹配结果。试试清空条件，或换一个关键词。', 'No matches. Clear the filters or try another keyword.')}</p>
+        <p className="notice">
+          {text(
+            locale,
+            '没有匹配结果。试试清空条件，或换一个关键词。',
+            'No matches. Clear the filters or try another keyword.'
+          )}
+        </p>
       )}
     </section>
   );

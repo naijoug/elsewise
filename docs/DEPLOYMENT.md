@@ -78,9 +78,9 @@ GHP_BASE=/elsewise/ npm run preview
 PR 使用 preview 环境构建并上传 artifact，不会创建在线预览站点或发布预览链接。
 CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布产物的检查为准。
 
-## 历史可选托管说明（Astro 迁移后未重新验收）
+## 可选静态托管配置（未配置 GitHub Actions 自动发布）
 
-以下 Vercel/Netlify 旧 SPA 配置不属于本次已验收发布范围；不要据此声称可直接发布第二代。
+以下 Vercel 与 Netlify 配置已对齐 Astro 静态多页产物（`dist/`、尾斜杠路由、独立 `404.html` 与 `/_astro/*` 缓存响应头），但仅 GitHub Pages 接入了仓库自动发布与验收流水线。
 
 ## Vercel 可选方案
 
@@ -88,7 +88,7 @@ CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布
 
 - 安装：`npm ci`；构建：`npm run build:production`；输出：`dist`。
 - Node 版本使用 package.json engines 指定的 22.x。
-- 根路径部署保持 `GHP_BASE` 未设置；配置已包含 SPA rewrite 和静态资源缓存响应头。
+- 根路径部署保持 `GHP_BASE` 未设置；配置启用 `trailingSlash: true`、静态路由直出、独立 `404.html` 回退与 `/_astro/*` 静态资源缓存响应头（不使用 SPA `/index.html` 重写）。
 - Git 集成的生产分支和预览部署由 Vercel 项目设置控制，不代表本仓库已配置 GitHub Actions Vercel 发布。
 
 如另外实现 CLI 或 Actions 发布，再按选定流程配置 Vercel 凭据；无需为 Pages 发布准备这些凭据。
@@ -99,7 +99,7 @@ CI 构建和 Pages 发布构建的路径/环境可能不同，应以最终发布
 
 - Node 22；构建：`npm run build:production`；输出：`dist`。
 - 安装依赖使用锁文件；本地和自定义流水线使用 `npm ci`。
-- 根路径部署保持 `GHP_BASE` 未设置；配置已包含 200 SPA rewrite、缓存和响应头。
+- 根路径部署保持 `GHP_BASE` 未设置；配置使用静态路由直出、独立 `404.html` 404 响应以及 `/_astro/*` 缓存和安全响应头（不使用 200 SPA `/index.html` 重写）。
 - 自动发布与预览由 Netlify 项目设置控制。
 
 平台托管构建会再次生成产物，不能把本地检查当作远程产物已经验收。

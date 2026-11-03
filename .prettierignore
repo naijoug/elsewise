@@ -1,5 +1,9 @@
 node_modules
 dist
+v2/node_modules
+v2/dist
+v2/.astro
+test-results
 build
 coverage
 .git

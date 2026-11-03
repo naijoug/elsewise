@@ -240,4 +240,17 @@ describe('pre-deploy orchestration', () => {
       'production:run validate\n'
     );
   });
+
+  it('rejects unsupported Node versions before running validation', async () => {
+    const root = await workspace();
+    const env = await commandFixture(root);
+    await put(
+      root,
+      'package.json',
+      JSON.stringify({ engines: { node: '^99.0.0' } })
+    );
+    const result = run(root, 'pre-deploy-check.sh', env);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('Node ^99.0.0 required');
+  });
 });
