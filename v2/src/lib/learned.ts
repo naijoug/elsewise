@@ -1,3 +1,4 @@
+import { toggledTopic } from './knowledge-identity';
 import { useSyncExternalStore } from 'react';
 
 export const learnedKey = 'elsewise_learned_v1';
@@ -64,9 +65,7 @@ export function useLearned(): State {
 export function toggleLearned(id: string) {
   if (!id) return;
   const current: State = unsaved ? JSON.parse(snapshot()) : read();
-  const ids = current.ids.includes(id)
-    ? current.ids.filter((item) => item !== id)
-    : [...current.ids, id];
+  const ids = toggledTopic(current.ids, id);
   let storage: State['storage'] = 'saved';
   try {
     localStorage.setItem(learnedKey, JSON.stringify({ version: 1, ids }));

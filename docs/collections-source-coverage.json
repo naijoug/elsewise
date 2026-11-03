@@ -1,0 +1,553 @@
+{
+  "checkedAt": "2026-10-28",
+  "canonicalTaskIds": [
+    "sequence-collections",
+    "key-value-maps"
+  ],
+  "languageCount": 12,
+  "entryCount": 24,
+  "scope": {
+    "zh": "仅核查所列官方或维护者文档章节，不代表完整手册通读。",
+    "en": "Only listed official or maintainer documentation chapters reviewed, not every manual."
+  },
+  "execution": {
+    "zh": "24 个原创示例未编译或执行。",
+    "en": "24 original examples not compiled or executed."
+  },
+  "entries": [
+    {
+      "taskId": "sequence-collections",
+      "languageId": "javascript",
+      "baseline": "Node.js 22；内置 Array",
+      "sources": [
+        {
+          "title": "ECMAScript® 2024 Language Specification",
+          "url": "https://tc39.es/ecma262/2024/multipage/indexed-collections.html#sec-array.prototype.push",
+          "section": "23.1.3.23 Array.prototype.push; 23.1.3.38 values; 23.1.5.1 CreateArrayIterator",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "ECMAScript® 2024 Language Specification",
+          "url": "https://tc39.es/ecma262/2024/multipage/ordinary-and-exotic-objects-behaviours.html#sec-array-exotic-objects",
+          "section": "10.4.2 Array Exotic Objects",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "typescript",
+      "baseline": "TypeScript 5.3；target ES2022；生成的 JavaScript 用 Node.js 22 运行",
+      "sources": [
+        {
+          "title": "TypeScript: Documentation - Everyday Types",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays",
+          "section": "Arrays",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "TypeScript: TSConfig Option: lib",
+          "url": "https://www.typescriptlang.org/tsconfig/lib.html",
+          "section": "lib",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "TypeScript: TSConfig Option: target",
+          "url": "https://www.typescriptlang.org/tsconfig/target.html",
+          "section": "target",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "ECMAScript® 2024 Language Specification",
+          "url": "https://tc39.es/ecma262/2024/multipage/indexed-collections.html#sec-array.prototype.push",
+          "section": "23.1.3.23 Array.prototype.push; 23.1.3.38 values; 23.1.5.1 CreateArrayIterator",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "ECMAScript® 2024 Language Specification",
+          "url": "https://tc39.es/ecma262/2024/multipage/ordinary-and-exotic-objects-behaviours.html#sec-array-exotic-objects",
+          "section": "10.4.2 Array Exotic Objects",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "python",
+      "baseline": "Python 3.12；内置 list",
+      "sources": [
+        {
+          "title": "5. Data Structures — Python 3.12 documentation",
+          "url": "https://docs.python.org/3.12/tutorial/datastructures.html#more-on-lists",
+          "section": "5.1 More on Lists",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Built-in Types — Python 3.12 documentation",
+          "url": "https://docs.python.org/3.12/library/stdtypes.html#common-sequence-operations",
+          "section": "Common Sequence Operations; Lists",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "go",
+      "baseline": "Go 1.22；标准库",
+      "sources": [
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#Slice_types",
+          "section": "Slice types",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#Appending_to_and_copying_slices",
+          "section": "Appending to and copying slices",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#Index_expressions",
+          "section": "Index expressions",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#For_range",
+          "section": "For statements with range clause",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "rust",
+      "baseline": "Rust 1.56+；2021 edition；标准库",
+      "sources": [
+        {
+          "title": "Vec in std::vec — Rust",
+          "url": "https://doc.rust-lang.org/stable/std/vec/struct.Vec.html",
+          "section": "Examples; Indexing; push; len; iter",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Rust Edition Guide — Rust 2021",
+          "url": "https://doc.rust-lang.org/edition-guide/rust-2021/index.html",
+          "section": "Release version",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "java",
+      "baseline": "Java 17；JDK 标准库 ArrayList。",
+      "sources": [
+        {
+          "title": "ArrayList (Java SE 17 & JDK 17)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html",
+          "section": "Class description; add(E); get(int); size(); iterator()",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Arrays (Java SE 17 & JDK 17)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#asList(T...)",
+          "section": "asList(T...)",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "List (Java SE 17 & JDK 17)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html",
+          "section": "Interface description; Unmodifiable Lists",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "csharp",
+      "baseline": "C# 12 / .NET 8；System.Collections.Generic.List<T>。",
+      "sources": [
+        {
+          "title": "List<T> Class",
+          "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-8.0",
+          "section": "Examples; Remarks; Count; Item[Int32]; Add(T)",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Arrays",
+          "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/arrays",
+          "section": "Array properties",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "IReadOnlyList<T> Interface",
+          "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=net-8.0",
+          "section": "Remarks",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "What's new in C# 12",
+          "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12",
+          "section": "Introduction",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "ruby",
+      "baseline": "Ruby 3.3；内置 Array",
+      "sources": [
+        {
+          "title": "class Array - Documentation for Ruby 3.3",
+          "url": "https://docs.ruby-lang.org/en/3.3/Array.html",
+          "section": "Creating Arrays; Array Indexes; #<<; #[]; #length; #each",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "php",
+      "baseline": "PHP 8.2；内建 array，使用连续的零基整数键。",
+      "sources": [
+        {
+          "title": "PHP: Arrays - Manual",
+          "url": "https://www.php.net/manual/en/language.types.array.php",
+          "section": "Arrays; Syntax; Accessing array elements with square bracket syntax; Creating/modifying with square bracket syntax",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "PHP: count - Manual",
+          "url": "https://www.php.net/manual/en/function.count.php",
+          "section": "Description; Return Values",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "PHP: foreach - Manual",
+          "url": "https://www.php.net/manual/en/control-structures.foreach.php",
+          "section": "foreach forms",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "swift",
+      "baseline": "Swift 5.9；标准库",
+      "sources": [
+        {
+          "title": "The Swift Programming Language — Collection Types (official source)",
+          "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/CollectionTypes.md",
+          "section": "Mutability of Collections; Arrays; Accessing and Modifying an Array; Iterating Over an Array",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "kotlin",
+      "baseline": "Kotlin 1.9 / JVM；Kotlin 标准库 MutableList。",
+      "sources": [
+        {
+          "title": "Collections overview",
+          "url": "https://kotlinlang.org/docs/collections-overview.html",
+          "section": "Collection types; Collection; List",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "mutableListOf",
+          "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/mutable-list-of.html",
+          "section": "vararg overload; Since Kotlin 1.0",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "sequence-collections",
+      "languageId": "cpp",
+      "baseline": "C++20；标准库",
+      "sources": [
+        {
+          "title": "C++ working draft — Class template vector",
+          "url": "https://eel.is/c++draft/vector",
+          "section": "[vector.overview]; [vector.capacity]; [vector.modifiers]",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "C++ working draft — Sequence containers",
+          "url": "https://eel.is/c++draft/sequence.reqmts",
+          "section": "[sequence.reqmts], element access requirements",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "javascript",
+      "baseline": "Node.js 22；内置 Map",
+      "sources": [
+        {
+          "title": "ECMAScript® 2024 Language Specification",
+          "url": "https://tc39.es/ecma262/2024/multipage/keyed-collections.html#sec-map-objects",
+          "section": "24.1 Map Objects; 24.1.3.6 get; 24.1.3.7 has; 24.1.3.9 set; 24.1.5.1 CreateMapIterator",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "typescript",
+      "baseline": "TypeScript 5.3；target ES2022；生成的 JavaScript 用 Node.js 22 运行",
+      "sources": [
+        {
+          "title": "TypeScript: TSConfig Option: lib",
+          "url": "https://www.typescriptlang.org/tsconfig/lib.html",
+          "section": "lib",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "TypeScript: TSConfig Option: target",
+          "url": "https://www.typescriptlang.org/tsconfig/target.html",
+          "section": "target",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "TypeScript: Documentation - Iterators and Generators",
+          "url": "https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html#forof-statements",
+          "section": "Iterables; for..of statements",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "ECMAScript® 2024 Language Specification",
+          "url": "https://tc39.es/ecma262/2024/multipage/keyed-collections.html#sec-map-objects",
+          "section": "24.1 Map Objects; 24.1.3.6 get; 24.1.3.7 has; 24.1.3.9 set; 24.1.5.1 CreateMapIterator",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "TypeScript 5.3.3 standard library — es2015.collection.d.ts",
+          "url": "https://raw.githubusercontent.com/microsoft/TypeScript/v5.3.3/src/lib/es2015.collection.d.ts",
+          "section": "interface Map<K, V>: get, has, set; MapConstructor",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "python",
+      "baseline": "Python 3.12；内置 dict",
+      "sources": [
+        {
+          "title": "5. Data Structures — Python 3.12 documentation",
+          "url": "https://docs.python.org/3.12/tutorial/datastructures.html#dictionaries",
+          "section": "5.5 Dictionaries; 5.6 Looping Techniques",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Built-in Types — Python 3.12 documentation",
+          "url": "https://docs.python.org/3.12/library/stdtypes.html#mapping-types-dict",
+          "section": "Mapping Types — dict; get; items; insertion-order guarantee",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "go",
+      "baseline": "Go 1.22；标准库",
+      "sources": [
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#Map_types",
+          "section": "Map types",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#Index_expressions",
+          "section": "Index expressions",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec#For_range",
+          "section": "For statements with range clause",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "rust",
+      "baseline": "Rust 1.56+；2021 edition；标准库",
+      "sources": [
+        {
+          "title": "HashMap in std::collections — Rust",
+          "url": "https://doc.rust-lang.org/stable/std/collections/struct.HashMap.html",
+          "section": "new; insert; contains_key; get; iter; IntoIterator",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "The Rust Edition Guide — Rust 2021",
+          "url": "https://doc.rust-lang.org/edition-guide/rust-2021/index.html",
+          "section": "Release version",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "java",
+      "baseline": "Java 17；JDK 标准库 LinkedHashMap。",
+      "sources": [
+        {
+          "title": "LinkedHashMap (Java SE 17 & JDK 17)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html",
+          "section": "Class description: insertion order, reinsertion, null elements",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Map (Java SE 17 & JDK 17)",
+          "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html",
+          "section": "containsKey(Object); get(Object); put(K,V); entrySet()",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "csharp",
+      "baseline": "C# 12 / .NET 8；Dictionary<string, int?>。",
+      "sources": [
+        {
+          "title": "Dictionary<TKey,TValue> Class",
+          "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2?view=net-8.0",
+          "section": "Examples; Remarks: enumeration order; Item[TKey]; ContainsKey(TKey)",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Dictionary<TKey,TValue>.TryGetValue(TKey, TValue) Method",
+          "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2.trygetvalue?view=net-8.0",
+          "section": "Parameters; Returns; Examples",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "ruby",
+      "baseline": "Ruby 3.3；内置 Hash",
+      "sources": [
+        {
+          "title": "class Hash - Documentation for Ruby 3.3",
+          "url": "https://docs.ruby-lang.org/en/3.3/Hash.html",
+          "section": "Creating a Hash; Entry Order; Default Values; #[]=; #[]; #key?; #each",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "php",
+      "baseline": "PHP 8.2；内建关联 array。",
+      "sources": [
+        {
+          "title": "PHP: Arrays - Manual",
+          "url": "https://www.php.net/manual/en/language.types.array.php",
+          "section": "Arrays; Syntax: key casts; Accessing array elements with square bracket syntax; Creating/modifying with square bracket syntax",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "PHP: array_key_exists - Manual",
+          "url": "https://www.php.net/manual/en/function.array-key-exists.php",
+          "section": "Description; Example #2 array_key_exists() vs isset()",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "PHP: foreach - Manual",
+          "url": "https://www.php.net/manual/en/control-structures.foreach.php",
+          "section": "Key/value foreach form",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "swift",
+      "baseline": "Swift 5.9；标准库",
+      "sources": [
+        {
+          "title": "The Swift Programming Language — Collection Types (official source)",
+          "url": "https://raw.githubusercontent.com/swiftlang/swift-book/main/TSPL.docc/LanguageGuide/CollectionTypes.md",
+          "section": "Dictionaries; Accessing and Modifying a Dictionary; Iterating Over a Dictionary",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "kotlin",
+      "baseline": "Kotlin 1.9 / JVM；标准库 linkedMapOf。",
+      "sources": [
+        {
+          "title": "linkedMapOf",
+          "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/linked-map-of.html",
+          "section": "vararg overload; iteration order; Since Kotlin 1.0",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Map-specific operations",
+          "url": "https://kotlinlang.org/docs/map-operations.html",
+          "section": "Retrieve keys and values; Map write operations",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "containsKey",
+          "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/contains-key.html",
+          "section": "containsKey; Since Kotlin",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Collections overview",
+          "url": "https://kotlinlang.org/docs/collections-overview.html",
+          "section": "Collection types; Map",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "LinkedHashMap",
+          "url": "https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-linked-hash-map/",
+          "section": "JVM typealias; Iteration order",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "taskId": "key-value-maps",
+      "languageId": "cpp",
+      "baseline": "C++20；标准库",
+      "sources": [
+        {
+          "title": "C++ working draft — Class template unordered_map",
+          "url": "https://eel.is/c++draft/unord.map",
+          "section": "[unord.map.overview]; [unord.map.elem]",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "C++ working draft — Unordered associative containers",
+          "url": "https://eel.is/c++draft/unord.req",
+          "section": "[unord.req.general], ordering and contains",
+          "checkedAt": "2026-10-28"
+        },
+        {
+          "title": "Microsoft Learn — unordered_map Class",
+          "url": "https://learn.microsoft.com/en-us/cpp/standard-library/unordered-map-class?view=msvc-170#contains",
+          "section": "Members; unordered_map::contains",
+          "checkedAt": "2026-10-28"
+        }
+      ]
+    }
+  ]
+}

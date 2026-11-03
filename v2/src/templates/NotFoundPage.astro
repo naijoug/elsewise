@@ -4,4 +4,4 @@ import {routeBase,type Locale} from '../lib/localized-content';
 interface Props {locale?:Locale}
 const {locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);
 ---
-<Layout title={en?'Page not found':'页面未找到'} locale={locale}><section class="document-heading"><p class="eyebrow">404</p><h1>{en?'This page could not be found.':'这个页面暂时找不到。'}</h1><p>{en?'The link may have changed. Continue from the documentation or idiom directory.':'链接可能已经变更。你可以返回文档目录，或继续浏览习语。'}</p><div class="actions"><a class="button-link" href={`${base}/`}>{en?'Browse docs':'浏览文档'}</a><a class="button-link" href={`${base}/idioms/`}>{en?'Browse idioms':'浏览习语'}</a></div></section></Layout>
+<Layout title={en?'Page not found':'页面未找到'} locale={locale}><section class="document-heading"><p class="eyebrow">404</p><h1>{en?'This page could not be found.':'这个页面暂时找不到。'}</h1><p>{en?'The link may have changed. Continue from the knowledge directory.':'链接可能已经变更。你可以返回知识目录继续查找。'}</p><div class="actions"><a class="button-link" href={`${base}/`}>{en?'Browse knowledge':'浏览知识目录'}</a></div></section></Layout>

@@ -1,3 +1,5 @@
+import ActionIcon from './ActionIcon';
+import { hasTopic, toggledTopic } from '../lib/knowledge-identity';
 import { text, type Locale } from '../lib/ui-i18n';
 import { useEffect, useRef, useState } from 'react';
 import { usePreferences, updatePreferences } from '../lib/preferences';
@@ -37,7 +39,7 @@ export default function DetailControls({
       .toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase())
   );
-  const favorite = preferences.favoriteIdioms.includes(idiomId);
+  const favorite = hasTopic(preferences.favoriteIdioms, idiomId);
   useEffect(() => {
     const grid = document.querySelector<HTMLElement>('.code-grid');
     if (grid) grid.dataset.columns = String(Math.min(selected.length, 2));
@@ -53,21 +55,21 @@ export default function DetailControls({
       : [...selected, id];
     if (next.length) updatePreferences({ selectedLanguages: next });
   }
+  const favoriteLabel = favorite ? text(locale, '已收藏', 'Favorited') : text(locale, `收藏${subject || '文档'}`, 'Favorite');
   return (
     <div className="detail-controls">
       <button
+        className="icon-action favorite-action"
+        aria-label={favoriteLabel}
         aria-pressed={favorite}
         onClick={() =>
           updatePreferences({
-            favoriteIdioms: favorite
-              ? preferences.favoriteIdioms.filter((id) => id !== idiomId)
-              : [...new Set([...preferences.favoriteIdioms, idiomId])],
+            favoriteIdioms: toggledTopic(preferences.favoriteIdioms, idiomId),
           })
         }
       >
-        {favorite
-          ? text(locale, '★ 已收藏', '★ Favorited')
-          : text(locale, `☆ 收藏${subject || '文档'}`, '☆ Favorite')}
+        <ActionIcon name="bookmark" />
+        <span className="action-tip" aria-hidden="true">{favoriteLabel}</span>
       </button>
       <LearnedButton id={idiomId} locale={locale} />
       <LearnedNotice locale={locale} />
@@ -98,12 +100,15 @@ export default function DetailControls({
             onChange={(event) => setQuery(event.target.value)}
           />
           <button
+            className="icon-action"
+            aria-label={text(locale, '恢复默认', 'Reset selection')}
             onClick={() => {
               setQuery('');
               updatePreferences({ selectedLanguages: [] });
             }}
           >
-            {text(locale, '恢复默认', 'Reset selection')}
+            <ActionIcon name="reset" />
+            <span className="action-tip" aria-hidden="true">{text(locale, '恢复默认', 'Reset selection')}</span>
           </button>
         </div>
         {!visibleOptions.length && (

@@ -15,17 +15,17 @@ const conceptual = JSON.parse(
 const foundations = JSON.parse(
   readFileSync(new URL('../v2/src/data/foundations.json', import.meta.url))
 );
-const documents = [...foundations, ...practical, ...conceptual];
+const collections = JSON.parse(
+  readFileSync(new URL('../v2/src/data/collections.json', import.meta.url))
+);
+const documents = [...foundations, ...collections, ...practical, ...conceptual];
 const english = JSON.parse(
   readFileSync(new URL('../v2/src/data/english-content.json', import.meta.url))
 );
-const learningFilter = (page, name) =>
-  page
-    .getByRole('group', { name: '学习状态', exact: true })
-    .getByRole('button', { name, exact: true });
+const savedFilter = (page) =>
+  page.getByRole('button', { name: '仅看收藏', exact: true });
 const base = (process.env.GHP_BASE || '/').replace(/\/$/, '') + '/';
-const cards = (page) =>
-  page.getByRole('list', { name: '编程习语列表' }).getByRole('listitem');
+const cards = (page) => page.locator('[data-knowledge-id]');
 async function hydrated(page) {
   await page.waitForFunction(() =>
     Array.from(document.querySelectorAll('astro-island[client="load"]')).every(
@@ -50,7 +50,7 @@ async function expandLanguagePicker(page) {
   return picker;
 }
 
-async function open(page, path = 'idioms/') {
+async function open(page, path = './') {
   const response = await page.goto(path);
   await hydrated(page);
   return response;
@@ -73,45 +73,68 @@ test('static entry has no full content or highlighter payload; search and combin
   });
   const response = await open(page);
   expect(response.status()).toBe(200);
-  await expect(page).toHaveTitle('模式与习语 · 异曲');
-  await expect(cards(page)).toHaveCount(idioms.length);
+  await expect(page).toHaveTitle('编程知识目录 · 异曲');
+  await expect(cards(page)).toHaveCount(50);
   await expect(
     page.getByRole('link', { name: '异曲', exact: true })
   ).toBeVisible();
   await expect(
-    page.getByRole('link', { name: 'GitHub（新窗口）' })
+    page.getByRole('link', { name: 'GitHub（新窗口）' }).first()
   ).toHaveAttribute('href', 'https://github.com/naijoug/elsewise');
   expect(
     requests.some((url) =>
-      /search-index|idioms.*\.json|prism|highlighter/i.test(url)
+      /knowledge-index|search-index|idioms.*\.json|prism|highlighter/i.test(url)
     )
   ).toBe(false);
   const initialHTML = await response.text();
   expect(initialHTML).not.toContain('&quot;implementations&quot;');
   expect(initialHTML).not.toContain('code-array-map-javascript');
-  await page.getByRole('searchbox', { name: '搜索习语' }).fill('数组映射');
+  await page.getByRole('searchbox', { name: '搜索知识点' }).fill('数组映射');
   await expect(cards(page)).toHaveCount(1);
-  await expect(
-    page.getByText('正在加载代码搜索索引，先显示摘要匹配…')
-  ).toHaveCount(0);
-  expect(requests.some((url) => url.endsWith('/search-index.json'))).toBe(true);
-  await page.getByRole('button', { name: '重置', exact: true }).click();
-  await expect(cards(page)).toHaveCount(idioms.length);
-  await page.locator('.filter-panel summary').click();
-  await page.getByRole('checkbox', { name: 'Python', exact: true }).check();
-  await page.getByRole('checkbox', { name: '初级', exact: true }).check();
-  const expected = idioms.filter(
-    (item) =>
-      item.difficulty === 'beginner' &&
-      item.implementations.some((impl) => impl.languageId === 'python')
+  expect(requests.some((url) => url.endsWith('/knowledge-index.json'))).toBe(
+    true
   );
+  await page.getByRole('button', { name: '重置', exact: true }).click();
+  await expect(cards(page)).toHaveCount(50);
+  await page
+    .getByRole('navigation', { name: '知识章节' })
+    .getByRole('button', { name: /集合与迭代/ })
+    .click();
+  await page.locator('.knowledge-language summary').click();
+  await page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Python', exact: true })
+    .click();
+  const expected = [
+    ...documents.filter(
+      (item) =>
+        [
+          'sequence-collections',
+          'key-value-maps',
+          'python-comprehensions',
+          'javascript-generators',
+        ].includes(item.id) &&
+        item.entries.some((entry) => entry.languageId === 'python')
+    ),
+    ...idioms.filter(
+      (item) =>
+        [
+          'destructuring',
+          'array-map',
+          'array-filter',
+          'iterator-pattern',
+          'pipeline-pattern',
+        ].includes(item.id) &&
+        item.implementations.some((entry) => entry.languageId === 'python')
+    ),
+  ];
   await expect(cards(page)).toHaveCount(expected.length);
   await page
-    .getByRole('searchbox', { name: '搜索习语' })
+    .getByRole('searchbox', { name: '搜索知识点' })
     .fill('no-such-idiom-release-test');
   await expect(cards(page)).toHaveCount(0);
   await expect(
-    page.getByText('没有匹配结果。试试清空条件，或换一个关键词。')
+    page.getByRole('heading', { name: '没有匹配的知识点' })
   ).toBeVisible();
   expect(failures).toEqual([]);
 });
@@ -119,19 +142,26 @@ test('static entry has no full content or highlighter payload; search and combin
 test('search index failure preserves summaries and retry restores code search', async ({
   page,
 }) => {
-  await page.route('**/search-index.json', (route) =>
+  await page.route('**/knowledge-index.json', (route) =>
     route.fulfill({ status: 503, body: 'Unavailable' })
   );
   await open(page);
-  await expect(cards(page)).toHaveCount(idioms.length);
+  await expect(cards(page)).toHaveCount(50);
   const term = 'numbers.map(n => n * 2)';
-  await page.getByRole('searchbox', { name: '搜索习语' }).fill(term);
-  await expect(page.getByRole('alert')).toContainText('代码搜索暂不可用');
-  await page.unroute('**/search-index.json');
+  await page.getByRole('searchbox', { name: '搜索知识点' }).fill(term);
+  await expect(
+    page.getByRole('status').filter({ hasText: '全文搜索暂不可用' })
+  ).toContainText('全文搜索暂不可用');
+  await page.unroute('**/knowledge-index.json');
   await page.getByRole('button', { name: '重试', exact: true }).click();
-  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(
+    page.getByRole('status').filter({ hasText: '全文搜索暂不可用' })
+  ).toHaveCount(0);
   await expect(cards(page).filter({ hasText: '数组映射' })).toHaveCount(1);
-  await expect(page.getByLabel('搜索命中').first()).toContainText('代码');
+  await expect(cards(page).first()).toHaveAttribute(
+    'data-knowledge-id',
+    'array-map'
+  );
 });
 
 test('delayed code index keeps summaries usable and resolves the latest search', async ({
@@ -141,28 +171,26 @@ test('delayed code index keeps summaries usable and resolves the latest search',
   const gate = new Promise((resolve) => {
     release = resolve;
   });
-  await page.route('**/search-index.json', async (route) => {
+  await page.route('**/knowledge-index.json', async (route) => {
     await gate;
     await route.continue();
   });
   try {
     await open(page);
-    const search = page.getByRole('searchbox', { name: '搜索习语' });
+    const search = page.getByRole('searchbox', { name: '搜索知识点' });
     await search.fill('数组映射');
     await expect(cards(page)).toHaveCount(1);
-    await expect(
-      page.getByText('正在加载代码搜索索引，先显示摘要匹配…')
-    ).toBeVisible();
+    await expect(search).toHaveValue('数组映射');
     await search.fill('no-such-idiom-while-index-pending');
     await expect(cards(page)).toHaveCount(0);
     release();
-    await expect(
-      page.getByText('正在加载代码搜索索引，先显示摘要匹配…')
-    ).toHaveCount(0);
     await expect(cards(page)).toHaveCount(0);
     await search.fill('numbers.map(n => n * 2)');
     await expect(cards(page).filter({ hasText: '数组映射' })).toHaveCount(1);
-    await expect(page.getByLabel('搜索命中').first()).toContainText('代码');
+    await expect(cards(page).first()).toHaveAttribute(
+      'data-knowledge-id',
+      'array-map'
+    );
   } finally {
     release();
   }
@@ -199,11 +227,11 @@ test('favorites persist, appear in their dedicated scope, and stay removed', asy
   page,
 }) => {
   await open(page, 'idiom/array-map/');
-  await page.getByRole('button', { name: '☆ 收藏文档', exact: true }).click();
+  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
   await page.reload();
   await hydrated(page);
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toBeVisible();
   await page
     .getByRole('navigation', { name: '主导航' })
@@ -218,7 +246,7 @@ test('favorites persist, appear in their dedicated scope, and stay removed', asy
     .getByRole('link', { name: /数组映射/ })
     .click();
   await hydrated(page);
-  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
+  await page.getByRole('button', { name: '已收藏', exact: true }).click();
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(0);
 });
@@ -254,9 +282,14 @@ test('language directory, deep links, direct catalog query/hash and 404 stay ins
     '资料记录版本'
   );
   await expect(cards(page)).toHaveCount(
-    idioms.filter((item) =>
-      item.implementations.some((impl) => impl.languageId === 'python')
-    ).length
+    documents.filter((item) =>
+      item.entries.some((entry) => entry.languageId === 'python')
+    ).length +
+      idioms.filter(
+        (item) =>
+          item.id !== 'closure' &&
+          item.implementations.some((entry) => entry.languageId === 'python')
+      ).length
   );
   const hrefs = await page
     .locator('a[href^="/"]')
@@ -265,7 +298,10 @@ test('language directory, deep links, direct catalog query/hash and 404 stay ins
   const catalogResponse = await open(page, 'idioms/?q=python#saved');
   expect(catalogResponse.status()).toBe(200);
   await expect.poll(() => new URL(page.url()).pathname).toBe(`${base}idioms/`);
-  await expect(cards(page)).toHaveCount(idioms.length);
+  await expect(page.getByRole('searchbox', { name: '搜索知识点' })).toHaveValue(
+    'python'
+  );
+  await expect(page.locator('[data-knowledge-id="array-map"]')).toBeVisible();
   expect(new URL(page.url()).search).toBe('?q=python');
   expect(new URL(page.url()).hash).toBe('#saved');
   for (const missing of ['not-a-real-page', 'idiom/missing-idiom/']) {
@@ -274,9 +310,9 @@ test('language directory, deep links, direct catalog query/hash and 404 stay ins
     await expect(
       page.getByRole('heading', { name: '这个页面暂时找不到。' })
     ).toBeVisible();
-    await page.getByRole('link', { name: '浏览习语', exact: true }).click();
+    await page.getByRole('link', { name: '浏览知识目录', exact: true }).click();
     await hydrated(page);
-    expect(new URL(page.url()).pathname).toBe(`${base}idioms/`);
+    expect(new URL(page.url()).pathname).toBe(base);
   }
 });
 
@@ -295,7 +331,7 @@ test('ByteBite preferences migrate without losing legacy data or resurrecting re
   }, legacy);
   await open(page, 'idiom/array-map/');
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toBeVisible();
   await expect(page.locator('#code-array-map-python')).toBeVisible();
   await expect(page.locator('#code-array-map-rust')).toBeVisible();
@@ -310,11 +346,11 @@ test('ByteBite preferences migrate without losing legacy data or resurrecting re
       JSON.parse(localStorage.getItem('bytebite_preferences'))
     )
   ).toEqual(legacy);
-  await page.getByRole('button', { name: '★ 已收藏', exact: true }).click();
+  await page.getByRole('button', { name: '已收藏', exact: true }).click();
   await page.reload();
   await hydrated(page);
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档', exact: true })
+    page.getByRole('button', { name: '收藏文档', exact: true })
   ).toBeVisible();
 });
 
@@ -328,7 +364,7 @@ test('invalid saved preferences do not crash static pages or hydration', async (
     )
   );
   await open(page);
-  await expect(cards(page)).toHaveCount(idioms.length);
+  await expect(cards(page)).toHaveCount(50);
   await open(page, 'idiom/array-map/');
   await expect(page.locator('#code-array-map-python')).toBeVisible();
 });
@@ -420,49 +456,104 @@ test('without JavaScript, complete detail source and links remain available', as
       await expect(code).toBeVisible();
       expect(await code.textContent()).toBe(impl.code);
     }
-    await page.getByRole('link', { name: '← 模式与习语', exact: true }).click();
-    await expect(cards(page)).toHaveCount(idioms.length);
+    await page
+      .getByRole('navigation', { name: '主导航' })
+      .getByRole('link', { name: '知识目录', exact: true })
+      .click();
+    await expect(cards(page)).toHaveCount(50);
   } finally {
     await context.close();
   }
 });
 
-test('Get marks are separate, persist across detail navigation/reload, and compose with filters', async ({
+test('catalog bookmarks persist across detail navigation and reload without changing learned records', async ({
   page,
 }) => {
   await open(page);
   const first = cards(page).first();
-  const title = await first.getByRole('heading').innerText();
-  await first.getByRole('button', { name: `标记学会: ${title}` }).click();
+  const title = (await first.locator('.knowledge-title').innerText())
+    .replace(/[↗→]/g, '')
+    .trim();
   await expect(
-    first.getByRole('button', { name: `已学会: ${title}` })
-  ).toHaveAttribute('aria-pressed', 'true');
-  await learningFilter(page, '已学会').click();
-  await expect(cards(page)).toHaveCount(1);
-  await cards(page).first().getByRole('link').click();
-  await hydrated(page);
+    page.getByRole('button', { name: '未学会', exact: true })
+  ).toHaveCount(0);
   await expect(
     page.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveCount(0);
+  await first
+    .getByRole('button', { name: `收藏: ${title}`, exact: true })
+    .click();
+  await expect(
+    first.getByRole('button', { name: `取消收藏: ${title}`, exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await savedFilter(page).click();
+  await expect(cards(page)).toHaveCount(1);
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get('saved'))
+    .toBe('1');
+  await cards(page).first().locator('.knowledge-title').click();
+  await hydrated(page);
+  await expect(
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档' })
+    page.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
+  await page.getByRole('button', { name: '标记学会', exact: true }).click();
   await page.reload();
   await hydrated(page);
   await expect(
     page.getByRole('button', { name: '已学会', exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: '已学会', exact: true }).click();
+  ).toHaveAttribute('aria-pressed', 'true');
+  const learned = await page.evaluate(() =>
+    localStorage.getItem('elsewise_learned_v1')
+  );
   await page.goBack();
   await hydrated(page);
-  await learningFilter(page, '已学会').click();
+  await expect(savedFilter(page)).toHaveAttribute('aria-pressed', 'true');
+  await expect(cards(page)).toHaveCount(1);
+  await cards(page)
+    .first()
+    .getByRole('button', { name: `取消收藏: ${title}`, exact: true })
+    .click();
   await expect(cards(page)).toHaveCount(0);
-  await page.getByRole('button', { name: '未学会', exact: true }).click();
-  await expect(cards(page)).toHaveCount(idioms.length);
-  await page.getByRole('button', { name: '只看收藏', exact: true }).click();
+  expect(
+    await page.evaluate(() => localStorage.getItem('elsewise_learned_v1'))
+  ).toBe(learned);
+  await page.getByRole('button', { name: '全部', exact: true }).click();
+  await expect(cards(page)).toHaveCount(50);
+  await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(0);
   await page.getByRole('button', { name: '重置', exact: true }).click();
-  await expect(cards(page)).toHaveCount(idioms.length);
+  await expect(cards(page)).toHaveCount(0);
+});
+
+test('legacy learning URL falls back to all topics without deleting learned records', async ({
+  page,
+}) => {
+  await open(page);
+  const saved = JSON.stringify({
+    version: 1,
+    ids: ['array-map', 'feature:variables', 'unknown-future-topic'],
+  });
+  await page.evaluate(
+    (value) => localStorage.setItem('elsewise_learned_v1', value),
+    saved
+  );
+  for (const learning of ['learned', 'unlearned']) {
+    await open(page, `?learning=${learning}`);
+    await expect(cards(page)).toHaveCount(50);
+    await expect
+      .poll(() => new URL(page.url()).searchParams.has('learning'))
+      .toBe(false);
+    expect(
+      await page.evaluate(() => localStorage.getItem('elsewise_learned_v1'))
+    ).toBe(saved);
+  }
+  await open(page, 'idiom/array-map/');
+  await expect(
+    page.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('learned state synchronizes another tab and ignores malformed data without affecting favorites', async ({
@@ -479,16 +570,22 @@ test('learned state synchronizes another tab and ignores malformed data without 
     page.getByText('已保存的学习记录格式异常', { exact: false })
   ).toBeVisible();
   const second = await context.newPage();
-  await open(second);
-  await learningFilter(second, '已学会').click();
-  await expect(cards(second)).toHaveCount(0);
-  await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await expect(cards(second)).toHaveCount(1);
+  await open(second, './idiom/array-map/');
   await expect(
-    page.getByRole('button', { name: '☆ 收藏文档' })
+    second.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
+  await page.getByRole('button', { name: '标记学会', exact: true }).click();
+  await expect(
+    second.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: '收藏文档' })).toHaveAttribute(
+    'aria-pressed',
+    'false'
+  );
   await page.getByRole('button', { name: '已学会', exact: true }).click();
-  await expect(cards(second)).toHaveCount(0);
+  await expect(
+    second.getByRole('button', { name: '标记学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'false');
   await second.close();
 });
 
@@ -496,40 +593,41 @@ test('documents retain learning/favorites, related idioms and language navigatio
   page,
 }) => {
   await open(page, 'features/');
-  await expect(page.locator('.docs-directory [data-doc-row]')).toHaveCount(
-    documents.length
-  );
-  await page.getByLabel('查找任务或功能模块').fill('所有权');
-  await expect(page.locator('[data-doc-row]:visible')).toHaveCount(1);
-  await page.locator('[data-doc-row]:visible').getByRole('link').click();
+  await expect(cards(page)).toHaveCount(50);
+  await page.getByLabel('搜索知识点').fill('所有权');
+  // Full-text search also finds discussions of ownership in other topics.
+  const ownership = cards(page).filter({
+    has: page.locator('a[href$="/feature/rust-ownership/"]'),
+  });
+  await expect(ownership).toHaveCount(1);
+  await ownership.locator('.knowledge-title').click();
   await hydrated(page);
   await expect(
     page.getByRole('heading', { name: 'Rust 所有权', exact: true })
   ).toBeVisible();
   await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await page.getByRole('button', { name: '☆ 收藏文档', exact: true }).click();
+  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
   await open(page, 'favorites/');
-  const savedDocuments = page.getByRole('region', {
-    name: '文档',
-    exact: true,
-  });
+  await expect(cards(page)).toHaveCount(1);
+  await expect(cards(page).first()).toContainText('Rust 所有权');
   await expect(
-    savedDocuments.getByRole('link', { name: 'Rust 所有权', exact: true })
-  ).toBeVisible();
-  await savedDocuments
-    .getByLabel('学习状态', { exact: true })
-    .selectOption('learned');
-  await expect(savedDocuments.locator('.result-count')).toHaveText('1 篇文档');
-  await savedDocuments
-    .getByLabel('对比语言', { exact: true })
-    .selectOption('rust');
-  await expect(savedDocuments.locator('.result-count')).toHaveText('1 篇文档');
-  await savedDocuments
-    .getByLabel('学习状态', { exact: true })
-    .selectOption('unlearned');
-  await expect(savedDocuments.locator('.result-count')).toHaveText('0 篇文档');
-  await savedDocuments.getByRole('button', { name: '重置筛选' }).click();
-  await expect(savedDocuments.locator('.result-count')).toHaveText('1 篇文档');
+    cards(page)
+      .first()
+      .getByRole('button', { name: '取消收藏: Rust 所有权', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('.knowledge-language summary').click();
+  await page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Rust', exact: true })
+    .click();
+  await expect(cards(page)).toHaveCount(1);
+  await page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Python', exact: true })
+    .click();
+  await expect(cards(page)).toHaveCount(0);
+  await page.getByRole('button', { name: '重置', exact: true }).click();
+  await expect(cards(page)).toHaveCount(1);
   await open(page, 'feature/polymorphism/');
   await expandLanguagePicker(page);
   await page.getByRole('button', { name: 'Go', exact: true }).click();
@@ -542,7 +640,7 @@ test('documents retain learning/favorites, related idioms and language navigatio
   await open(page, 'language/rust/');
   // Language-directory links include the document title AND its summary.
   const ownershipLink = page.locator(
-    '.docs-directory a[href$="/feature/rust-ownership/"]'
+    '[data-knowledge-id] a[href$="/feature/rust-ownership/"]'
   );
   await expect(ownershipLink).toBeVisible();
   await expect(ownershipLink).toContainText('Rust 所有权');
@@ -577,42 +675,45 @@ async function expectEnglishProse(page) {
   expect(prose).not.toMatch(/\p{Script=Han}/u);
 }
 
-test('documentation home is a searchable task workspace, not the idiom catalog', async ({
+test('home unifies documentation and patterns into an ordered searchable curriculum', async ({
   page,
 }) => {
-  const requests = [];
-  page.on('request', (request) => requests.push(request.url()));
-  const response = await open(page, './');
+  const response = await open(page);
   expect(response.status()).toBe(200);
   await expect(
-    page.getByRole('heading', { name: '从基础开始，对照着学。' })
+    page.getByRole('heading', { name: '编程知识目录' })
   ).toBeVisible();
-  await expect(page.locator('.docs-sidebar')).toBeVisible();
-  await expect(page.locator('[data-doc-row]')).toHaveCount(documents.length);
-  await expect(cards(page)).toHaveCount(0);
-  const query = page.getByLabel('查找任务或功能模块');
-  await query.fill('JSON');
-  await expect(page.locator('[data-doc-row]:visible')).toHaveCount(1);
+  await expect(cards(page)).toHaveCount(50);
+  await expect(page.locator('.knowledge-chapter')).toHaveCount(10);
+  const mainNav = page.getByRole('navigation', { name: '主导航' });
+  await expect(
+    mainNav.getByRole('link', { name: '模式与习语', exact: true })
+  ).toHaveCount(0);
+  await expect(
+    mainNav.getByRole('link', { name: '知识目录', exact: true })
+  ).toBeVisible();
+  await expect(
+    page
+      .getByRole('region', { name: '集合与迭代', exact: true })
+      .locator('[data-knowledge-id]')
+  ).toHaveCount(9);
+  await expect(
+    page
+      .getByRole('region', { name: '对象与协作', exact: true })
+      .locator('[data-knowledge-id="builder-pattern"]')
+  ).toBeVisible();
+  const query = page.getByLabel('搜索知识点');
   await query.fill('no-such-document-release-test');
-  await expect(page.locator('[data-doc-row]:visible')).toHaveCount(0);
-  await expect(page.locator('#docs-search-status')).toHaveText(
-    '没有匹配文档。'
-  );
+  await expect(cards(page)).toHaveCount(0);
+  await expect(
+    page.getByRole('heading', { name: '没有匹配的知识点' })
+  ).toBeVisible();
   await query.fill('');
-  await expect(page.locator('[data-doc-row]:visible')).toHaveCount(
-    documents.length
-  );
-  expect(
-    requests.some((url) =>
-      /search-index|idioms.*\.json|prism|highlighter/i.test(url)
-    )
-  ).toBe(false);
-  await page
-    .getByRole('navigation', { name: '主导航' })
-    .getByRole('link', { name: '模式与习语', exact: true })
-    .click();
-  await hydrated(page);
-  await expect(cards(page)).toHaveCount(idioms.length);
+  await expect(cards(page)).toHaveCount(50);
+  for (const alias of ['features/', 'idioms/']) {
+    await open(page, alias);
+    await expect(cards(page)).toHaveCount(50);
+  }
 });
 
 test('all four practical tasks expose twelve sourced implementations in both locales and themes at 375px', async ({
@@ -691,7 +792,7 @@ test('document language selection and learned/favorite IDs survive Chinese to En
 }) => {
   await open(page, 'feature/read-text-file/');
   await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await page.getByRole('button', { name: '☆ 收藏文档', exact: true }).click();
+  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
   await expandLanguagePicker(page);
   for (const name of ['Rust', 'C++'])
     await page.getByRole('button', { name, exact: true }).click();
@@ -711,7 +812,7 @@ test('document language selection and learned/favorite IDs survive Chinese to En
     page.getByRole('button', { name: 'Learned', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
-    page.getByRole('button', { name: '★ Favorited', exact: true })
+    page.getByRole('button', { name: 'Favorited', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
   await page.reload();
   await hydrated(page);
@@ -745,7 +846,7 @@ test('document language selection and learned/favorite IDs survive Chinese to En
     page.getByRole('button', { name: '标记学会', exact: true })
   ).toHaveAttribute('aria-pressed', 'false');
   await expect(
-    page.getByRole('button', { name: '★ 已收藏', exact: true })
+    page.getByRole('button', { name: '已收藏', exact: true })
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -795,9 +896,7 @@ test('without JavaScript, both locales retain the docs directory and all practic
       expect(
         (await page.goto(new URL(prefix || './', baseURL).href)).status()
       ).toBe(200);
-      await expect(page.locator('[data-doc-row]')).toHaveCount(
-        documents.length
-      );
+      await expect(cards(page)).toHaveCount(50);
       for (const doc of practical) {
         expect(
           (
@@ -878,45 +977,526 @@ test('language picker defaults match viewport and mobile disclosure supports rep
   }
 });
 
-
-test('foundation-first directory opens the same five beginner chapters in both locales', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+test('foundation-first directory opens the same eight beginner chapters in both locales', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
   for (const locale of ['zh', 'en']) {
     const prefix = locale === 'en' ? 'en/' : '';
     await open(page, prefix || './');
-    const rows = page.locator('.docs-directory [data-doc-row] a');
-    for (const [index, doc] of foundations.entries()) {
-      await expect(rows.nth(index)).toHaveAttribute('href', `${base}${prefix}feature/${doc.id}/`);
+    const rows = page.locator('[data-knowledge-id] .knowledge-title');
+    for (const [index, doc] of foundations.slice(0, 7).entries()) {
+      await expect(rows.nth(index)).toHaveAttribute(
+        'href',
+        `${base}${prefix}feature/${doc.id}/`
+      );
     }
+    await expect(
+      page.locator('[data-knowledge-id="feature:functions"] .knowledge-title')
+    ).toHaveAttribute('href', `${base}${prefix}feature/functions/`);
     await rows.first().click();
     await hydrated(page);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(locale === 'en' ? foundations[0].en.title : foundations[0].title);
-    await expect(page.locator('.docs-sidebar [aria-current="page"]')).toHaveAttribute('href', `${base}${prefix}feature/syntax-basics/`);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      locale === 'en' ? foundations[0].en.title : foundations[0].title
+    );
+    await expect(
+      page.locator('.docs-sidebar [aria-current="page"]')
+    ).toHaveAttribute('href', `${base}${prefix}feature/syntax-basics/`);
     await expectNoHorizontalOverflow(page, page.viewportSize().width);
   }
 });
 
-test('all five beginner chapters deliver twelve complete sourced examples in both locales', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: testInfo.project.name === 'mobile' ? 375 : 1280, height: 900 });
+test('all eight beginner chapters deliver twelve complete sourced examples in both locales', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
   test.setTimeout(180000);
-  await page.addInitScript((ids) => localStorage.setItem('elsewise_preferences', JSON.stringify({ selectedLanguages: ids })), languages.map(language => language.id));
+  await page.addInitScript(
+    (ids) =>
+      localStorage.setItem(
+        'elsewise_preferences',
+        JSON.stringify({ selectedLanguages: ids })
+      ),
+    languages.map((language) => language.id)
+  );
   for (const locale of ['zh', 'en']) {
     for (const doc of foundations) {
-      const response = await open(page, `${locale === 'en' ? 'en/' : ''}feature/${doc.id}/`);
+      const response = await open(
+        page,
+        `${locale === 'en' ? 'en/' : ''}feature/${doc.id}/`
+      );
       expect(response.status()).toBe(200);
       await expect(page.locator('[data-language-card]')).toHaveCount(12);
       for (const entry of doc.entries) {
         const card = page.locator(`[data-language-card="${entry.languageId}"]`);
         await expect(card).toBeVisible();
         expect(await card.locator('pre code').textContent()).toBe(entry.code);
-        await expect(card).toContainText(locale === 'en' ? entry.en.summary : entry.summary);
-        await expect(card.locator('.source-details a')).toHaveCount(entry.sources.length);
+        await expect(card).toContainText(
+          locale === 'en' ? entry.en.summary : entry.summary
+        );
+        await expect(card.locator('.source-details a')).toHaveCount(
+          entry.sources.length
+        );
       }
       for (const theme of ['light', 'dark']) {
-        if ((await page.locator('html').getAttribute('data-theme')) !== theme) await page.locator('#theme-toggle').click();
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+          await page.locator('#theme-toggle').click();
         await expectNoHorizontalOverflow(page, page.viewportSize().width);
         if (locale === 'en') await expectEnglishProse(page);
       }
     }
+  }
+});
+
+test('basic types, conditions and loops navigate as one beginner sequence without losing locale or selection', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  for (const locale of ['zh', 'en']) {
+    const prefix = locale === 'en' ? 'en/' : '';
+    await open(page, `${prefix}feature/basic-types/`);
+    const picker = await expandLanguagePicker(page);
+    const python = picker.getByRole('button', { name: 'Python', exact: true });
+    if ((await python.getAttribute('aria-pressed')) !== 'true')
+      await python.click();
+    for (const id of ['conditions', 'loops']) {
+      await page
+        .locator(`.related-docs a[href="${base}${prefix}feature/${id}/"]`)
+        .click();
+      await hydrated(page);
+      await expect(page.locator('[data-language-card="python"]')).toBeVisible();
+      await expect(
+        page.locator('.docs-sidebar [aria-current="page"]')
+      ).toHaveAttribute('href', `${base}${prefix}feature/${id}/`);
+      await expectNoHorizontalOverflow(page, page.viewportSize().width);
+      if (locale === 'en') await expectEnglishProse(page);
+    }
+  }
+});
+
+test('collections keep twelve examples, sources and selected languages across related chapters and locales', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  await page.addInitScript(
+    (ids) =>
+      localStorage.setItem(
+        'elsewise_preferences',
+        JSON.stringify({ selectedLanguages: ids })
+      ),
+    languages.map((language) => language.id)
+  );
+  for (const locale of ['zh', 'en']) {
+    const prefix = locale === 'en' ? 'en/' : '';
+    await open(page, `${prefix}feature/sequence-collections/`);
+    for (const [index, doc] of collections.entries()) {
+      if (index) {
+        await page
+          .locator(`.related-docs a[href="${base}${prefix}feature/${doc.id}/"]`)
+          .click();
+        await hydrated(page);
+      }
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+        locale === 'en' ? doc.en.title : doc.title
+      );
+      await expect(page.locator('[data-language-card]:visible')).toHaveCount(
+        12
+      );
+      for (const entry of doc.entries) {
+        const card = page.locator(`[data-language-card="${entry.languageId}"]`);
+        expect(await card.locator('pre code').textContent()).toBe(entry.code);
+        await expect(card).toContainText(
+          locale === 'en' ? entry.en.summary : entry.summary
+        );
+        await expect(card.locator('.source-details a')).toHaveCount(
+          entry.sources.length
+        );
+      }
+      for (const theme of ['light', 'dark']) {
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+          await page.locator('#theme-toggle').click();
+        await expectNoHorizontalOverflow(page, page.viewportSize().width);
+        if (locale === 'en') await expectEnglishProse(page);
+      }
+    }
+  }
+});
+
+test('catalog chapter, language, saved and query survive detail back, reload and locale switch', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  await open(page);
+  await page
+    .getByRole('navigation', { name: '知识章节' })
+    .getByRole('button', { name: /集合与迭代/ })
+    .click();
+  const languagePicker = page.locator('.knowledge-language');
+  await languagePicker.locator('summary').click();
+  const python = page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Python', exact: true });
+  await python.click();
+  await python.click();
+  await expect(python).toHaveAttribute('aria-pressed', 'true');
+  await languagePicker.locator('summary').click();
+  await expect(languagePicker).not.toHaveAttribute('open');
+  await page.getByRole('searchbox', { name: '搜索知识点' }).fill('map');
+  await page
+    .locator('[data-knowledge-id="array-map"]')
+    .getByRole('button', { name: /^收藏:/ })
+    .click();
+  await savedFilter(page).click();
+  const checkParams = () => {
+    const params = new URL(page.url()).searchParams;
+    expect(Object.fromEntries(params)).toEqual({
+      chapter: 'collections',
+      language: 'python',
+      q: 'map',
+      saved: '1',
+    });
+  };
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get('q'))
+    .toBe('map');
+  checkParams();
+  await expect(page.locator('[data-knowledge-id="array-map"]')).toBeVisible();
+  await page
+    .locator('[data-knowledge-id="array-map"] .knowledge-title')
+    .click();
+  await hydrated(page);
+  await page.goBack();
+  await hydrated(page);
+  checkParams();
+  await expect(page.getByRole('searchbox', { name: '搜索知识点' })).toHaveValue(
+    'map'
+  );
+  await expect(languagePicker.locator('summary')).toHaveText('Python');
+  await page.reload();
+  await hydrated(page);
+  checkParams();
+  await page.getByRole('link', { name: '切换至英文' }).click();
+  await hydrated(page);
+  checkParams();
+  await expect(
+    page.getByRole('searchbox', { name: 'Search knowledge' })
+  ).toHaveValue('map');
+  await expectEnglishProse(page);
+  await expect(
+    page.getByRole('button', { name: 'Show saved only', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page
+      .locator('[data-knowledge-id="array-map"]')
+      .getByRole('button', { name: /^Unsave:/ })
+  ).toHaveAttribute('aria-pressed', 'true');
+  for (const theme of ['dark', 'light']) {
+    if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+      await page.locator('#theme-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+    await expectNoHorizontalOverflow(page, page.viewportSize().width);
+  }
+  await page.getByRole('button', { name: 'Reset', exact: true }).click();
+  await expect(cards(page)).toHaveCount(50);
+  expect(new URL(page.url()).search).toBe('');
+});
+
+test('canonical closure topic preserves legacy progress, favorites, examples and deliberate removal', async ({
+  page,
+}) => {
+  await open(page);
+  await page.evaluate(() => {
+    localStorage.setItem(
+      'elsewise_learned_v1',
+      JSON.stringify({
+        version: 1,
+        ids: ['closure', 'feature:closures', 'unknown-future-topic'],
+      })
+    );
+    localStorage.setItem(
+      'elsewise_preferences',
+      JSON.stringify({
+        favoriteIdioms: ['closure', 'feature:closures', 'array-map'],
+        selectedLanguages: ['python', 'cpp'],
+        theme: 'dark',
+      })
+    );
+  });
+  await open(page, 'favorites/');
+  await expect(cards(page)).toHaveCount(2);
+  const closure = page.locator('[data-knowledge-id="feature:closures"]');
+  await expect(closure).toBeVisible();
+  await expect(page.locator('[data-knowledge-id="closure"]')).toHaveCount(0);
+  await expect(closure).toContainText('12 种语言可对照');
+  await expect(
+    closure.getByRole('button', { name: '取消收藏: 闭包与捕获', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await closure
+    .getByRole('link', { name: '有状态闭包示例', exact: true })
+    .click();
+  await hydrated(page);
+  await expect(page).toHaveURL(new RegExp('/idiom/closure/$'));
+  await expect(page.locator('#code-closure-python')).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByRole('button', { name: '已收藏', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: '已学会', exact: true }).click();
+  await page.getByRole('button', { name: '已收藏', exact: true }).click();
+  await open(page, 'feature/closures/');
+  await expect(
+    page.getByRole('button', { name: '标记学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'false');
+  await expect(
+    page.getByRole('button', { name: '收藏文档', exact: true })
+  ).toHaveAttribute('aria-pressed', 'false');
+  expect(
+    await page.evaluate(
+      () => JSON.parse(localStorage.getItem('elsewise_learned_v1')).ids
+    )
+  ).toEqual(['unknown-future-topic']);
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem('elsewise_preferences')).favoriteIdioms
+    )
+  ).toEqual(['array-map']);
+  await page.getByRole('button', { name: '标记学会', exact: true }).click();
+  await open(page, 'idiom/closure/');
+  await expect(
+    page.getByRole('button', { name: '已学会', exact: true })
+  ).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('directory visual acceptance in both locales and themes with dismissible language filter', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  for (const locale of ['', 'en/']) {
+    await open(page, locale);
+    for (const theme of ['light', 'dark']) {
+      const toggle = page.getByRole('button', {
+        name: locale ? 'Toggle light and dark theme' : '切换明暗主题',
+      });
+      const current = await page.locator('html').getAttribute('data-theme');
+      if (current !== theme) await toggle.click();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await page.locator('.knowledge-language summary').click();
+      await expect(page.locator('.knowledge-language')).toHaveAttribute(
+        'open',
+        ''
+      );
+      await page.locator('.knowledge-language summary').press('Escape');
+      await expect(page.locator('.knowledge-language')).not.toHaveAttribute(
+        'open',
+        ''
+      );
+      await page.locator('.knowledge-language summary').click();
+      await page.locator('.knowledge-heading h1').click();
+      await expect(page.locator('.knowledge-language')).not.toHaveAttribute(
+        'open',
+        ''
+      );
+      await expectNoHorizontalOverflow(
+        page,
+        testInfo.project.name === 'mobile' ? 375 : 1280
+      );
+      await page.screenshot({
+        path: testInfo.outputPath(
+          `directory-${locale ? 'en' : 'zh'}-${theme}.png`
+        ),
+      });
+    }
+  }
+});
+
+test('reading theme keeps navigation aligned, controls named and text readable', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  await open(page);
+  for (const theme of ['light', 'dark']) {
+    const toggle = page.getByRole('button', { name: '切换明暗主题' });
+    if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+      await toggle.click();
+    await toggle.focus();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Shift+Tab');
+    await expect(toggle).toBeFocused();
+    const measured = await page.evaluate(() => {
+      const color = (value) =>
+        value
+          .match(/[\d.]+/g)
+          .slice(0, 3)
+          .map(Number)
+          .map((n) => {
+            const v = n / 255;
+            return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+          })
+          .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+      const root = getComputedStyle(document.documentElement);
+      const bg = color(root.backgroundColor);
+      const nodes = [
+        '.knowledge-title',
+        '.knowledge-row-text p',
+        '.knowledge-meta',
+        '.locale-switch',
+      ];
+      const ratios = nodes.map((selector) => {
+        const foreground = color(
+          getComputedStyle(document.querySelector(selector)).color
+        );
+        return (
+          (Math.max(bg, foreground) + 0.05) / (Math.min(bg, foreground) + 0.05)
+        );
+      });
+      const main = document.querySelector('main').getBoundingClientRect();
+      const header = document
+        .querySelector('.site-header')
+        .getBoundingClientRect();
+      const button = document
+        .querySelector('#theme-toggle')
+        .getBoundingClientRect();
+      return {
+        ratios,
+        aligned:
+          Math.abs(main.left - header.left) < 1 &&
+          Math.abs(main.width - header.width) < 1,
+        target: button.width >= 44 && button.height >= 44,
+        focus: getComputedStyle(document.activeElement).outlineStyle,
+      };
+    });
+    expect(measured.aligned).toBe(true);
+    expect(measured.target).toBe(true);
+    expect(measured.focus).not.toBe('none');
+    for (const ratio of measured.ratios)
+      expect(ratio).toBeGreaterThanOrEqual(4.5);
+  }
+  await page.locator('#docs-query').fill('变量');
+  await page.locator('.knowledge-language summary').click();
+  await page
+    .getByRole('group', { name: '按语言筛选' })
+    .getByRole('button', { name: 'Python', exact: true })
+    .click();
+  await page.locator('.knowledge-language summary').press('Escape');
+  await page.screenshot({
+    path: testInfo.outputPath('reading-search-selected.png'),
+  });
+  await page.getByRole('link', { name: '变量与赋值', exact: true }).click();
+  await hydrated(page);
+  await page.screenshot({
+    path: testInfo.outputPath('reading-comparison-dark.png'),
+  });
+  await expectNoHorizontalOverflow(
+    page,
+    testInfo.project.name === 'mobile' ? 375 : 1280
+  );
+});
+
+test('directory remains operable with enlarged text', async ({
+  page,
+}, testInfo) => {
+  const width = testInfo.project.name === 'mobile' ? 375 : 1280;
+  await page.setViewportSize({ width, height: 900 });
+  await open(page, 'en/');
+  // Enlarge computed font sizes once, including px-based labels, to test text-only reflow.
+  await page.evaluate(() => {
+    const entries = [...document.querySelectorAll('body *')].map((element) => [
+      element,
+      parseFloat(getComputedStyle(element).fontSize),
+    ]);
+    for (const [element, size] of entries)
+      element.style.fontSize = `${size * 2}px`;
+  });
+  await expectNoHorizontalOverflow(page, width);
+  await expect(
+    page.getByRole('button', { name: 'Toggle light and dark theme' })
+  ).toBeVisible();
+  await page.locator('#docs-query').fill('variables');
+  await expect(
+    page.getByRole('link', { name: 'Variables and assignment', exact: true })
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath('reading-enlarged-text.png'),
+  });
+});
+
+test('HTTP documentation icon actions retain tooltips, names and touch targets', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  for (const locale of ['', 'en/']) {
+    await open(page, `${locale}feature/http-get/`);
+    const theme = page.getByRole('button', {
+      name: locale ? 'Toggle light and dark theme' : '切换明暗主题',
+    });
+    if ((await page.locator('html').getAttribute('data-theme')) !== 'dark')
+      await theme.click();
+    await expandLanguagePicker(page);
+    await page.screenshot({
+      path: testInfo.outputPath(
+        `http-controls-${locale ? 'en' : 'zh'}-dark.png`
+      ),
+    });
+    for (const name of locale
+      ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code']
+      : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
+      const button = page.getByRole('button', { name, exact: true }).first();
+      await expect(button.locator('svg')).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      );
+      const size = await button.boundingBox();
+      expect(size.width).toBeGreaterThanOrEqual(44);
+      expect(size.height).toBeGreaterThanOrEqual(44);
+      await button.hover();
+      await expect(button.locator('.action-tip')).toHaveCSS(
+        'visibility',
+        'visible'
+      );
+      await expect(button.locator('.action-tip')).toHaveText(name);
+      await page.mouse.move(0, 0);
+      await button.focus();
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Shift+Tab');
+      await expect(button).toBeFocused();
+      await expect(button.locator('.action-tip')).toHaveCSS(
+        'visibility',
+        'visible'
+      );
+    }
+    await page.screenshot({
+      path: testInfo.outputPath(`http-icons-${locale ? 'en' : 'zh'}-dark.png`),
+    });
+    await expectNoHorizontalOverflow(
+      page,
+      testInfo.project.name === 'mobile' ? 375 : 1280
+    );
   }
 });
