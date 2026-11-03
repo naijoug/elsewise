@@ -8,16 +8,20 @@ import { featureKey, filterFeatures } from './features';
 import { languages } from './content';
 describe('reviewed feature catalog', () => {
   it('covers every registered language with preserved concepts and four practical tasks and eight foundation chapters plus two collection chapters', () => {
-    expect(features).toHaveLength(30);
+    expect(features).toHaveLength(31);
     expect(features.reduce((n, feature) => n + feature.entries.length, 0)).toBe(
-      228
+      232
     );
     for (const language of languages)
       expect(
         features
           .flatMap((f) => f.entries)
           .filter((e) => e.languageId === language.id)
-      ).toHaveLength(19);
+      ).toHaveLength(
+        ['javascript', 'typescript', 'python', 'go'].includes(language.id)
+          ? 20
+          : 19
+      );
     expect(() => validateFeatures(features)).not.toThrow();
   });
   it('keeps code and evidence out of client summaries and isolates learned ids', () => {

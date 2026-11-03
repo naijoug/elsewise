@@ -1,3 +1,7 @@
+# 路径组合增补（2026-11-03）
+
+`v2/src/data/paths.json` 是本仓原创规范源，首批 `compose-path` 统一对照 JavaScript、TypeScript、Python、Go，接入“文件与目录”。它独立于旧 handbook 快照，不改写 `src/data/idioms.json`。中文和英文共用稳定 ID；没有重命名旧条目或迁移存储键。来源版本与逐章节范围见 [paths-source-coverage.json](paths-source-coverage.json)。仅核查所列 API，示例未执行；未收录的语言不表示不支持。
+
 # 集合基础增补（2026-10-28）
 
 生产内容还包含 `v2/src/data/foundations.json` 的八个基础章节，以及 `v2/src/data/collections.json` 的“顺序集合”和“键值映射”。两章按同一任务对照全部 12 门语言，归入基础语法之后的“集合与查找”目录，不为每门语言复制独立任务。三个本仓内容文件均为本仓原创规范源，统一由 `v2/src/lib/feature-content.ts` 合并、校验并构建，不修改旧 handbook 生成快照。
