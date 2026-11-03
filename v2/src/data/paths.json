@@ -14,7 +14,7 @@
         "baseline": "Node.js 22.12.0；node:path；ES module",
         "status": "native",
         "summary": "用 path.posix.join 组合目录与文件名，明确使用 POSIX 斜杠规则；join 同时清理点段。后面的 /tmp 不会像 resolve 那样替换已有前缀。",
-        "versionNotes": "保存为 .mjs；node:path 是 Node 标准库，不是浏览器 JavaScript API。空片段被忽略；全部为空时返回 .。相对输入不自动变为绝对路径；不检查存在性、不解析符号链接，也不保证结果留在指定目录内。示例未经执行。",
+        "versionNotes": "保存为 .mjs；node:path 是 Node 标准库，不是浏览器 JavaScript API。空片段被忽略；全部为空时返回 .。相对输入不自动变为绝对路径；不检查存在性、不解析符号链接，也不保证结果留在指定目录内。示例未经执行。 词法折叠 link/.. 可能改变实际目标，不保证文件身份保持。",
         "code": "import { posix as path } from \"node:path\";\n\nconst parts = [\"reports\", \"2026\", \"summary.txt\"];\nconsole.log(path.join(...parts));\nconsole.log(path.join(\"/base\", \"/tmp\"));\nconsole.log(path.join(\"reports\", \"draft\", \"..\", \"final.txt\"));\nconsole.log(path.join(\"\", \"\"));",
         "sources": [
           {
@@ -27,7 +27,7 @@
         "en": {
           "baseline": "Node.js 22.12.0; node:path; ES module",
           "summary": "Compose a directory and filename with path.posix.join using explicit POSIX slash rules. join also cleans dot segments. A later /tmp does not replace the existing prefix as it would with resolve.",
-          "versionNotes": "Save as .mjs; node:path is a Node standard-library API, not a browser JavaScript API. Empty segments are ignored; all-empty input returns a dot. Relative input is not automatically made absolute. This does not check existence, resolve symlinks, or guarantee directory containment. Example not executed."
+          "versionNotes": "Save as .mjs; node:path is a Node standard-library API, not a browser JavaScript API. Empty segments are ignored; all-empty input returns a dot. Relative input is not automatically made absolute. This does not check existence, resolve symlinks, or guarantee directory containment. Example not executed. Lexically removing link/.. can change the actual target; file identity is not guaranteed."
         }
       },
       {
@@ -35,7 +35,7 @@
         "baseline": "TypeScript 5.3；编译为 JavaScript 后在 Node.js 22.12.0 运行",
         "status": "native",
         "summary": "用 path.posix.join 组合目录与文件名，明确使用 POSIX 斜杠规则；join 同时清理点段。后面的 /tmp 不会像 resolve 那样替换已有前缀。",
-        "versionNotes": "保存为 .mts，以 module/moduleResolution=NodeNext 编译，提供匹配 Node 22 的 @types/node；类型标注不改变运行时行为。空片段被忽略；全部为空时返回 .。相对输入不自动变为绝对路径；不检查存在性、不解析符号链接，也不保证结果留在指定目录内。示例未经执行。",
+        "versionNotes": "保存为 .mts，以 module/moduleResolution=NodeNext 编译，提供匹配 Node 22 的 @types/node；类型标注不改变运行时行为。空片段被忽略；全部为空时返回 .。相对输入不自动变为绝对路径；不检查存在性、不解析符号链接，也不保证结果留在指定目录内。示例未经执行。 词法折叠 link/.. 可能改变实际目标，不保证文件身份保持。",
         "code": "import { posix as path } from \"node:path\";\n\nconst parts: string[] = [\"reports\", \"2026\", \"summary.txt\"];\nconsole.log(path.join(...parts));\nconsole.log(path.join(\"/base\", \"/tmp\"));\nconsole.log(path.join(\"reports\", \"draft\", \"..\", \"final.txt\"));\nconsole.log(path.join(\"\", \"\"));",
         "sources": [
           {
@@ -54,7 +54,7 @@
         "en": {
           "baseline": "TypeScript 5.3; compile to JavaScript and run on Node.js 22.12.0",
           "summary": "Compose a directory and filename with path.posix.join using explicit POSIX slash rules. join also cleans dot segments. A later /tmp does not replace the existing prefix as it would with resolve.",
-          "versionNotes": "Save as .mts, compile with module/moduleResolution=NodeNext, and supply Node 22 @types/node declarations; annotations do not alter runtime behavior. Empty segments are ignored; all-empty input returns a dot. Relative input is not automatically made absolute. This does not check existence, resolve symlinks, or guarantee directory containment. Example not executed."
+          "versionNotes": "Save as .mts, compile with module/moduleResolution=NodeNext, and supply Node 22 @types/node declarations; annotations do not alter runtime behavior. Empty segments are ignored; all-empty input returns a dot. Relative input is not automatically made absolute. This does not check existence, resolve symlinks, or guarantee directory containment. Example not executed. Lexically removing link/.. can change the actual target; file identity is not guaranteed."
         }
       },
       {
@@ -83,11 +83,11 @@
         "baseline": "Go 1.27.3；标准库 path/filepath；本例限 POSIX 宿主",
         "status": "native",
         "summary": "filepath.Join 使用宿主分隔符组合片段并调用 Clean；在 POSIX 系统上，后续 /tmp 不会替换已有 /base 前缀。",
-        "versionNotes": "忽略空片段；全部为空或零参数时返回空字符串，与 Node 不同。Clean 只做词法处理，折叠 .. 不代表解析了符号链接。Windows 规则不同；不要把 filepath 用于 URL。此操作不验证文件存在或目录包含关系。示例未经编译或执行。",
+        "versionNotes": "忽略空片段；全部为空或零参数时返回空字符串，与 Node 不同。Clean 只做词法处理，折叠 .. 不代表解析了符号链接。Windows 规则不同；不要把 filepath 用于 URL。此操作不验证文件存在或目录包含关系。示例未经编译或执行。 词法折叠 link/.. 可能改变实际目标，不保证文件身份保持。",
         "code": "package main\n\nimport (\n    \"fmt\"\n    \"path/filepath\"\n)\n\nfunc main() {\n    parts := []string{\"reports\", \"2026\", \"summary.txt\"}\n    fmt.Println(filepath.Join(parts...))\n    fmt.Println(filepath.Join(\"/base\", \"/tmp\"))\n    fmt.Println(filepath.Join(\"reports\", \"draft\", \"..\", \"final.txt\"))\n    fmt.Printf(\"%q\\n\", filepath.Join(\"\", \"\"))\n}",
         "sources": [
           {
-            "title": "Go 1.27.3.0 — path/filepath",
+            "title": "Go 1.27.3 — path/filepath",
             "url": "https://pkg.go.dev/path/filepath@go1.27.3",
             "section": "Join; Clean; package overview",
             "checkedAt": "2026-11-03"
@@ -96,7 +96,7 @@
         "en": {
           "baseline": "Go 1.27.3; standard-library path/filepath; POSIX host for this example",
           "summary": "filepath.Join combines segments with the host separator and applies Clean. On POSIX, a later /tmp does not replace the existing /base prefix.",
-          "versionNotes": "Empty segments are ignored; all-empty input or zero arguments returns an empty string, unlike Node. Clean is lexical: collapsing dot-dot segments does not resolve symlinks. Windows rules differ; filepath is not for URLs. This does not validate existence or directory containment. Example not compiled or executed."
+          "versionNotes": "Empty segments are ignored; all-empty input or zero arguments returns an empty string, unlike Node. Clean is lexical: collapsing dot-dot segments does not resolve symlinks. Windows rules differ; filepath is not for URLs. This does not validate existence or directory containment. Example not compiled or executed. Lexically removing link/.. can change the actual target; file identity is not guaranteed."
         }
       }
     ],

@@ -22,7 +22,7 @@
     },
     {
       "languageId": "typescript",
-      "documentationVersion": "TypeScript 5.3；编译为 JavaScript 后在 Node.js 22.12.0 运行",
+      "documentationVersion": "Rolling TypeScript Modules Reference, selected NodeNext sections. TypeScript 5.3 is an illustrative source-code baseline, not the handbook version or a tested compiler/declaration pairing; Node API reference is fixed at v22.12.0.",
       "reviewedSections": [
         {
           "title": "Node.js v22.12.0 — Path",
@@ -61,7 +61,7 @@
       "documentationVersion": "Go 1.27.3；标准库 path/filepath；本例限 POSIX 宿主",
       "reviewedSections": [
         {
-          "title": "Go 1.27.3.0 — path/filepath",
+          "title": "Go 1.27.3 — path/filepath",
           "url": "https://pkg.go.dev/path/filepath@go1.27.3",
           "section": "Join; Clean; package overview",
           "checkedAt": "2026-11-03"
