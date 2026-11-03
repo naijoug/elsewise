@@ -1,0 +1,110 @@
+[
+  {
+    "id": "compose-path",
+    "title": "组合文件路径片段",
+    "description": "把目录与文件名组合成路径，比较绝对片段、点段和空片段的处理。路径拼接、绝对化与符号链接解析不是同一个操作。",
+    "scope": "shared",
+    "scopeNote": "首批核查四门语言、三套标准库语义；未收录不代表不支持。只阅读所列章节，示例未执行。",
+    "tags": ["文件", "目录", "路径", "拼接", "join"],
+    "related": ["read-text-file", "write-text-file"],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "Node.js 22.12.0；node:path；ES module",
+        "status": "native",
+        "summary": "用 path.posix.join 组合目录与文件名，明确使用 POSIX 斜杠规则；join 同时清理点段。后面的 /tmp 不会像 resolve 那样替换已有前缀。",
+        "versionNotes": "保存为 .mjs；node:path 是 Node 标准库，不是浏览器 JavaScript API。空片段被忽略；全部为空时返回 .。相对输入不自动变为绝对路径；不检查存在性、不解析符号链接，也不保证结果留在指定目录内。示例未经执行。",
+        "code": "import { posix as path } from \"node:path\";\n\nconst parts = [\"reports\", \"2026\", \"summary.txt\"];\nconsole.log(path.join(...parts));\nconsole.log(path.join(\"/base\", \"/tmp\"));\nconsole.log(path.join(\"reports\", \"draft\", \"..\", \"final.txt\"));\nconsole.log(path.join(\"\", \"\"));",
+        "sources": [
+          {
+            "title": "Node.js v22.12.0 — Path",
+            "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+            "section": "Windows vs. POSIX; path.join; path.normalize; path.posix; path.resolve",
+            "checkedAt": "2026-11-03"
+          }
+        ],
+        "en": {
+          "baseline": "Node.js 22.12.0; node:path; ES module",
+          "summary": "Compose a directory and filename with path.posix.join using explicit POSIX slash rules. join also cleans dot segments. A later /tmp does not replace the existing prefix as it would with resolve.",
+          "versionNotes": "Save as .mjs; node:path is a Node standard-library API, not a browser JavaScript API. Empty segments are ignored; all-empty input returns a dot. Relative input is not automatically made absolute. This does not check existence, resolve symlinks, or guarantee directory containment. Example not executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3；编译为 JavaScript 后在 Node.js 22.12.0 运行",
+        "status": "native",
+        "summary": "用 path.posix.join 组合目录与文件名，明确使用 POSIX 斜杠规则；join 同时清理点段。后面的 /tmp 不会像 resolve 那样替换已有前缀。",
+        "versionNotes": "保存为 .mts，以 module/moduleResolution=NodeNext 编译，提供匹配 Node 22 的 @types/node；类型标注不改变运行时行为。空片段被忽略；全部为空时返回 .。相对输入不自动变为绝对路径；不检查存在性、不解析符号链接，也不保证结果留在指定目录内。示例未经执行。",
+        "code": "import { posix as path } from \"node:path\";\n\nconst parts: string[] = [\"reports\", \"2026\", \"summary.txt\"];\nconsole.log(path.join(...parts));\nconsole.log(path.join(\"/base\", \"/tmp\"));\nconsole.log(path.join(\"reports\", \"draft\", \"..\", \"final.txt\"));\nconsole.log(path.join(\"\", \"\"));",
+        "sources": [
+          {
+            "title": "Node.js v22.12.0 — Path",
+            "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+            "section": "Windows vs. POSIX; path.join; path.normalize; path.posix; path.resolve",
+            "checkedAt": "2026-11-03"
+          },
+          {
+            "title": "TypeScript — Modules reference",
+            "url": "https://www.typescriptlang.org/docs/handbook/modules/reference.html",
+            "section": "node16 / nodenext; module format detection; Node.js type declarations",
+            "checkedAt": "2026-11-03"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3; compile to JavaScript and run on Node.js 22.12.0",
+          "summary": "Compose a directory and filename with path.posix.join using explicit POSIX slash rules. join also cleans dot segments. A later /tmp does not replace the existing prefix as it would with resolve.",
+          "versionNotes": "Save as .mts, compile with module/moduleResolution=NodeNext, and supply Node 22 @types/node declarations; annotations do not alter runtime behavior. Empty segments are ignored; all-empty input returns a dot. Relative input is not automatically made absolute. This does not check existence, resolve symlinks, or guarantee directory containment. Example not executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；标准库 posixpath",
+        "status": "native",
+        "summary": "使用 posixpath.join 固定 POSIX 规则。与 Node/Go 示例不同，后续绝对片段会丢弃此前前缀，join 不折叠 ..。",
+        "versionNotes": "本机路径通常使用 os.path，它按宿主系统选择规则；本例用 posixpath 便于跨系统比较。空尾段会保留末尾斜杠，join(\"\", \"\") 返回空字符串。Windows 的盘符与根规则不同，不能照搬此例。拼接不访问目标文件、不解析符号链接，也不是目录访问安全检查。示例未经执行。",
+        "code": "import posixpath\n\nparts = [\"reports\", \"2026\", \"summary.txt\"]\nprint(posixpath.join(*parts))\nprint(posixpath.join(\"/base\", \"/tmp\"))\nprint(posixpath.join(\"reports\", \"draft\", \"..\", \"final.txt\"))\nprint(repr(posixpath.join(\"reports\", \"\")))\nprint(repr(posixpath.join(\"\", \"\")))",
+        "sources": [
+          {
+            "title": "Python 3.14 — os.path",
+            "url": "https://docs.python.org/3.14/library/os.path.html",
+            "section": "Module introduction; os.path.join; os.path.normpath; os.path.realpath",
+            "checkedAt": "2026-11-03"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; standard-library posixpath",
+          "summary": "Use posixpath.join to fix the POSIX grammar. Unlike the Node/Go examples, a later absolute segment discards the preceding prefix; join does not collapse dot-dot segments.",
+          "versionNotes": "Use os.path for native paths; it selects the host grammar. This example uses posixpath for cross-platform comparison. An empty final segment retains a trailing slash; join(\"\", \"\") returns an empty string. Windows drive/root rules differ. Joining does not access target files, resolve symlinks, or enforce directory containment. Example not executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.27.3；标准库 path/filepath；本例限 POSIX 宿主",
+        "status": "native",
+        "summary": "filepath.Join 使用宿主分隔符组合片段并调用 Clean；在 POSIX 系统上，后续 /tmp 不会替换已有 /base 前缀。",
+        "versionNotes": "忽略空片段；全部为空或零参数时返回空字符串，与 Node 不同。Clean 只做词法处理，折叠 .. 不代表解析了符号链接。Windows 规则不同；不要把 filepath 用于 URL。此操作不验证文件存在或目录包含关系。示例未经编译或执行。",
+        "code": "package main\n\nimport (\n    \"fmt\"\n    \"path/filepath\"\n)\n\nfunc main() {\n    parts := []string{\"reports\", \"2026\", \"summary.txt\"}\n    fmt.Println(filepath.Join(parts...))\n    fmt.Println(filepath.Join(\"/base\", \"/tmp\"))\n    fmt.Println(filepath.Join(\"reports\", \"draft\", \"..\", \"final.txt\"))\n    fmt.Printf(\"%q\\n\", filepath.Join(\"\", \"\"))\n}",
+        "sources": [
+          {
+            "title": "Go 1.27.3.0 — path/filepath",
+            "url": "https://pkg.go.dev/path/filepath@go1.27.3",
+            "section": "Join; Clean; package overview",
+            "checkedAt": "2026-11-03"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.27.3; standard-library path/filepath; POSIX host for this example",
+          "summary": "filepath.Join combines segments with the host separator and applies Clean. On POSIX, a later /tmp does not replace the existing /base prefix.",
+          "versionNotes": "Empty segments are ignored; all-empty input or zero arguments returns an empty string, unlike Node. Clean is lexical: collapsing dot-dot segments does not resolve symlinks. Windows rules differ; filepath is not for URLs. This does not validate existence or directory containment. Example not compiled or executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "Compose file path segments",
+      "description": "Combine directories and filenames, comparing absolute segments, dot segments, and empty input. Joining, making a path absolute, and resolving symlinks are different operations.",
+      "scopeNote": "Initial coverage: four languages, three standard-library contracts. Missing coverage does not mean unsupported. Only listed sections were reviewed; examples were not executed.",
+      "tags": ["files", "directories", "paths", "join", "compose"]
+    }
+  }
+]

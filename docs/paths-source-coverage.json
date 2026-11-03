@@ -1,0 +1,75 @@
+{
+  "checkedAt": "2026-11-03",
+  "canonicalTaskIds": ["compose-path"],
+  "authority": "v2/src/data/paths.json is the repository-authored canonical source; no external handbook or generated snapshot edits.",
+  "scope": "Selected Path API sections only, not full manuals. Four language entries share three runtime contracts. Missing entries are not unsupported-language claims.",
+  "execution": "Examples are original static illustrations, not executed demos. Application tests are distinct from snippet execution.",
+  "entries": [
+    {
+      "languageId": "javascript",
+      "documentationVersion": "Node.js 22.12.0；node:path；ES module",
+      "reviewedSections": [
+        {
+          "title": "Node.js v22.12.0 — Path",
+          "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+          "section": "Windows vs. POSIX; path.join; path.normalize; path.posix; path.resolve",
+          "checkedAt": "2026-11-03"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Explicit POSIX grammar; not native Windows behavior",
+      "boundary": "Compose only; not existence, realpath, or containment validation."
+    },
+    {
+      "languageId": "typescript",
+      "documentationVersion": "TypeScript 5.3；编译为 JavaScript 后在 Node.js 22.12.0 运行",
+      "reviewedSections": [
+        {
+          "title": "Node.js v22.12.0 — Path",
+          "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+          "section": "Windows vs. POSIX; path.join; path.normalize; path.posix; path.resolve",
+          "checkedAt": "2026-11-03"
+        },
+        {
+          "title": "TypeScript — Modules reference",
+          "url": "https://www.typescriptlang.org/docs/handbook/modules/reference.html",
+          "section": "node16 / nodenext; module format detection; Node.js type declarations",
+          "checkedAt": "2026-11-03"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Explicit POSIX grammar; not native Windows behavior",
+      "boundary": "Compose only; not existence, realpath, or containment validation."
+    },
+    {
+      "languageId": "python",
+      "documentationVersion": "Python 3.14；标准库 posixpath",
+      "reviewedSections": [
+        {
+          "title": "Python 3.14 — os.path",
+          "url": "https://docs.python.org/3.14/library/os.path.html",
+          "section": "Module introduction; os.path.join; os.path.normpath; os.path.realpath",
+          "checkedAt": "2026-11-03"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Explicit POSIX grammar; not native Windows behavior",
+      "boundary": "Compose only; not existence, realpath, or containment validation."
+    },
+    {
+      "languageId": "go",
+      "documentationVersion": "Go 1.27.3；标准库 path/filepath；本例限 POSIX 宿主",
+      "reviewedSections": [
+        {
+          "title": "Go 1.27.3.0 — path/filepath",
+          "url": "https://pkg.go.dev/path/filepath@go1.27.3",
+          "section": "Join; Clean; package overview",
+          "checkedAt": "2026-11-03"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "POSIX host only",
+      "boundary": "Compose only; not existence, realpath, or containment validation."
+    }
+  ]
+}

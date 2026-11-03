@@ -97,7 +97,7 @@ export const chapters = [
     id: 'files',
     zh: '文件与目录',
     en: 'Files & directories',
-    items: ['f:read-text-file', 'f:write-text-file'],
+    items: ['f:compose-path', 'f:read-text-file', 'f:write-text-file'],
   },
   { id: 'data', zh: '数据格式', en: 'Data formats', items: ['f:json'] },
   { id: 'network', zh: '网络请求', en: 'Networking', items: ['f:http-get'] },
