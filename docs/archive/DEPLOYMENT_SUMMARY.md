@@ -267,7 +267,6 @@ vercel --prod  # 或 netlify deploy --prod
 
 - [完整部署指南](../DEPLOYMENT.md)
 - [部署检查清单](../DEPLOYMENT_CHECKLIST.md)
-- [快速部署指南](../QUICK_DEPLOY.md)
 - [脚本文档](../../scripts/README.md)
 - [主 README](../../README.md)
 
