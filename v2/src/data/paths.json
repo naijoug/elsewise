@@ -5,8 +5,18 @@
     "description": "把目录与文件名组合成路径，比较绝对片段、点段和空片段的处理。路径拼接、绝对化与符号链接解析不是同一个操作。",
     "scope": "shared",
     "scopeNote": "首批核查四门语言、三套标准库语义；未收录不代表不支持。只阅读所列章节，示例未执行。",
-    "tags": ["文件", "目录", "路径", "拼接", "join"],
-    "related": ["read-text-file", "write-text-file"],
+    "tags": [
+      "文件",
+      "目录",
+      "路径",
+      "拼接",
+      "join"
+    ],
+    "related": [
+      "split-path",
+      "read-text-file",
+      "write-text-file"
+    ],
     "idiomIds": [],
     "entries": [
       {
@@ -104,7 +114,141 @@
       "title": "Compose file path segments",
       "description": "Combine directories and filenames, comparing absolute segments, dot segments, and empty input. Joining, making a path absolute, and resolving symlinks are different operations.",
       "scopeNote": "Initial coverage: four languages, three standard-library contracts. Missing coverage does not mean unsupported. Only listed sections were reviewed; examples were not executed.",
-      "tags": ["files", "directories", "paths", "join", "compose"]
+      "tags": [
+        "files",
+        "directories",
+        "paths",
+        "join",
+        "compose"
+      ]
+    }
+  },
+  {
+    "id": "split-path",
+    "title": "拆分文件路径",
+    "description": "从路径提取目录、名称和扩展名，对照尾斜杠、点文件与空输入。拆分是词法操作，不等于读取文件或识别真实文件类型。",
+    "scope": "shared",
+    "scopeNote": "首批四门语言、三套标准库；未收录不代表不支持。只核查所列章节，示例未执行。",
+    "tags": [
+      "文件",
+      "目录",
+      "路径",
+      "名称",
+      "扩展名",
+      "basename",
+      "dirname"
+    ],
+    "related": [
+      "compose-path",
+      "read-text-file",
+      "write-text-file"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "Node.js 22.12.0；node:path；ES module",
+        "status": "native",
+        "summary": "用 path.posix.basename、dirname 和 extname 分别取名称、目录和最后一个扩展名；固定 POSIX 规则，避免宿主系统改变解析方式。",
+        "versionNotes": "保存为 .mjs；需要 Node 标准库，不是浏览器 API。basename/dirname 忽略尾斜杠；reports/2026/ 的名称是 2026，目录是 reports。archive.tar.gz 只取 .gz；.env 没有扩展名。这些是字符串操作，不检查文件存在，也不能证明文件类型。示例未执行。 空路径的名称与扩展名为空，目录为 .。",
+        "code": "import { posix as path } from \"node:path\";\n\nconst paths = [\"reports/archive.tar.gz\", \"reports/2026/\", \".env\", \"\"];\nfor (const value of paths) {\n  console.log(JSON.stringify({\n    path: value,\n    directory: path.dirname(value),\n    name: path.basename(value),\n    extension: path.extname(value),\n  }));\n}",
+        "sources": [
+          {
+            "title": "Node.js v22.12.0 — Path",
+            "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+            "section": "Windows vs. POSIX; path.basename; path.dirname; path.extname",
+            "checkedAt": "2026-11-04"
+          }
+        ],
+        "en": {
+          "baseline": "Node.js 22.12.0; node:path; ES module",
+          "summary": "Extract the name, directory, and last extension with path.posix.basename, dirname, and extname, using explicit POSIX rules.",
+          "versionNotes": "Save as .mjs; requires Node, not a browser API. Trailing slashes are ignored: reports/2026/ has name 2026 and directory reports. archive.tar.gz yields .gz; .env has no extension. String parsing does not check existence or establish file type. Example not executed. Empty input gives an empty name and extension, and directory dot."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3；编译为 JavaScript 后在 Node.js 22.12.0 运行",
+        "status": "native",
+        "summary": "用 path.posix.basename、dirname 和 extname 分别取名称、目录和最后一个扩展名；固定 POSIX 规则，避免宿主系统改变解析方式。",
+        "versionNotes": "保存为 .mts，以 NodeNext 编译并提供匹配 Node 22 的 @types/node；类型标注不改变运行时行为。basename/dirname 忽略尾斜杠；reports/2026/ 的名称是 2026，目录是 reports。archive.tar.gz 只取 .gz；.env 没有扩展名。这些是字符串操作，不检查文件存在，也不能证明文件类型。示例未执行。 空路径的名称与扩展名为空，目录为 .。",
+        "code": "import { posix as path } from \"node:path\";\n\nconst paths: string[] = [\"reports/archive.tar.gz\", \"reports/2026/\", \".env\", \"\"];\nfor (const value of paths) {\n  console.log(JSON.stringify({\n    path: value,\n    directory: path.dirname(value),\n    name: path.basename(value),\n    extension: path.extname(value),\n  }));\n}",
+        "sources": [
+          {
+            "title": "Node.js v22.12.0 — Path",
+            "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+            "section": "Windows vs. POSIX; path.basename; path.dirname; path.extname",
+            "checkedAt": "2026-11-04"
+          },
+          {
+            "title": "TypeScript — Modules reference",
+            "url": "https://www.typescriptlang.org/docs/handbook/modules/reference.html",
+            "section": "node16 / nodenext; module format detection; Node.js type declarations",
+            "checkedAt": "2026-11-04"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3; compile to JavaScript and run on Node.js 22.12.0",
+          "summary": "Extract the name, directory, and last extension with path.posix.basename, dirname, and extname, using explicit POSIX rules.",
+          "versionNotes": "Save as .mts; compile with NodeNext and Node 22 @types/node declarations. Types do not change runtime behavior. Trailing slashes are ignored: reports/2026/ has name 2026 and directory reports. archive.tar.gz yields .gz; .env has no extension. String parsing does not check existence or establish file type. Example not executed. Empty input gives an empty name and extension, and directory dot."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；标准库 posixpath",
+        "status": "native",
+        "summary": "用 posixpath.dirname/basename 拆目录和名称，用 splitext 取扩展名。尾斜杠会保留空名称，这与 Node 和 Go 的 basename 不同。",
+        "versionNotes": "reports/2026/ 的目录为 reports/2026、名称为空。空路径的目录和名称均为空；.env 没有扩展名，archive.tar.gz 的扩展名只有 .gz。splitext 的第一个返回值包含原目录，不只是文件名。此例固定 POSIX 规则，本机路径通常使用 os.path；不访问文件系统。示例未执行。",
+        "code": "import posixpath\n\npaths = [\"reports/archive.tar.gz\", \"reports/2026/\", \".env\", \"\"]\nfor value in paths:\n    root, extension = posixpath.splitext(value)\n    print({\n        \"path\": value,\n        \"directory\": posixpath.dirname(value),\n        \"name\": posixpath.basename(value),\n        \"extension\": extension,\n    })",
+        "sources": [
+          {
+            "title": "Python 3.14 — os.path",
+            "url": "https://docs.python.org/3.14/library/os.path.html",
+            "section": "Module introduction; os.path.basename; os.path.dirname; os.path.split; os.path.splitext",
+            "checkedAt": "2026-11-04"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; standard-library posixpath",
+          "summary": "Use posixpath.dirname/basename for directory and name, and splitext for the extension. A trailing slash produces an empty name, unlike Node and Go basename.",
+          "versionNotes": "reports/2026/ has directory reports/2026 and an empty name. Empty input gives an empty directory and name. .env has no extension; archive.tar.gz yields only .gz. The first splitext result includes the directory. Explicit POSIX rules; use os.path for native paths. No filesystem access. Example not executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.27.3；标准库 path/filepath；本例限 POSIX 宿主",
+        "status": "native",
+        "summary": "用 filepath.Base、Dir 和 Ext 取名称、目录与扩展名。Base 忽略尾分隔符，但 Dir 对尾斜杠的处理不能照搬 Node dirname。",
+        "versionNotes": "此例限 POSIX 宿主。reports/2026/ 的 Base 为 2026、Dir 为 reports/2026；空路径的两者均为 .。Ext(\".env\") 为 .env，与 Node/Python 不同；archive.tar.gz 只取 .gz。Dir 会词法清理目录，未解析符号链接；扩展名不是文件类型验证。示例未经编译或执行。 Dir 与 Base 不是互补拆分对；含尾斜杠时不能直接重新拼接，需无损拆分时查看 Split。",
+        "code": "package main\n\nimport (\n    \"fmt\"\n    \"path/filepath\"\n)\n\nfunc main() {\n    paths := []string{\"reports/archive.tar.gz\", \"reports/2026/\", \".env\", \"\"}\n    for _, value := range paths {\n        fmt.Printf(\"path=%q directory=%q name=%q extension=%q\\n\",\n            value, filepath.Dir(value), filepath.Base(value), filepath.Ext(value))\n    }\n}",
+        "sources": [
+          {
+            "title": "Go 1.27.3 — path/filepath",
+            "url": "https://pkg.go.dev/path/filepath@go1.27.3",
+            "section": "Package overview; Base; Dir; Ext; Split; Clean",
+            "checkedAt": "2026-11-04"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.27.3; standard-library path/filepath; POSIX host for this example",
+          "summary": "Use filepath.Base, Dir, and Ext for name, directory, and extension. Base ignores trailing separators; Dir does not follow Node dirname semantics for trailing slashes.",
+          "versionNotes": "POSIX host only. reports/2026/ gives Base 2026 and Dir reports/2026; empty input gives a dot for both. Ext(\".env\") is .env, unlike Node/Python; archive.tar.gz gives .gz. Dir cleans lexically, without resolving symlinks. Extensions do not validate file types. Example not compiled or executed. Dir and Base are not complementary parts; do not rejoin them for trailing-slash input. See Split for a complementary pair."
+        }
+      }
+    ],
+    "en": {
+      "title": "Split file paths",
+      "description": "Extract directories, names, and extensions, comparing trailing slashes, dotfiles, and empty input. Lexical parsing neither reads files nor establishes their actual type.",
+      "scopeNote": "Four languages, three standard-library contracts. Missing coverage does not mean unsupported. Only listed sections reviewed; examples not executed.",
+      "tags": [
+        "files",
+        "directories",
+        "paths",
+        "names",
+        "extensions",
+        "basename",
+        "dirname"
+      ]
     }
   }
 ]

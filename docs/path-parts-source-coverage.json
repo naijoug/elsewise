@@ -1,0 +1,77 @@
+{
+  "checkedAt": "2026-11-04",
+  "canonicalTaskIds": [
+    "split-path"
+  ],
+  "authority": "Repository-authored canonical content in v2/src/data/paths.json. No external handbook or legacy snapshot modifications.",
+  "scope": "Selected Path sections, not complete manuals. Four language entries, three runtime contracts; missing coverage is not a lack-of-support claim.",
+  "execution": "Original static illustrations, not executed demos; application tests do not execute snippets.",
+  "entries": [
+    {
+      "languageId": "javascript",
+      "documentationVersion": "Node.js 22.12.0；node:path；ES module",
+      "reviewedSections": [
+        {
+          "title": "Node.js v22.12.0 — Path",
+          "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+          "section": "Windows vs. POSIX; path.basename; path.dirname; path.extname",
+          "checkedAt": "2026-11-04"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Explicit POSIX grammar",
+      "boundary": "Lexical decomposition only; not file existence, symlink resolution, type validation, or containment."
+    },
+    {
+      "languageId": "typescript",
+      "documentationVersion": "Rolling TypeScript Modules Reference, selected NodeNext sections. TypeScript 5.3 is illustrative, not a tested compiler/declaration pairing. Node API reference fixed at v22.12.0.",
+      "reviewedSections": [
+        {
+          "title": "Node.js v22.12.0 — Path",
+          "url": "https://nodejs.org/download/release/v22.12.0/docs/api/path.html",
+          "section": "Windows vs. POSIX; path.basename; path.dirname; path.extname",
+          "checkedAt": "2026-11-04"
+        },
+        {
+          "title": "TypeScript — Modules reference",
+          "url": "https://www.typescriptlang.org/docs/handbook/modules/reference.html",
+          "section": "node16 / nodenext; module format detection; Node.js type declarations",
+          "checkedAt": "2026-11-04"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Explicit POSIX grammar",
+      "boundary": "Lexical decomposition only; not file existence, symlink resolution, type validation, or containment."
+    },
+    {
+      "languageId": "python",
+      "documentationVersion": "Python 3.14；标准库 posixpath",
+      "reviewedSections": [
+        {
+          "title": "Python 3.14 — os.path",
+          "url": "https://docs.python.org/3.14/library/os.path.html",
+          "section": "Module introduction; os.path.basename; os.path.dirname; os.path.split; os.path.splitext",
+          "checkedAt": "2026-11-04"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Explicit POSIX grammar",
+      "boundary": "Lexical decomposition only; not file existence, symlink resolution, type validation, or containment."
+    },
+    {
+      "languageId": "go",
+      "documentationVersion": "Go 1.27.3；标准库 path/filepath；本例限 POSIX 宿主",
+      "reviewedSections": [
+        {
+          "title": "Go 1.27.3 — path/filepath",
+          "url": "https://pkg.go.dev/path/filepath@go1.27.3",
+          "section": "Package overview; Base; Dir; Ext; Split; Clean",
+          "checkedAt": "2026-11-04"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "POSIX host required",
+      "boundary": "Lexical decomposition only; not file existence, symlink resolution, type validation, or containment."
+    }
+  ]
+}
