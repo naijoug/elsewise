@@ -116,7 +116,7 @@ describe('localized build content', () => {
     expect(new Set(modules.map((module) => module.id)).size).toBe(
       modules.length
     );
-    expect(assignedIds).toHaveLength(31);
+    expect(assignedIds).toHaveLength(32);
     expect(new Set(assignedIds).size).toBe(assignedIds.length);
     expect([...assignedIds].sort()).toEqual(
       content('zh')

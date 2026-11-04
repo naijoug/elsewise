@@ -1510,68 +1510,73 @@ test('HTTP documentation icon actions retain tooltips, names and touch targets',
   }
 });
 
-test('path composition keeps partial coverage honest and preserves bilingual saved progress', async ({
-  page,
-}, testInfo) => {
-  await page.setViewportSize({
-    width: testInfo.project.name === 'mobile' ? 375 : 1280,
-    height: 900,
-  });
-  await open(page, 'feature/compose-path/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    '组合文件路径片段'
-  );
-  await expect(page.locator('[data-language-card]')).toHaveCount(4);
-  await expect(page.locator('.doc-context')).toContainText('不代表语言不支持');
-  await page.getByRole('button', { name: '标记学会', exact: true }).click();
-  await page.getByRole('button', { name: '收藏文档', exact: true }).click();
-  await expandLanguagePicker(page);
-  const go = page.getByRole('button', { name: 'Go', exact: true });
-  if ((await go.getAttribute('aria-pressed')) !== 'true') await go.click();
-  const selected = await page
-    .locator('[data-language-card]:visible')
-    .evaluateAll((cards) => cards.map((card) => card.dataset.languageCard));
-  for (const locale of ['zh', 'en']) {
-    if (locale === 'en') {
-      await page.getByRole('link', { name: '切换至英文' }).click();
-      await hydrated(page);
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-        'Compose file path segments'
-      );
-      await expect(
-        page.getByRole('button', { name: 'Learned', exact: true })
-      ).toHaveAttribute('aria-pressed', 'true');
-      await expect(
-        page.getByRole('button', { name: 'Favorited', exact: true })
-      ).toHaveAttribute('aria-pressed', 'true');
-      await expectEnglishProse(page);
-    }
-    for (const theme of ['light', 'dark']) {
-      if ((await page.locator('html').getAttribute('data-theme')) !== theme)
-        await page.locator('#theme-toggle').click();
-      await expectNoHorizontalOverflow(page, page.viewportSize().width);
-      await page.screenshot({
-        path: testInfo.outputPath(`path-compose-${locale}-${theme}.png`),
-        fullPage: true,
-      });
-    }
-  }
-  await page.reload();
-  await hydrated(page);
-  expect(
-    await page
+for (const pathDoc of paths) {
+  test(`${pathDoc.id} keeps partial coverage honest and preserves bilingual saved progress`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({
+      width: testInfo.project.name === 'mobile' ? 375 : 1280,
+      height: 900,
+    });
+    await open(page, `feature/${pathDoc.id}/`);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      pathDoc.title
+    );
+    await expect(page.locator('[data-language-card]')).toHaveCount(4);
+    await expect(page.locator('.doc-context')).toContainText(
+      '不代表语言不支持'
+    );
+    await page.getByRole('button', { name: '标记学会', exact: true }).click();
+    await page.getByRole('button', { name: '收藏文档', exact: true }).click();
+    await expandLanguagePicker(page);
+    const go = page.getByRole('button', { name: 'Go', exact: true });
+    if ((await go.getAttribute('aria-pressed')) !== 'true') await go.click();
+    const selected = await page
       .locator('[data-language-card]:visible')
-      .evaluateAll((cards) => cards.map((card) => card.dataset.languageCard))
-  ).toEqual(selected);
-  expect(
-    await page.evaluate(
-      () => JSON.parse(localStorage.getItem('elsewise_learned_v1')).ids
-    )
-  ).toContain('feature:compose-path');
-  expect(
-    await page.evaluate(
-      () =>
-        JSON.parse(localStorage.getItem('elsewise_preferences')).favoriteIdioms
-    )
-  ).toContain('feature:compose-path');
-});
+      .evaluateAll((cards) => cards.map((card) => card.dataset.languageCard));
+    for (const locale of ['zh', 'en']) {
+      if (locale === 'en') {
+        await page.getByRole('link', { name: '切换至英文' }).click();
+        await hydrated(page);
+        await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+          pathDoc.en.title
+        );
+        await expect(
+          page.getByRole('button', { name: 'Learned', exact: true })
+        ).toHaveAttribute('aria-pressed', 'true');
+        await expect(
+          page.getByRole('button', { name: 'Favorited', exact: true })
+        ).toHaveAttribute('aria-pressed', 'true');
+        await expectEnglishProse(page);
+      }
+      for (const theme of ['light', 'dark']) {
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+          await page.locator('#theme-toggle').click();
+        await expectNoHorizontalOverflow(page, page.viewportSize().width);
+        await page.screenshot({
+          path: testInfo.outputPath(`${pathDoc.id}-${locale}-${theme}.png`),
+          fullPage: true,
+        });
+      }
+    }
+    await page.reload();
+    await hydrated(page);
+    expect(
+      await page
+        .locator('[data-language-card]:visible')
+        .evaluateAll((cards) => cards.map((card) => card.dataset.languageCard))
+    ).toEqual(selected);
+    expect(
+      await page.evaluate(
+        () => JSON.parse(localStorage.getItem('elsewise_learned_v1')).ids
+      )
+    ).toContain(`feature:${pathDoc.id}`);
+    expect(
+      await page.evaluate(
+        () =>
+          JSON.parse(localStorage.getItem('elsewise_preferences'))
+            .favoriteIdioms
+      )
+    ).toContain(`feature:${pathDoc.id}`);
+  });
+}
