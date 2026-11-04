@@ -2,7 +2,7 @@
 import { idioms, languages } from './content';
 import { features } from './feature-content';
 import englishData from '../data/english-content.json';
-import type { Idiom, Language, Implementation } from '../../../src/types';
+import type { Idiom, Language, Implementation } from '@shared/types';
 import type { Feature, FeatureEntry } from './features';
 export type Locale = 'zh' | 'en';
 const english = englishData as unknown as {

@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
-import { loadPreferences, savePreferences } from '../../../src/utils/storage';
-import type { UserPreferences } from '../../../src/types';
+import { loadPreferences, savePreferences } from '@shared/utils/storage';
+import type { UserPreferences } from '@shared/types';
 const eventName = 'elsewise:preferences';
 const serverValue = JSON.stringify({
   favoriteIdioms: [],

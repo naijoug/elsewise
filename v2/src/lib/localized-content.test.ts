@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { content, modules, validateModules } from './localized-content';
-import type { Implementation } from '../../../src/types';
+import type { Implementation } from '@shared/types';
 
 const practicalIds = ['read-text-file', 'write-text-file', 'json', 'http-get'];
 const cjk = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u;

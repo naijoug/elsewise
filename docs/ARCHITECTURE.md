@@ -26,6 +26,13 @@
 
 生产入口现为 `v2/`：Astro静态生成目录、习语详情、语言目录/详情、收藏壳与404；React岛只承载搜索筛选、语言选择、复制、收藏与主题。Prism只在构建期使用。目录props只有摘要，代码搜索索引在首次输入时加载；详情只包含当前习语代码。
 
+`v2/` 与 `src/` 旧 SPA 彻底解耦，仅通过清晰的别名访问共享基础资产，对旧 SPA 页面、组件、Hook 与过滤器无任何依赖：
+- `@shared/types`: 类型契约定义（`src/types/index.ts`）
+- `@shared/config/brand`: 品牌配置（`src/config/brand.ts`）
+- `@shared/utils/storage`: 偏好持久化与兼容回退工具（`src/utils/storage.ts`）
+- `@shared/data/*`: 静态数据快照（`src/data/idioms.json`, `src/data/languages.json`）
+- `@scripts/*`: 内容 Schema 验证工具（`scripts/content-schema.mjs`）
+
 继续复用 `src/data` 快照和 `src/utils/storage.ts`，保留 `elsewise_preferences` 及旧 `bytebite_preferences` 回退键。主内容仍来自外部handbook，构建保留快照不等于更新权威内容。未提供账户或在线执行；示例输出不是实时结果。
 
 根 `build`/`validate`/`pre-deploy` 已接入静态生产流水线；`build:legacy`仅供旧实现回归，不用于Pages。以下内容保留作原SPA实现文档，提到BrowserRouter或全量客户端加载的部分不再描述生产架构。

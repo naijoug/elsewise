@@ -41,6 +41,9 @@ npm exec -- tsc -b
 | 命令 | 范围与副作用 |
 | --- | --- |
 | `npm run test:run` | 全部 Vitest 测试，一次执行 |
+| `npm run test:shared` | 共享层与构建验证测试（存储兼容、内容模式、同步器、构建验证） |
+| `npm run test:legacy` | 旧 SPA 组件、页面与 Hook 回归测试 |
+| `npm run test:v2` | `v2/` 生产应用与 React 岛单元测试 |
 | `npm run validate` | lint → 格式 → Vitest → 数据同步 → TypeScript → Vite 构建 |
 | `npm run pre-deploy` | Node 版本检查 → production 环境的 validate → 构建产物检查，只构建一次 |
 | `npm run verify-build` | 检查已有 dist 的 HTML、JS、CSS 和两份非空 JSON 数组，不重新构建 |
