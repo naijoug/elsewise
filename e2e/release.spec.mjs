@@ -83,7 +83,7 @@ test('static entry has no full content or highlighter payload; search and combin
   const response = await open(page);
   expect(response.status()).toBe(200);
   await expect(page).toHaveTitle('编程知识目录 · 异曲');
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   await expect(
     page.getByRole('link', { name: '异曲', exact: true })
   ).toBeVisible();
@@ -104,7 +104,7 @@ test('static entry has no full content or highlighter payload; search and combin
     true
   );
   await page.getByRole('button', { name: '重置', exact: true }).click();
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   await page
     .getByRole('navigation', { name: '知识章节' })
     .getByRole('button', { name: /集合与迭代/ })
@@ -155,7 +155,7 @@ test('search index failure preserves summaries and retry restores code search', 
     route.fulfill({ status: 503, body: 'Unavailable' })
   );
   await open(page);
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   const term = 'numbers.map(n => n * 2)';
   await page.getByRole('searchbox', { name: '搜索知识点' }).fill(term);
   await expect(
@@ -373,7 +373,7 @@ test('invalid saved preferences do not crash static pages or hydration', async (
     )
   );
   await open(page);
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   await open(page, 'idiom/array-map/');
   await expect(page.locator('#code-array-map-python')).toBeVisible();
 });
@@ -469,7 +469,7 @@ test('without JavaScript, complete detail source and links remain available', as
       .getByRole('navigation', { name: '主导航' })
       .getByRole('link', { name: '知识目录', exact: true })
       .click();
-    await expect(cards(page)).toHaveCount(51);
+    await expect(cards(page)).toHaveCount(52);
   } finally {
     await context.close();
   }
@@ -530,7 +530,7 @@ test('catalog bookmarks persist across detail navigation and reload without chan
     await page.evaluate(() => localStorage.getItem('elsewise_learned_v1'))
   ).toBe(learned);
   await page.getByRole('button', { name: '全部', exact: true }).click();
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(0);
   await page.getByRole('button', { name: '重置', exact: true }).click();
@@ -551,7 +551,7 @@ test('legacy learning URL falls back to all topics without deleting learned reco
   );
   for (const learning of ['learned', 'unlearned']) {
     await open(page, `?learning=${learning}`);
-    await expect(cards(page)).toHaveCount(51);
+    await expect(cards(page)).toHaveCount(52);
     await expect
       .poll(() => new URL(page.url()).searchParams.has('learning'))
       .toBe(false);
@@ -602,7 +602,7 @@ test('documents retain learning/favorites, related idioms and language navigatio
   page,
 }) => {
   await open(page, 'features/');
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   await page.getByLabel('搜索知识点').fill('所有权');
   // Full-text search also finds discussions of ownership in other topics.
   const ownership = cards(page).filter({
@@ -692,7 +692,7 @@ test('home unifies documentation and patterns into an ordered searchable curricu
   await expect(
     page.getByRole('heading', { name: '编程知识目录' })
   ).toBeVisible();
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   await expect(page.locator('.knowledge-chapter')).toHaveCount(10);
   const mainNav = page.getByRole('navigation', { name: '主导航' });
   await expect(
@@ -718,10 +718,10 @@ test('home unifies documentation and patterns into an ordered searchable curricu
     page.getByRole('heading', { name: '没有匹配的知识点' })
   ).toBeVisible();
   await query.fill('');
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   for (const alias of ['features/', 'idioms/']) {
     await open(page, alias);
-    await expect(cards(page)).toHaveCount(51);
+    await expect(cards(page)).toHaveCount(52);
   }
 });
 
@@ -905,7 +905,7 @@ test('without JavaScript, both locales retain the docs directory and all practic
       expect(
         (await page.goto(new URL(prefix || './', baseURL).href)).status()
       ).toBe(200);
-      await expect(cards(page)).toHaveCount(51);
+      await expect(cards(page)).toHaveCount(52);
       for (const doc of practical) {
         expect(
           (
@@ -1221,7 +1221,7 @@ test('catalog chapter, language, saved and query survive detail back, reload and
     await expectNoHorizontalOverflow(page, page.viewportSize().width);
   }
   await page.getByRole('button', { name: 'Reset', exact: true }).click();
-  await expect(cards(page)).toHaveCount(51);
+  await expect(cards(page)).toHaveCount(52);
   expect(new URL(page.url()).search).toBe('');
 });
 
