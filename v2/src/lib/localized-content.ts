@@ -153,7 +153,7 @@ export const modules = [
     id: 'files',
     zh: '文件与目录',
     en: 'Files & directories',
-    ids: ['compose-path', 'read-text-file', 'write-text-file'],
+    ids: ['compose-path', 'split-path', 'read-text-file', 'write-text-file'],
   },
   { id: 'data', zh: '数据格式', en: 'Data formats', ids: ['json'] },
   { id: 'network', zh: '网络请求', en: 'Networking', ids: ['http-get'] },

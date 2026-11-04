@@ -1,3 +1,7 @@
+# 路径拆分增补（2026-11-04）
+
+`v2/src/data/paths.json` 新增 `split-path`，按同一任务对照 JavaScript、TypeScript、Python、Go 的目录、名称与扩展名提取。明确尾斜杠、点文件与空输入差异，仅核查 [path-parts-source-coverage.json](path-parts-source-coverage.json) 所列章节，不宣称全手册覆盖。示例未执行；中文和英文共用 `feature:split-path`，原有 ID、收藏、学习记录和语言偏好保持不变，无需破坏性迁移。新增内容不修改外部 handbook 或旧生成快照。
+
 # 路径组合增补（2026-11-03）
 
 `v2/src/data/paths.json` 是本仓原创规范源，首批 `compose-path` 统一对照 JavaScript、TypeScript、Python、Go，接入“文件与目录”。它独立于旧 handbook 快照，不改写 `src/data/idioms.json`。中文和英文共用稳定 ID；没有重命名旧条目或迁移存储键。来源版本与逐章节范围见 [paths-source-coverage.json](paths-source-coverage.json)。仅核查所列 API，示例未执行；未收录的语言不表示不支持。
