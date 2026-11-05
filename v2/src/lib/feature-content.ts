@@ -4,10 +4,12 @@ import practical from '../data/practical-docs.json';
 import foundations from '../data/foundations.json';
 import collections from '../data/collections.json';
 import paths from '../data/paths.json';
+import strings from '../data/strings.json';
 import { idioms, languages } from './content';
 import type { Feature } from './features';
 export const features = [
   ...foundations,
+  ...strings,
   ...collections,
   ...practical,
   ...paths,

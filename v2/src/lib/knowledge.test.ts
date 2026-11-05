@@ -7,8 +7,8 @@ describe('unified knowledge directory', () => {
     'covers every source once without confusing related concepts (%s)',
     (locale) => {
       const items = knowledge(locale);
-      expect(items).toHaveLength(52);
-      expect(new Set(items.map((i) => i.id)).size).toBe(52);
+      expect(items).toHaveLength(53);
+      expect(new Set(items.map((i) => i.id)).size).toBe(53);
       expect(items.map((i) => i.id)).toEqual(
         expect.arrayContaining(
           content(locale).features.map((f) => `feature:${f.id}`)
@@ -46,7 +46,7 @@ describe('unified knowledge directory', () => {
         'collections',
       ]);
       const search = knowledgeSearch(locale);
-      expect(search).toHaveLength(52);
+      expect(search).toHaveLength(53);
       expect(search.find((i) => i.id === 'feature:closures')?.text).toContain(
         'counter'
       );

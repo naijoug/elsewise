@@ -1,0 +1,172 @@
+[
+  {
+    "id": "string-length",
+    "title": "字符串长度与 Unicode",
+    "description": "用相同的 cat、😀（U+1F600）和 e + U+0301 比较 UTF-16 码元、Unicode 码点与 UTF-8 字节。按这个顺序，文档推导的计数分别为 3/3/3、2/1/4、2/2/3；这不是执行结果，也不是字素簇数或屏幕宽度。",
+    "scope": "shared",
+    "scopeNote": "已核查的子集：JavaScript、TypeScript、Python、Go，共四门语言、三套运行时语义。仅核查所列章节，不代表完整手册覆盖；未收录不代表不支持。所有示例未执行。",
+    "tags": [
+      "字符串",
+      "长度",
+      "Unicode",
+      "编码",
+      "码点",
+      "UTF-16",
+      "UTF-8"
+    ],
+    "related": [
+      "basic-types",
+      "sequence-collections",
+      "read-text-file"
+    ],
+    "idiomIds": [],
+    "entries": [
+      {
+        "languageId": "javascript",
+        "baseline": "Node.js 22.12.0；ES module；标准库 node:buffer",
+        "status": "native",
+        "summary": "length 统计 UTF-16 码元；展开字符串后统计码点；Buffer.byteLength 指定 UTF-8 后统计字节。三个值衡量不同单位。",
+        "versionNotes": "保存为 .mjs；Buffer 是 Node API，不是浏览器标准 API。样本均为有效 Unicode 文本，未做正规化；码点数不是字素簇数或显示宽度。本例不验证孤立代理项或其他无效输入。示例未执行。",
+        "code": "import { Buffer } from \"node:buffer\";\n\nconst samples = [\"cat\", \"\\u{1F600}\", \"e\\u0301\"];\nfor (const text of samples) {\n  console.log(JSON.stringify({\n    text,\n    utf16Units: text.length,\n    codePoints: [...text].length,\n    utf8Bytes: Buffer.byteLength(text, \"utf8\"),\n  }));\n}",
+        "sources": [
+          {
+            "title": "ECMAScript — The String Type (living specification)",
+            "url": "https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type",
+            "section": "6.1.4 The String Type",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "ECMAScript — String iteration and length (living specification)",
+            "url": "https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype-%symbol.iterator%",
+            "section": "String.prototype [ %Symbol.iterator% ]; Properties of String Instances: length",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "Node.js v22.12.0 — Buffer",
+            "url": "https://nodejs.org/download/release/v22.12.0/docs/api/buffer.html#static-method-bufferbytelengthstring-encoding",
+            "section": "Buffer.byteLength(string[, encoding])",
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "en": {
+          "baseline": "Node.js 22.12.0; ES module; standard-library node:buffer",
+          "summary": "length counts UTF-16 code units; spreading the string counts code points; Buffer.byteLength with UTF-8 counts bytes. These are different units.",
+          "versionNotes": "Save as .mjs; Buffer is a Node API, not a standard browser API. Samples contain valid Unicode text without normalization. Code-point counts are neither grapheme-cluster counts nor display widths. Lone surrogates and other invalid inputs are not validated here. Example not executed."
+        }
+      },
+      {
+        "languageId": "typescript",
+        "baseline": "TypeScript 5.3；target=ES2022；编译后在 Node.js 22.12.0 运行",
+        "status": "native",
+        "summary": "length 统计 UTF-16 码元；展开字符串后统计码点；Buffer.byteLength 指定 UTF-8 后统计字节。三个值衡量不同单位。",
+        "versionNotes": "保存为 .mts，以 module/moduleResolution=NodeNext、target=ES2022 编译，并提供兼容编译器的 Node 22 类型声明；此编译器与声明组合未验证。类型标注不改变字符串运行时语义。仅处理本例有效 Unicode 文本，未正规化，不统计字素簇或显示宽度。示例未经编译或执行。",
+        "code": "import { Buffer } from \"node:buffer\";\n\nconst samples: string[] = [\"cat\", \"\\u{1F600}\", \"e\\u0301\"];\nfor (const text of samples) {\n  console.log(JSON.stringify({\n    text,\n    utf16Units: text.length,\n    codePoints: [...text].length,\n    utf8Bytes: Buffer.byteLength(text, \"utf8\"),\n  }));\n}",
+        "sources": [
+          {
+            "title": "ECMAScript — The String Type (living specification)",
+            "url": "https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type",
+            "section": "6.1.4 The String Type",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "ECMAScript — String iteration and length (living specification)",
+            "url": "https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype-%symbol.iterator%",
+            "section": "String.prototype [ %Symbol.iterator% ]; Properties of String Instances: length",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "Node.js v22.12.0 — Buffer",
+            "url": "https://nodejs.org/download/release/v22.12.0/docs/api/buffer.html#static-method-bufferbytelengthstring-encoding",
+            "section": "Buffer.byteLength(string[, encoding])",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "TypeScript — The Basics",
+            "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types",
+            "section": "Erased Types; Downleveling",
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "en": {
+          "baseline": "TypeScript 5.3; target=ES2022; compile and run on Node.js 22.12.0",
+          "summary": "length counts UTF-16 code units; spreading the string counts code points; Buffer.byteLength with UTF-8 counts bytes. These are different units.",
+          "versionNotes": "Save as .mts; compile with module/moduleResolution=NodeNext and target=ES2022, supplying compiler-compatible Node 22 type declarations. This compiler/declaration pairing is unverified. Annotations do not change string runtime semantics. Only the valid Unicode samples are covered, without normalization, grapheme segmentation, or display-width measurement. Example not compiled or executed."
+        }
+      },
+      {
+        "languageId": "python",
+        "baseline": "Python 3.14；内置 str 与标准编码器",
+        "status": "native",
+        "summary": "len(str) 统计码点；编码为 UTF-8 后用 len 统计字节。为对照 JavaScript，把文本编码为无 BOM 的 UTF-16-LE，再将字节数除以 2 得到码元数。",
+        "versionNotes": "UTF-16-LE 明确字节序且不添加 BOM；不要直接换成会添加 BOM 的 utf-16。此计数不代表 Python 内部内存占用。仅处理本例有效 Unicode 文本，不做正规化或字素簇分割；默认 strict 编码可能拒绝代理码点。示例未执行。",
+        "code": "samples = [\"cat\", \"\\U0001F600\", \"e\\u0301\"]\nfor text in samples:\n    print({\n        \"text\": text,\n        \"utf16Units\": len(text.encode(\"utf-16-le\")) // 2,\n        \"codePoints\": len(text),\n        \"utf8Bytes\": len(text.encode(\"utf-8\")),\n    })",
+        "sources": [
+          {
+            "title": "Python 3.14 — Built-in Types",
+            "url": "https://docs.python.org/3.14/library/stdtypes.html#text-sequence-type-str",
+            "section": "Common Sequence Operations: len; Text Sequence Type — str; str.encode; Bytes Objects",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "Python 3.14 — codecs",
+            "url": "https://docs.python.org/3.14/library/codecs.html#standard-encodings",
+            "section": "Standard Encodings: utf_16_le and utf_8",
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "en": {
+          "baseline": "Python 3.14; built-in str and standard codecs",
+          "summary": "len(str) counts code points; len after UTF-8 encoding counts bytes. For comparison with JavaScript, encode as BOM-free UTF-16-LE and divide the byte count by two to count code units.",
+          "versionNotes": "UTF-16-LE fixes byte order without adding a BOM; do not substitute utf-16, which adds a BOM. This does not measure Python object memory. Only the valid Unicode samples are covered, without normalization or grapheme segmentation; strict encoding can reject surrogate code points. Example not executed."
+        }
+      },
+      {
+        "languageId": "go",
+        "baseline": "Go 1.23.0；标准库 unicode/utf8 与 unicode/utf16",
+        "status": "native",
+        "summary": "len(string) 统计字节；对有效 UTF-8 文本，utf8.RuneCountInString 统计码点。先转换为 []rune 再用 utf16.Encode，得到可与 JavaScript 对照的 UTF-16 码元数。",
+        "versionNotes": "Go string 可以包含任意字节，不保证有效 UTF-8；RuneCountInString 将无效或截断编码的每个错误字节计为一个 rune，因此它不是有效性检查。本例只含有效 UTF-8，不做正规化，不统计字素簇或显示宽度。Go 1.23.0 是固定示例基线，不宣称为最新版。示例未经编译或执行。",
+        "code": "package main\n\nimport (\n    \"fmt\"\n    \"unicode/utf16\"\n    \"unicode/utf8\"\n)\n\nfunc main() {\n    samples := []string{\"cat\", \"\\U0001F600\", \"e\\u0301\"}\n    for _, text := range samples {\n        fmt.Printf(\"%q utf16Units=%d codePoints=%d utf8Bytes=%d\\n\",\n            text, len(utf16.Encode([]rune(text))),\n            utf8.RuneCountInString(text), len(text))\n    }\n}",
+        "sources": [
+          {
+            "title": "Go — Language Specification",
+            "url": "https://go.dev/ref/spec#String_types",
+            "section": "String types; Conversions to and from a string type",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "Go 1.23.0 — unicode/utf8",
+            "url": "https://pkg.go.dev/unicode/utf8@go1.23.0#RuneCountInString",
+            "section": "RuneCount; RuneCountInString",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "title": "Go 1.23.0 — unicode/utf16",
+            "url": "https://pkg.go.dev/unicode/utf16@go1.23.0#Encode",
+            "section": "Encode",
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "en": {
+          "baseline": "Go 1.23.0; standard-library unicode/utf8 and unicode/utf16",
+          "summary": "len(string) counts bytes; utf8.RuneCountInString counts code points in valid UTF-8. Convert to []rune and then use utf16.Encode to count UTF-16 code units for comparison with JavaScript.",
+          "versionNotes": "A Go string may contain arbitrary bytes, not necessarily valid UTF-8. RuneCountInString counts each erroneous byte in invalid or truncated encodings as a rune, so it is not a validity check. Samples are valid UTF-8, without normalization, grapheme segmentation, or display-width measurement. Go 1.23.0 is a pinned illustrative baseline, not a claim of latest release. Example not compiled or executed."
+        }
+      }
+    ],
+    "en": {
+      "title": "String length and Unicode",
+      "description": "Compare UTF-16 code units, Unicode code points, and UTF-8 bytes for the same cat, 😀 (U+1F600), and e + U+0301 samples. In that order, the documentation-derived counts are 3/3/3, 2/1/4, and 2/2/3. These are not execution results, grapheme-cluster counts, or screen widths.",
+      "scopeNote": "Reviewed subset: JavaScript, TypeScript, Python, and Go, covering four languages and three runtime contracts. Only listed sections were reviewed, not complete manuals. Missing coverage does not mean unsupported. All examples are unexecuted.",
+      "tags": [
+        "strings",
+        "length",
+        "Unicode",
+        "encoding",
+        "code points",
+        "UTF-16",
+        "UTF-8"
+      ]
+    }
+  }
+]

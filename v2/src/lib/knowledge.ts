@@ -13,6 +13,7 @@ export const chapters = [
       'f:operators',
       'f:conditions',
       'f:loops',
+      'f:string-length',
       'string-interpolation',
     ],
   },

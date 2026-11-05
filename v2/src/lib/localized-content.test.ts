@@ -116,7 +116,7 @@ describe('localized build content', () => {
     expect(new Set(modules.map((module) => module.id)).size).toBe(
       modules.length
     );
-    expect(assignedIds).toHaveLength(32);
+    expect(assignedIds).toHaveLength(33);
     expect(new Set(assignedIds).size).toBe(assignedIds.length);
     expect([...assignedIds].sort()).toEqual(
       content('zh')
@@ -183,7 +183,7 @@ describe('foundations-first learning path', () => {
     'functions',
   ];
   it('starts with real foundation chapters, not practical APIs or empty placeholders', () => {
-    expect(modules[0].ids).toEqual(ids);
+    expect(modules[0].ids).toEqual([...ids, 'string-length']);
     for (const locale of ['zh', 'en'] as const) {
       const localized = content(locale);
       for (const id of ids) {

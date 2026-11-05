@@ -104,6 +104,7 @@ export const modules = [
       'conditions',
       'loops',
       'functions',
+      'string-length',
     ],
   },
   {

@@ -1,3 +1,7 @@
+# 字符串长度增补（2026-11-05）
+
+`v2/src/data/strings.json` 是本仓原创规范源，新增 `string-length`，在“基础语法”中对照 JavaScript、TypeScript、Python、Go 对同一文本的计数单位：UTF-16 码元、Unicode 码点与 UTF-8 字节。明确这些数量不等于用户感知的字素簇数；仅核查 [strings-source-coverage.json](strings-source-coverage.json) 所列章节，不宣称覆盖全部语言或完整手册。示例未执行。中英文共用 `feature:string-length`，原 ID、收藏、学习记录与导航保持兼容，不修改外部 handbook 或旧生成快照。
+
 # 路径拆分增补（2026-11-04）
 
 `v2/src/data/paths.json` 新增 `split-path`，按同一任务对照 JavaScript、TypeScript、Python、Go 的目录、名称与扩展名提取。明确尾斜杠、点文件与空输入差异，仅核查 [path-parts-source-coverage.json](path-parts-source-coverage.json) 所列章节，不宣称全手册覆盖。示例未执行；中文和英文共用 `feature:split-path`，原有 ID、收藏、学习记录和语言偏好保持不变，无需破坏性迁移。新增内容不修改外部 handbook 或旧生成快照。
