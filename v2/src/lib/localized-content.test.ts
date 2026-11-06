@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { content, modules, validateModules } from './localized-content';
+import { content } from './localized-content';
+import { chapters } from './knowledge';
 import type { Implementation } from '@shared/types';
 
 const practicalIds = ['read-text-file', 'write-text-file', 'json', 'http-get'];
@@ -30,10 +31,10 @@ function nonempty(value: unknown, label: string) {
 }
 
 describe('localized build content', () => {
-  it('has no untranslated CJK prose in English content or English module labels', () => {
+  it('has no untranslated CJK prose in English content or English chapter labels', () => {
     expect(untranslatedProse(content('en'))).toEqual([]);
     expect(
-      modules.flatMap((module) => untranslatedProse(module.en, module.id))
+      chapters.flatMap((chapter) => untranslatedProse(chapter.en, chapter.id))
     ).toEqual([]);
   });
 
@@ -111,34 +112,6 @@ describe('localized build content', () => {
     }
   );
 
-  it('assigns all document IDs to exactly one directory module', () => {
-    const assignedIds = modules.flatMap((module) => module.ids);
-    expect(new Set(modules.map((module) => module.id)).size).toBe(
-      modules.length
-    );
-    expect(assignedIds).toHaveLength(32);
-    expect(new Set(assignedIds).size).toBe(assignedIds.length);
-    expect([...assignedIds].sort()).toEqual(
-      content('zh')
-        .features.map((feature) => feature.id)
-        .sort()
-    );
-  });
-
-  it('rejects incomplete or unknown module assignments', () => {
-    const copy = structuredClone(modules);
-    copy[0].ids.push('unknown-feature');
-    expect(() => validateModules(copy, content('zh').features)).toThrow(
-      /Unknown feature 'unknown-feature'/
-    );
-
-    const missingFeature = structuredClone(modules);
-    missingFeature[0].ids.shift();
-    expect(() =>
-      validateModules(missingFeature, content('zh').features)
-    ).toThrow(/is not assigned to any module/);
-  });
-
   it('preserves every populated optional implementation prose field in English', () => {
     const zh = content('zh');
     const en = content('en');
@@ -197,7 +170,12 @@ describe('foundations-first learning path', () => {
     'functions',
   ];
   it('starts with real foundation chapters, not practical APIs or empty placeholders', () => {
-    expect(modules[0].ids).toEqual(ids);
+    expect(chapters[0].items.filter((id) => id.startsWith('f:'))).toEqual(
+      ids.filter((id) => id !== 'functions').map((id) => `f:${id}`)
+    );
+    expect(
+      chapters.find((chapter) => chapter.id === 'functions')!.items[0]
+    ).toBe('f:functions');
     for (const locale of ['zh', 'en'] as const) {
       const localized = content(locale);
       for (const id of ids) {
@@ -264,9 +242,12 @@ it('covers types, branches and loops as sourced beginner chapters in both locale
 
 describe('collection comparison chapters', () => {
   const ids = ['sequence-collections', 'key-value-maps'];
-  it('puts one canonical collection module after foundations without duplicate language-specific tasks', () => {
-    expect(modules[1].id).toBe('collections');
-    expect(modules[1].ids).toEqual(ids);
+  it('keeps collection lessons together in the production curriculum', () => {
+    expect(
+      chapters
+        .find((chapter) => chapter.id === 'collections')!
+        .items.slice(0, 2)
+    ).toEqual(ids.map((id) => `f:${id}`));
   });
   it.each(['zh', 'en'] as const)(
     'provides complete sourced examples for twelve languages (%s)',

@@ -1,0 +1,15 @@
+---
+interface Props { topic?: string; chapter?: string }
+const { topic, chapter = 'basics' } = Astro.props;
+const plates = import.meta.glob<string>('../assets/topic-art/**/*.webp', {
+  eager: true, import: 'default', query: '?url',
+});
+const plate = (name: string) => plates[`../assets/topic-art/${name}.webp`];
+const subject = topic === 'closure' ? 'closures' : topic;
+const shared = plate(`topics/${subject}`) || plate(chapter);
+const dark = plate(`topics/${subject}-dark`) || (subject === 'variables' ? plate('variables-dark') : shared);
+const light = plate(`topics/${subject}-light`) || (subject === 'variables' ? plate('variables-light') : shared);
+---
+{dark && light && (
+  <div aria-hidden="true" class:list={['topic-art', { 'topic-art--hello-world': subject === 'hello-world' }]} style={`--plate-light:url("${light}");--plate-dark:url("${dark}")`}></div>
+)}

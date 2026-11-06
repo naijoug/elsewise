@@ -1,5 +1,6 @@
 /** Build-only adapter: one curriculum, independent of the historical source format. */
 import { content, type Locale } from './localized-content';
+// The sole topic registry: content modules must not maintain a second assignment list.
 export const chapters = [
   {
     id: 'basics',

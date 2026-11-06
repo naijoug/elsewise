@@ -1,6 +1,6 @@
 /** Build-only localized content; never serialize implementation bodies to catalog islands. */
 import { idioms, languages } from './content';
-import { features } from './feature-content';
+import { features, validateFeatures } from './feature-content';
 import englishData from '../data/english-content.json';
 import type { Idiom, Language, Implementation } from '@shared/types';
 import type { Feature, FeatureEntry } from './features';
@@ -23,11 +23,15 @@ const contentCache = new Map<
   ReturnType<typeof buildLocalizedContent>
 >();
 
+function nonempty(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
 function buildLocalizedContent(locale: Locale) {
   const localizedIdioms = idioms.map((item) => {
     if (locale === 'zh') return item;
     const value = english.idioms[item.id];
-    if (!value || !value.title?.trim() || !value.description?.trim()) {
+    if (!value || !nonempty(value.title) || !nonempty(value.description)) {
       throw new Error(`Missing English idiom '${item.id}'`);
     }
     return {
@@ -63,7 +67,7 @@ function buildLocalizedContent(locale: Locale) {
     const value =
       (item as Feature & { en?: Partial<Feature> }).en ||
       english.features[item.id];
-    if (!value || !value.title?.trim() || !value.description?.trim()) {
+    if (!value || !nonempty(value.title) || !nonempty(value.description)) {
       throw new Error(`Missing English document '${item.id}'`);
     }
     return {
@@ -77,9 +81,9 @@ function buildLocalizedContent(locale: Locale) {
           ];
         if (
           !entryEn ||
-          !entryEn.summary?.trim() ||
-          !entryEn.versionNotes?.trim() ||
-          !entryEn.baseline?.trim()
+          !nonempty(entryEn.summary) ||
+          !nonempty(entryEn.versionNotes) ||
+          !nonempty(entryEn.baseline)
         ) {
           throw new Error(
             `Missing English entry for document '${item.id}' (${entry.languageId})`
@@ -92,6 +96,8 @@ function buildLocalizedContent(locale: Locale) {
       }),
     } as Feature;
   });
+  // Validate the resolved locale too: translations can override code and evidence.
+  validateFeatures(localizedFeatures);
   return {
     idioms: localizedIdioms,
     languages: localizedLanguages,
@@ -123,107 +129,3 @@ export function routeBase(locale: Locale) {
     import.meta.env.BASE_URL.replace(/\/$/, '') + (locale === 'en' ? '/en' : '')
   );
 }
-export const modules = [
-  {
-    id: 'basics',
-    zh: '基础语法',
-    en: 'Language basics',
-    ids: [
-      'syntax-basics',
-      'variables',
-      'constants',
-      'basic-types',
-      'operators',
-      'conditions',
-      'loops',
-      'functions',
-    ],
-  },
-  {
-    id: 'collections',
-    zh: '集合与查找',
-    en: 'Collections & lookup',
-    ids: ['sequence-collections', 'key-value-maps'],
-  },
-  {
-    id: 'functions-advanced',
-    zh: '函数与迭代',
-    en: 'Functions & iteration',
-    ids: ['closures', 'javascript-generators', 'python-comprehensions'],
-  },
-  {
-    id: 'types',
-    zh: '类型与数据建模',
-    en: 'Types & modeling',
-    ids: ['generics', 'typescript-discriminated-unions', 'swift-optionals'],
-  },
-  {
-    id: 'objects',
-    zh: '对象与行为',
-    en: 'Objects & behavior',
-    ids: [
-      'inheritance',
-      'polymorphism',
-      'ruby-open-classes',
-      'csharp-events',
-      'kotlin-delegated-properties',
-      'php-traits',
-    ],
-  },
-  {
-    id: 'safety',
-    zh: '错误与资源管理',
-    en: 'Errors & resources',
-    ids: ['java-checked-exceptions', 'rust-ownership', 'cpp-raii'],
-  },
-  {
-    id: 'concurrency',
-    zh: '并发',
-    en: 'Concurrency',
-    ids: ['go-goroutines-channels'],
-  },
-  {
-    id: 'files',
-    zh: '文件与目录',
-    en: 'Files & directories',
-    ids: ['compose-path', 'split-path', 'read-text-file', 'write-text-file'],
-  },
-  { id: 'data', zh: '数据格式', en: 'Data formats', ids: ['json'] },
-  { id: 'network', zh: '网络请求', en: 'Networking', ids: ['http-get'] },
-];
-
-export function validateModules(
-  moduleList: typeof modules,
-  featureList: { id: string }[]
-) {
-  const modIds = new Set<string>();
-  const assignedIds = new Set<string>();
-  const featureIdSet = new Set(featureList.map((f) => f.id));
-
-  for (const mod of moduleList) {
-    if (!mod.id || !mod.zh || !mod.en) {
-      throw new Error(`Module '${mod.id}': Invalid module metadata`);
-    }
-    if (modIds.has(mod.id)) {
-      throw new Error(`Duplicate module id: '${mod.id}'`);
-    }
-    modIds.add(mod.id);
-
-    for (const featId of mod.ids) {
-      if (assignedIds.has(featId)) {
-        throw new Error(`Duplicate module feature: '${featId}'`);
-      }
-      assignedIds.add(featId);
-      if (!featureIdSet.has(featId)) {
-        throw new Error(`Module '${mod.id}': Unknown feature '${featId}'`);
-      }
-    }
-  }
-
-  for (const feat of featureList) {
-    if (!assignedIds.has(feat.id)) {
-      throw new Error(`Feature '${feat.id}' is not assigned to any module`);
-    }
-  }
-}
-validateModules(modules, features);

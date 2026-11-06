@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   knowledge,
   chapters,
@@ -12,8 +12,11 @@ describe('unified knowledge directory', () => {
     'covers every source once without confusing related concepts (%s)',
     (locale) => {
       const items = knowledge(locale);
-      expect(items).toHaveLength(52);
-      expect(new Set(items.map((i) => i.id)).size).toBe(52);
+      const expectedCount =
+        content(locale).features.length +
+        content(locale).idioms.filter((i) => i.id !== 'closure').length;
+      expect(items).toHaveLength(expectedCount);
+      expect(new Set(items.map((i) => i.id)).size).toBe(expectedCount);
       expect(items.map((i) => i.id)).toEqual(
         expect.arrayContaining(
           content(locale).features.map((f) => `feature:${f.id}`)
@@ -51,7 +54,7 @@ describe('unified knowledge directory', () => {
         'collections',
       ]);
       const search = knowledgeSearch(locale);
-      expect(search).toHaveLength(52);
+      expect(search.map((i) => i.id)).toEqual(items.map((i) => i.id));
       expect(search.find((i) => i.id === 'feature:closures')?.text).toContain(
         'counter'
       );
@@ -89,6 +92,49 @@ describe('unified knowledge directory', () => {
         content('zh').idioms
       )
     ).toThrow(/is not assigned to any chapter/);
+  });
+  it('rejects duplicate chapter assignments and unknown feature references', () => {
+    const copy = structuredClone(chapters);
+    copy[1].items.push(copy[0].items[0]);
+    expect(() =>
+      validateChapters(copy, content('zh').features, content('zh').idioms)
+    ).toThrow(/Duplicate chapter item/);
+    copy[1].items.pop();
+    copy[1].items.push('f:unknown-topic');
+    expect(() =>
+      validateChapters(copy, content('zh').features, content('zh').idioms)
+    ).toThrow(/Unknown feature/);
+  });
+  it('accepts a new document after adding it to only the production registry', async () => {
+    vi.resetModules();
+    vi.doMock('./feature-content', async (importOriginal) => {
+      const original =
+        await importOriginal<typeof import('./feature-content')>();
+      const topic = structuredClone(
+        original.features.find((f) => f.id === 'compose-path')!
+      );
+      topic.id = 'new-topic';
+      return { ...original, features: [...original.features, topic] };
+    });
+    try {
+      // Content loading must not require a second module assignment.
+      const { content: expandedContent } = await import('./localized-content');
+      const expanded = structuredClone(chapters);
+      expanded[0].items.push('f:new-topic');
+      for (const locale of ['zh', 'en'] as const) {
+        const data = expandedContent(locale);
+        expect(data.features.some((f) => f.id === 'new-topic')).toBe(true);
+        expect(() =>
+          validateChapters(expanded, data.features, data.idioms)
+        ).not.toThrow();
+        expect(() =>
+          validateChapters(chapters, data.features, data.idioms)
+        ).toThrow(/new-topic.*not assigned/);
+      }
+    } finally {
+      vi.doUnmock('./feature-content');
+      vi.resetModules();
+    }
   });
 });
 

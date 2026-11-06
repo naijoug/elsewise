@@ -1,3 +1,5 @@
-export type Locale = 'zh' | 'en';
-export const text = (locale: Locale, zh: string, en: string): string =>
+export type { Locale, Messages } from './messages';
+export { getMessages } from './messages';
+
+export const text = (locale: 'zh' | 'en', zh: string, en: string): string =>
   locale === 'en' ? en : zh;

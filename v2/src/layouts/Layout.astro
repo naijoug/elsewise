@@ -3,27 +3,43 @@ import '../styles.css';
 import '../reading-theme.css';
 import { brand } from '@shared/config/brand';
 import ThemeToggle from '../components/ThemeToggle';
-import {routeBase, type Locale} from '../lib/localized-content';
-interface Props { title: string; description?: string; locale?: Locale }
-const { title, description, locale='zh' } = Astro.props;
-const en=locale==='en'; const base=routeBase(locale);
-const root=import.meta.env.BASE_URL.replace(/\/$/,'');
-const path=Astro.url.pathname.slice(root.length).replace(/^\/en(?=\/|$)/,'') || '/';
+import { routeBase, type Locale } from '../lib/localized-content';
+import { getMessages } from '../lib/messages';
+
+interface Props {
+  title: string;
+  description?: string;
+  locale?: Locale;
+}
+
+const { title, description, locale = 'zh' } = Astro.props;
+const en = locale === 'en';
+const base = routeBase(locale);
+const t = getMessages(locale);
+
+const root = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.slice(root.length).replace(/^\/en(?=\/|$)/, '') || '/';
 const is404 = /^\/404(?:\.html|\/)?$/.test(path);
-const alternatePath=is404?(en?'/404.html':'/404/'):path;
-const alternate=`${root}${en?'':'/en'}${alternatePath}${Astro.url.search}`;
+const alternatePath = is404 ? (en ? '/404.html' : '/404/') : path;
+const alternate = `${root}${en ? '' : '/en'}${alternatePath}${Astro.url.search}`;
 const siteUrl = Astro.site ? new URL(Astro.site) : null;
 const zhUrl = siteUrl ? new URL(`${root}${alternatePath}`, siteUrl).href : `${root}${alternatePath}`;
 const enUrl = siteUrl ? new URL(`${root}/en${alternatePath}`, siteUrl).href : `${root}/en${alternatePath}`;
 const canonicalUrl = en ? enUrl : zhUrl;
-const links = [{href: `${base}/`, title: en?'Knowledge':'知识目录'}, {href: `${base}/languages/`, title: en?'Languages':'语言'}, {href: `${base}/favorites/`, title: en?'Saved':'收藏'}];
+
+const links = [
+  { href: `${base}/`, title: t.layout.navKnowledge },
+  { href: `${base}/languages/`, title: t.layout.navLanguages },
+  { href: `${base}/favorites/`, title: t.layout.navFavorites },
+];
 ---
 <!doctype html>
-<html lang={en?'en':'zh-CN'} data-theme="light">
+<html lang={en ? 'en' : 'zh-CN'} data-theme="light">
   <head>
-    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description || (en?'Learn one task. Compare implementations across programming languages.':'围绕同一个任务，对照不同编程语言的实现与用法。')} />
-    <title>{title} · {en?'Elsewise':'异曲'}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description || t.layout.siteDescription} />
+    <title>{title} · {t.layout.brandName}</title>
     {is404 ? (
       <meta name="robots" content="noindex" />
     ) : (
@@ -35,17 +51,49 @@ const links = [{href: `${base}/`, title: en?'Knowledge':'知识目录'}, {href: 
       </>
     )}
     <script is:inline>
-      try { const stored = localStorage.getItem('elsewise_preferences') ?? localStorage.getItem('bytebite_preferences'); const preferences = stored ? JSON.parse(stored) : null; document.documentElement.dataset.theme = preferences?.theme === 'dark' ? 'dark' : 'light'; } catch { }
+      try {
+        const stored = localStorage.getItem('elsewise_preferences') ?? localStorage.getItem('bytebite_preferences');
+        const preferences = stored ? JSON.parse(stored) : null;
+        document.documentElement.dataset.theme = preferences?.theme === 'dark' ? 'dark' : 'light';
+      } catch {}
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">{en?'Skip to content':'跳转到主内容'}</a>
+    <a class="skip-link" href="#main">{t.layout.skipLink}</a>
     <header class="site-header">
-      <a class="brand" href={`${base}/`}><svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h7v12H4V6Zm9 0h7v12h-7V6Z" stroke="currentColor" stroke-width="1.5"/><path d="M7 9h1m8 0h1M7 12h1m8 0h1" stroke="currentColor" stroke-linecap="round"/></svg>{en?'Elsewise':'异曲'}</a>
-      <nav aria-label={en?'Main navigation':'主导航'}>{links.map(link => <a href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>{link.title}</a>)}</nav>
-      <div class="header-tools"><a class="locale-switch" href={alternate} lang={en?'zh-CN':'en'} aria-label={en?'Switch to Chinese':'切换至英文'}><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor"/><path d="M3 10h14M10 3c4 4 4 10 0 14-4-4-4-10 0-14Z" stroke="currentColor"/></svg>{en?'中文':'English'}</a><ThemeToggle locale={locale} client:load /><a class="repository-link" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></div>
+      <a class="brand" href={`${base}/`} aria-label={t.layout.brandName}>
+        {en ? brand.name : brand.chineseName}
+      </a>
+      <nav aria-label={t.layout.mainNav}>
+        {links.map((link) => (
+          <a href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>
+            {link.title}
+          </a>
+        ))}
+      </nav>
+      <div class="header-tools">
+        <a class="locale-switch" href={alternate} lang={en ? 'zh-CN' : 'en'} aria-label={t.layout.switchLocale}>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="7" stroke="currentColor" />
+            <path d="M3 10h14M10 3c4 4 4 10 0 14-4-4-4-10 0-14Z" stroke="currentColor" />
+          </svg>
+          {t.layout.localeName}
+        </a>
+        <a class="header-search" href={`${base}/#docs-query`}>{t.layout.search}</a>
+        <ThemeToggle locale={locale} client:load />
+        <a class="repository-link" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={t.layout.githubLabel}>
+          GitHub ↗
+        </a>
+      </div>
     </header>
-    <main id="main" tabindex="-1"><slot /></main>
-    <footer class="site-footer">{en?'One task, many languages. Learning records and favorites stay in this browser.':'同一个任务，不同语言的做法。学习记录与收藏仅保存在当前浏览器。'}<a class="footer-repository" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={en?'GitHub (new window)':'GitHub（新窗口）'}>GitHub ↗</a></footer>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      {t.layout.footerText}
+      <a class="footer-repository" href={brand.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={t.layout.githubLabel}>
+        GitHub ↗
+      </a>
+    </footer>
   </body>
 </html>

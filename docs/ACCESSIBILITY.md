@@ -57,7 +57,7 @@ Elsewise 以 WCAG 2.1 AA 为目标。下文功能描述与勾选记录需要结�
 
 #### 颜色方案
 
-- 生产主题以 `v2/src/styles.css` 的语义变量为准：浅色暖白 `#faf9f6` / 文字 `#292b26` / 次要文字 `#62675e` / 强调 `#35614d`；深色墨灰 `#1c1e1b` / 文字 `#eceee6` / 次要文字 `#b3b9ad` / 强调 `#b2cfaa`。
+- 生产主题以 `v2/src/styles.css` 的语义变量为准：浅色暖白 `#faf6ee` / 文字 `#29221c` / 次要文字 `#6d6054` / 强调 `#953d25`；深色墨灰 `#191613` / 文字 `#f3e8d6` / 次要文字 `#c6b7a4` / 强调 `#f0ad77`。
 - `v2/src/reading-theme.css` 管理阅读布局与组件层级；正文、目录摘要与语言切换在浏览器测试中按计算样式检查至少 4.5:1。不能据此宣称全站 WCAG 合规。
 
 ### 5. 触摸目标大小
@@ -135,7 +135,7 @@ Elsewise 以 WCAG 2.1 AA 为目标。下文功能描述与勾选记录需要结�
 ### Header 组件
 
 - ✅ 使用 `<nav>` 元素和 `aria-label`
-- ✅ 移动菜单按钮有 `aria-expanded` 和 `aria-label`
+- ✅ 窄屏主导航以链接直接呈现
 - ✅ 当前页面使用 `aria-current="page"`
 - ✅ 所有链接都有可见的焦点指示器
 
@@ -176,9 +176,9 @@ Elsewise 以 WCAG 2.1 AA 为目标。下文功能描述与勾选记录需要结�
 
 ### LanguageSelector 组件
 
-- ✅ 下拉菜单使用 `role="listbox"`
-- ✅ 选项使用 `role="option"` 和 `aria-selected`
-- ✅ 按钮有 `aria-expanded` 和 `aria-haspopup`
+- ✅ 语言面板使用原生 `details` 和 `summary`
+- ✅ 面板内的语言按钮使用 `aria-pressed` 表示选中状态
+- ✅ Escape 关闭面板并将焦点还给展开控件
 - ✅ 移除按钮有描述性的 `aria-label`
 
 ### FavoriteButton 组件
