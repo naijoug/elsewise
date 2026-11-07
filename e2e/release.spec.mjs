@@ -941,7 +941,9 @@ test('language picker defaults match viewport and mobile disclosure supports rep
     const prefix = locale === 'en' ? 'en/' : '';
     await page.setViewportSize({ width: 1280, height: 900 });
     await open(page, `${prefix}feature/read-text-file/`);
-    await expect(page.locator('details.language-picker')).not.toHaveAttribute('open');
+    await expect(page.locator('details.language-picker')).not.toHaveAttribute(
+      'open'
+    );
     await page.setViewportSize({ width: 375, height: 812 });
     await page.reload();
     await hydrated(page);
@@ -1478,8 +1480,10 @@ test('HTTP documentation icon actions retain tooltips, names and touch targets',
       ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code']
       : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
       const picker = page.locator('details.language-picker');
-      if (name === 'Reset selection' || name === '恢复默认') await expandLanguagePicker(page);
-      else if (await picker.evaluate((element) => element.open)) await picker.locator('summary').click();
+      if (name === 'Reset selection' || name === '恢复默认')
+        await expandLanguagePicker(page);
+      else if (await picker.evaluate((element) => element.open))
+        await picker.locator('summary').click();
       const button = page.getByRole('button', { name, exact: true }).first();
       await expect(button.locator('svg')).toHaveAttribute(
         'aria-hidden',
@@ -1612,5 +1616,45 @@ test('Unicode string length is discoverable in foundations with stable back navi
     await page.reload();
     await hydrated(page);
     await expect(row).toBeVisible();
+  }
+});
+
+test('topic artwork stays outside bilingual titles and summaries in both themes', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  for (const route of [
+    'feature/string-length/',
+    'feature/variables/',
+    'idiom/array-map/',
+  ]) {
+    for (const prefix of ['', 'en/']) {
+      await open(page, `${prefix}${route}`);
+      for (const theme of ['light', 'dark']) {
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+          await page.locator('#theme-toggle').click();
+        const artwork = page.locator('.topic-heading .topic-art');
+        await expect(artwork).toBeVisible();
+        const art = await artwork.boundingBox();
+        for (const selector of ['.topic-heading > h1', '.topic-heading > p']) {
+          const text = await page.locator(selector).boundingBox();
+          expect(text).not.toBeNull();
+          const overlapWidth =
+            Math.min(art.x + art.width, text.x + text.width) -
+            Math.max(art.x, text.x);
+          const overlapHeight =
+            Math.min(art.y + art.height, text.y + text.height) -
+            Math.max(art.y, text.y);
+          expect(
+            overlapWidth > 1 && overlapHeight > 1,
+            `${prefix}${route} ${theme}: artwork overlaps ${selector}`
+          ).toBe(false);
+        }
+        await expectNoHorizontalOverflow(page, page.viewportSize().width);
+      }
+    }
   }
 });

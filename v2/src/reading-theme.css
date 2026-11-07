@@ -755,6 +755,10 @@ main:has(.topic-heading, .directory-heading) {
 [data-theme='dark'] .topic-art {
   background-image: var(--plate-dark);
 }
+/* Keep decorative artwork outside the reading column. */
+.topic-heading .topic-art {
+  width: 40%;
+}
 .topic-art--hello-world {
   background-size: contain;
   mask-image:
@@ -1001,6 +1005,19 @@ main:has(.topic-heading, .directory-heading) {
     width: 42%;
     background-position: 55% center;
   }
+  .topic-heading > h1,
+  .topic-heading > p {
+    max-width: 100%;
+  }
+  .topic-heading .topic-art {
+    position: relative;
+    inset: auto;
+    order: 1;
+    width: 100%;
+    aspect-ratio: 3 / 1;
+    margin-top: 8px;
+    opacity: 1;
+  }
   .topic-path .docs-sidebar summary,
   .header-tools .theme-toggle,
   .selection-chips button,
@@ -1023,9 +1040,6 @@ main:has(.topic-heading, .directory-heading) {
   }
 }
 @media (max-width: 500px) {
-  .topic-heading > p {
-    max-width: 88%;
-  }
   .topic-art {
     opacity: 0.66;
   }
