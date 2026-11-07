@@ -171,7 +171,9 @@ describe('foundations-first learning path', () => {
   ];
   it('starts with real foundation chapters, not practical APIs or empty placeholders', () => {
     expect(chapters[0].items.filter((id) => id.startsWith('f:'))).toEqual(
-      ids.filter((id) => id !== 'functions').map((id) => `f:${id}`)
+      [...ids.filter((id) => id !== 'functions'), 'string-length'].map(
+        (id) => `f:${id}`
+      )
     );
     expect(
       chapters.find((chapter) => chapter.id === 'functions')!.items[0]

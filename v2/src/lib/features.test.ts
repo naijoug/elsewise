@@ -7,10 +7,10 @@ import {
 import { featureKey, filterFeatures } from './features';
 import { languages } from './content';
 describe('reviewed feature catalog', () => {
-  it('covers every registered language with preserved concepts and four practical tasks and eight foundation chapters plus two collection chapters', () => {
-    expect(features).toHaveLength(32);
+  it('covers every registered language with preserved concepts and four practical tasks and eight foundation chapters plus two collection chapters and Unicode string length', () => {
+    expect(features).toHaveLength(33);
     expect(features.reduce((n, feature) => n + feature.entries.length, 0)).toBe(
-      236
+      240
     );
     for (const language of languages)
       expect(
@@ -19,7 +19,7 @@ describe('reviewed feature catalog', () => {
           .filter((e) => e.languageId === language.id)
       ).toHaveLength(
         ['javascript', 'typescript', 'python', 'go'].includes(language.id)
-          ? 21
+          ? 22
           : 19
       );
     expect(() => validateFeatures(features)).not.toThrow();

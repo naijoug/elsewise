@@ -1,0 +1,119 @@
+{
+  "checkedAt": "2026-11-05",
+  "canonicalTaskIds": [
+    "string-length"
+  ],
+  "authority": "v2/src/data/strings.json is the repository-authored canonical source; no external handbook or generated snapshot edits.",
+  "scope": "Reviewed subset of four languages and three runtime contracts. Only the listed sections were reviewed; no full-manual or unsupported-language claims.",
+  "execution": "Original illustrative snippets, not compiled or executed. Numeric comparisons are derived from documented encoding rules, not captured runtime output. Application tests do not count as snippet execution.",
+  "entries": [
+    {
+      "languageId": "javascript",
+      "documentationVersion": "Node.js v22.12.0 Buffer reference plus selected sections of the living ECMAScript specification; the living specification is not a claim of full Node conformance.",
+      "reviewedSections": [
+        {
+          "title": "ECMAScript — The String Type (living specification)",
+          "url": "https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type",
+          "section": "6.1.4 The String Type",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "ECMAScript — String iteration and length (living specification)",
+          "url": "https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype-%symbol.iterator%",
+          "section": "String.prototype [ %Symbol.iterator% ]; Properties of String Instances: length",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "Node.js v22.12.0 — Buffer",
+          "url": "https://nodejs.org/download/release/v22.12.0/docs/api/buffer.html#static-method-bufferbytelengthstring-encoding",
+          "section": "Buffer.byteLength(string[, encoding])",
+          "checkedAt": "2026-11-05"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Node.js, not browser JavaScript",
+      "boundary": "Valid Unicode samples only. Counts UTF-16 code units, code points, and UTF-8 bytes; no normalization, grapheme segmentation, memory-size measurement, or display-width calculation."
+    },
+    {
+      "languageId": "typescript",
+      "documentationVersion": "TypeScript 5.3 is an illustrative compiler baseline; rolling TypeScript handbook sections and Node.js v22.12.0 Buffer reference reviewed. Compiler/declaration pairing unverified.",
+      "reviewedSections": [
+        {
+          "title": "ECMAScript — The String Type (living specification)",
+          "url": "https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type",
+          "section": "6.1.4 The String Type",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "ECMAScript — String iteration and length (living specification)",
+          "url": "https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype-%symbol.iterator%",
+          "section": "String.prototype [ %Symbol.iterator% ]; Properties of String Instances: length",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "Node.js v22.12.0 — Buffer",
+          "url": "https://nodejs.org/download/release/v22.12.0/docs/api/buffer.html#static-method-bufferbytelengthstring-encoding",
+          "section": "Buffer.byteLength(string[, encoding])",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "TypeScript — The Basics",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types",
+          "section": "Erased Types; Downleveling",
+          "checkedAt": "2026-11-05"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "Node.js, not browser JavaScript",
+      "boundary": "Valid Unicode samples only. Counts UTF-16 code units, code points, and UTF-8 bytes; no normalization, grapheme segmentation, memory-size measurement, or display-width calculation."
+    },
+    {
+      "languageId": "python",
+      "documentationVersion": "Python 3.14 documentation branch, not a fixed patch-version snapshot.",
+      "reviewedSections": [
+        {
+          "title": "Python 3.14 — Built-in Types",
+          "url": "https://docs.python.org/3.14/library/stdtypes.html#text-sequence-type-str",
+          "section": "Common Sequence Operations: len; Text Sequence Type — str; str.encode; Bytes Objects",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "Python 3.14 — codecs",
+          "url": "https://docs.python.org/3.14/library/codecs.html#standard-encodings",
+          "section": "Standard Encodings: utf_16_le and utf_8",
+          "checkedAt": "2026-11-05"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "No OS-specific behavior used",
+      "boundary": "Valid Unicode samples only. Counts UTF-16 code units, code points, and UTF-8 bytes; no normalization, grapheme segmentation, memory-size measurement, or display-width calculation."
+    },
+    {
+      "languageId": "go",
+      "documentationVersion": "Go 1.23.0 pinned standard-library references plus selected sections of the rolling language specification; not a latest-version claim.",
+      "reviewedSections": [
+        {
+          "title": "Go — Language Specification",
+          "url": "https://go.dev/ref/spec#String_types",
+          "section": "String types; Conversions to and from a string type",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "Go 1.23.0 — unicode/utf8",
+          "url": "https://pkg.go.dev/unicode/utf8@go1.23.0#RuneCountInString",
+          "section": "RuneCount; RuneCountInString",
+          "checkedAt": "2026-11-05"
+        },
+        {
+          "title": "Go 1.23.0 — unicode/utf16",
+          "url": "https://pkg.go.dev/unicode/utf16@go1.23.0#Encode",
+          "section": "Encode",
+          "checkedAt": "2026-11-05"
+        }
+      ],
+      "runtimeValidation": "not executed",
+      "platform": "No OS-specific behavior used",
+      "boundary": "Valid Unicode samples only. Counts UTF-16 code units, code points, and UTF-8 bytes; no normalization, grapheme segmentation, memory-size measurement, or display-width calculation."
+    }
+  ]
+}

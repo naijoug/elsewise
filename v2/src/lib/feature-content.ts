@@ -4,6 +4,7 @@ import practical from '../data/practical-docs.json';
 import foundations from '../data/foundations.json';
 import collections from '../data/collections.json';
 import paths from '../data/paths.json';
+import stringDocs from '../data/strings.json';
 import { idioms, languages } from './content';
 import type { Feature } from './features';
 
@@ -164,6 +165,7 @@ export function validateFeatures(values: unknown): asserts values is Feature[] {
 }
 const featureData: unknown = [
   ...foundations,
+  ...stringDocs,
   ...collections,
   ...practical,
   ...paths,

@@ -21,7 +21,11 @@ const collections = JSON.parse(
 const paths = JSON.parse(
   readFileSync(new URL('../v2/src/data/paths.json', import.meta.url))
 );
+const strings = JSON.parse(
+  readFileSync(new URL('../v2/src/data/strings.json', import.meta.url))
+);
 const documents = [
+  ...strings,
   ...foundations,
   ...collections,
   ...practical,
@@ -81,7 +85,7 @@ test('static entry has no full content or highlighter payload; search and combin
   const response = await open(page);
   expect(response.status()).toBe(200);
   await expect(page).toHaveTitle('编程知识目录 · 异曲');
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   await expect(
     page.getByRole('link', { name: '异曲', exact: true })
   ).toBeVisible();
@@ -102,7 +106,7 @@ test('static entry has no full content or highlighter payload; search and combin
     true
   );
   await page.getByRole('button', { name: '重置', exact: true }).click();
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   await page
     .getByRole('navigation', { name: '知识章节' })
     .getByRole('button', { name: /集合与迭代/ })
@@ -153,7 +157,7 @@ test('search index failure preserves summaries and retry restores code search', 
     route.fulfill({ status: 503, body: 'Unavailable' })
   );
   await open(page);
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   const term = 'numbers.map(n => n * 2)';
   await page.getByRole('searchbox', { name: '搜索知识点' }).fill(term);
   await expect(
@@ -371,7 +375,7 @@ test('invalid saved preferences do not crash static pages or hydration', async (
     )
   );
   await open(page);
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   await open(page, 'idiom/array-map/');
   await expect(page.locator('#code-array-map-python')).toBeVisible();
 });
@@ -467,7 +471,7 @@ test('without JavaScript, complete detail source and links remain available', as
       .getByRole('navigation', { name: '主导航' })
       .getByRole('link', { name: '知识目录', exact: true })
       .click();
-    await expect(cards(page)).toHaveCount(52);
+    await expect(cards(page)).toHaveCount(53);
   } finally {
     await context.close();
   }
@@ -528,7 +532,7 @@ test('catalog bookmarks persist across detail navigation and reload without chan
     await page.evaluate(() => localStorage.getItem('elsewise_learned_v1'))
   ).toBe(learned);
   await page.getByRole('button', { name: '全部', exact: true }).click();
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   await open(page, 'favorites/');
   await expect(cards(page)).toHaveCount(0);
   await page.getByRole('button', { name: '重置', exact: true }).click();
@@ -549,7 +553,7 @@ test('legacy learning URL falls back to all topics without deleting learned reco
   );
   for (const learning of ['learned', 'unlearned']) {
     await open(page, `?learning=${learning}`);
-    await expect(cards(page)).toHaveCount(52);
+    await expect(cards(page)).toHaveCount(53);
     await expect
       .poll(() => new URL(page.url()).searchParams.has('learning'))
       .toBe(false);
@@ -600,7 +604,7 @@ test('documents retain learning/favorites, related idioms and language navigatio
   page,
 }) => {
   await open(page, 'features/');
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   await page.getByLabel('搜索知识点').fill('所有权');
   // Full-text search also finds discussions of ownership in other topics.
   const ownership = cards(page).filter({
@@ -692,7 +696,7 @@ test('home unifies documentation and patterns into an ordered searchable curricu
   await expect(
     page.getByRole('heading', { name: '编程知识目录' })
   ).toBeVisible();
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   await expect(page.locator('.knowledge-chapter')).toHaveCount(10);
   const mainNav = page.getByRole('navigation', { name: '主导航' });
   await expect(
@@ -718,10 +722,10 @@ test('home unifies documentation and patterns into an ordered searchable curricu
     page.getByRole('heading', { name: '没有匹配的知识点' })
   ).toBeVisible();
   await query.fill('');
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   for (const alias of ['features/', 'idioms/']) {
     await open(page, alias);
-    await expect(cards(page)).toHaveCount(52);
+    await expect(cards(page)).toHaveCount(53);
   }
 });
 
@@ -905,7 +909,7 @@ test('without JavaScript, both locales retain the docs directory and all practic
       expect(
         (await page.goto(new URL(prefix || './', baseURL).href)).status()
       ).toBe(200);
-      await expect(cards(page)).toHaveCount(52);
+      await expect(cards(page)).toHaveCount(53);
       for (const doc of practical) {
         expect(
           (
@@ -937,7 +941,9 @@ test('language picker defaults match viewport and mobile disclosure supports rep
     const prefix = locale === 'en' ? 'en/' : '';
     await page.setViewportSize({ width: 1280, height: 900 });
     await open(page, `${prefix}feature/read-text-file/`);
-    await expect(page.locator('details.language-picker')).not.toHaveAttribute('open');
+    await expect(page.locator('details.language-picker')).not.toHaveAttribute(
+      'open'
+    );
     await page.setViewportSize({ width: 375, height: 812 });
     await page.reload();
     await hydrated(page);
@@ -1218,7 +1224,7 @@ test('catalog chapter, language, saved and query survive detail back, reload and
     await expectNoHorizontalOverflow(page, page.viewportSize().width);
   }
   await page.getByRole('button', { name: 'Reset', exact: true }).click();
-  await expect(cards(page)).toHaveCount(52);
+  await expect(cards(page)).toHaveCount(53);
   expect(new URL(page.url()).search).toBe('');
 });
 
@@ -1474,8 +1480,10 @@ test('HTTP documentation icon actions retain tooltips, names and touch targets',
       ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code']
       : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
       const picker = page.locator('details.language-picker');
-      if (name === 'Reset selection' || name === '恢复默认') await expandLanguagePicker(page);
-      else if (await picker.evaluate((element) => element.open)) await picker.locator('summary').click();
+      if (name === 'Reset selection' || name === '恢复默认')
+        await expandLanguagePicker(page);
+      else if (await picker.evaluate((element) => element.open))
+        await picker.locator('summary').click();
       const button = page.getByRole('button', { name, exact: true }).first();
       await expect(button.locator('svg')).toHaveAttribute(
         'aria-hidden',
@@ -1510,7 +1518,7 @@ test('HTTP documentation icon actions retain tooltips, names and touch targets',
   }
 });
 
-for (const pathDoc of paths) {
+for (const pathDoc of [...paths, ...strings]) {
   test(`${pathDoc.id} keeps partial coverage honest and preserves bilingual saved progress`, async ({
     page,
   }, testInfo) => {
@@ -1580,3 +1588,73 @@ for (const pathDoc of paths) {
     ).toContain(`feature:${pathDoc.id}`);
   });
 }
+
+test('Unicode string length is discoverable in foundations with stable back navigation', async ({
+  page,
+}) => {
+  for (const locale of ['zh', 'en']) {
+    const prefix = locale === 'en' ? 'en/' : '';
+    await open(page, `${prefix}?chapter=basics&q=RuneCountInString`);
+    const row = page.locator('[data-knowledge-id="feature:string-length"]');
+    await expect(row).toBeVisible();
+    await expect(cards(page)).toHaveCount(1);
+    await row.locator('.knowledge-title').click();
+    await hydrated(page);
+    await expect(page).toHaveURL(/\/feature\/string-length\/$/);
+    await expect(
+      page.locator('.docs-sidebar [aria-current="page"]')
+    ).toHaveAttribute('href', `${base}${prefix}feature/string-length/`);
+    await page.goBack();
+    await hydrated(page);
+    await expect(row).toBeVisible();
+    await expect(
+      page.getByRole('searchbox', {
+        name: locale === 'en' ? 'Search knowledge' : '搜索知识点',
+      })
+    ).toHaveValue('RuneCountInString');
+    expect(new URL(page.url()).searchParams.get('chapter')).toBe('basics');
+    await page.reload();
+    await hydrated(page);
+    await expect(row).toBeVisible();
+  }
+});
+
+test('topic artwork stays outside bilingual titles and summaries in both themes', async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({
+    width: testInfo.project.name === 'mobile' ? 375 : 1280,
+    height: 900,
+  });
+  for (const route of [
+    'feature/string-length/',
+    'feature/variables/',
+    'idiom/array-map/',
+  ]) {
+    for (const prefix of ['', 'en/']) {
+      await open(page, `${prefix}${route}`);
+      for (const theme of ['light', 'dark']) {
+        if ((await page.locator('html').getAttribute('data-theme')) !== theme)
+          await page.locator('#theme-toggle').click();
+        const artwork = page.locator('.topic-heading .topic-art');
+        await expect(artwork).toBeVisible();
+        const art = await artwork.boundingBox();
+        for (const selector of ['.topic-heading > h1', '.topic-heading > p']) {
+          const text = await page.locator(selector).boundingBox();
+          expect(text).not.toBeNull();
+          const overlapWidth =
+            Math.min(art.x + art.width, text.x + text.width) -
+            Math.max(art.x, text.x);
+          const overlapHeight =
+            Math.min(art.y + art.height, text.y + text.height) -
+            Math.max(art.y, text.y);
+          expect(
+            overlapWidth > 1 && overlapHeight > 1,
+            `${prefix}${route} ${theme}: artwork overlaps ${selector}`
+          ).toBe(false);
+        }
+        await expectNoHorizontalOverflow(page, page.viewportSize().width);
+      }
+    }
+  }
+});
