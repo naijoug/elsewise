@@ -1,3 +1,23 @@
+# 扩展本仓知识点与校验（2026-11-05）
+
+本节描述本仓原创文档；旧习语的 YAML 主源与同步规则保持不变。
+
+1. 在对应 `v2/src/data/*.json` 中增加稳定 kebab-case ID 的知识点，并补齐顶层与各语言条目的英文 `en` 文案。旧内容仍可使用 `english-content.json` 翻译层。
+2. 仅在 `v2/src/lib/knowledge.ts` 的 `chapters[].items` 中登记一次 `f:<id>`，决定章节及顺序。`localized-content.ts` 不再有第二份 `modules` 登记表。现有课程顺序以 `chapters` 为准，历史模块分组不再适用。
+3. 若新建内容文件，在 `feature-content.ts` 的构建期聚合中导入；加入现有文件则不需要额外导入。可选主题插图有章节回退，不是新增知识点的前置要求。
+4. 执行 `npm run test:v2`、`npx tsc --noEmit -p v2/tsconfig.json` 和 `npm --prefix v2 run build`，检查中英文详情与搜索索引。使用 Node 22.x；完整发布另按部署流程执行。
+
+`validateFeatures` 接收未知数据，先校验结构再收窄为 `Feature[]`。构建时校验原始内容，并再次校验合并后的中英文文档，防止翻译覆盖破坏有效内容。错误包含知识点 ID、语言 ID 与具体字段路径；校验不改写输入。
+
+- 必填非空文本：主题的 `title`、`description`、`scopeNote`；条目的 `baseline`、`summary`、`versionNotes`。仅含空白也不合格。
+- `tags` 为非空字符串数组；`related`、`idiomIds` 为可空数组，但引用必须存在且不得重复，`related` 不得引用自身。
+- `entries`、`sources` 必须为非空数组，数组元素必须为对象。主题 ID 唯一，语言 ID 必须已注册，同一主题内语言不得重复；`scope` 和 `status` 必须为定义的枚举值。
+- `native` / `idiomatic` 条目必须提供非空 `code`。只有 `not-applicable` / `undocumented` 可显式填写 `code: ""`，仍须具备环境、解释、版本边界与来源；缺失或非字符串的代码字段不合格。
+- 来源必须包含非空 `title`、`section`、无内嵌账号密码的绝对 HTTPS URL，以及真实有效的 `YYYY-MM-DD` 核查日期。
+- `common` 文档仍须覆盖全部已注册语言。课程仍校验所有文档和旧习语的登记完整性，保留 `closure` 的现有别名例外。
+
+结构校验不证明示例可执行，也不检查远程链接是否可访问；需如实记录独立核查结果。
+
 # 字符串长度增补（2026-11-05）
 
 `v2/src/data/strings.json` 是本仓原创规范源，新增 `string-length`，在“基础语法”中对照 JavaScript、TypeScript、Python、Go 对同一文本的计数单位：UTF-16 码元、Unicode 码点与 UTF-8 字节。明确这些数量不等于用户感知的字素簇数；仅核查 [strings-source-coverage.json](strings-source-coverage.json) 所列章节，不宣称覆盖全部语言或完整手册。示例未执行。中英文共用 `feature:string-length`，原 ID、收藏、学习记录与导航保持兼容，不修改外部 handbook 或旧生成快照。
@@ -142,8 +162,8 @@ implementations:
 | `officialDocs` | 官方文档 URL |
 | `icon` | 可选图标地址 |
 
-新增语言时，核对 [CodeComparison.tsx](../src/components/CodeComparison.tsx) 中的语言映射和实际加载的 Prism grammar，
-再给相关 YAML 增加实现。语言元数据文件尚无完整的独立运行时校验器，类型定义不能代替数据验证。
+新增语言时，生产高亮入口是 [v2/src/lib/content.ts](../v2/src/lib/content.ts)：当前按旧习语实现中的语言 ID 加载 Prism grammar，新增语言若只出现在本仓文档中，也需要确保其 grammar 已加载。`src/components/CodeComparison.tsx` 仅用于旧 SPA 回归。
+语言元数据由 [scripts/content-schema.mjs](../scripts/content-schema.mjs) 的 `validateContent` 在生产构建期校验，入口为 `v2/src/lib/content.ts`。新增语言还需补充英文语言元数据，并为标记 `common` 的文档补齐审核条目；旧习语实现仍在 YAML 主源维护。类型定义不能代替数据验证。
 
 ## 验证
 

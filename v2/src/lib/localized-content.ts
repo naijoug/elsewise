@@ -1,9 +1,9 @@
 /** Build-only localized content; never serialize implementation bodies to catalog islands. */
 import { idioms, languages } from './content';
-import { features } from './feature-content';
+import { features, validateFeatures } from './feature-content';
 import englishData from '../data/english-content.json';
-import type { Idiom, Language } from '../../../src/types';
-import type { Feature } from './features';
+import type { Idiom, Language, Implementation } from '@shared/types';
+import type { Feature, FeatureEntry } from './features';
 export type Locale = 'zh' | 'en';
 const english = englishData as unknown as {
   idioms: Record<
@@ -23,42 +23,81 @@ const contentCache = new Map<
   ReturnType<typeof buildLocalizedContent>
 >();
 
+function nonempty(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
 function buildLocalizedContent(locale: Locale) {
   const localizedIdioms = idioms.map((item) => {
     if (locale === 'zh') return item;
     const value = english.idioms[item.id];
-    if (!value) throw new Error(`Missing English idiom ${item.id}`);
+    if (!value || !nonempty(value.title) || !nonempty(value.description)) {
+      throw new Error(`Missing English idiom '${item.id}'`);
+    }
     return {
       ...item,
       ...value,
-      implementations: item.implementations.map((entry) => ({
-        ...entry,
-        ...value.implementations[entry.languageId],
-      })),
+      implementations: item.implementations.map((entry) => {
+        const entryEn = value.implementations?.[entry.languageId] as
+          | Partial<Implementation>
+          | undefined;
+        if (!entryEn || !entryEn.explanation?.trim()) {
+          throw new Error(
+            `Missing English implementation for idiom '${item.id}' (${entry.languageId})`
+          );
+        }
+        return {
+          ...entry,
+          ...entryEn,
+        };
+      }),
     } as Idiom;
   });
-  const localizedLanguages = languages.map((item) =>
-    locale === 'zh' ? item : { ...item, ...english.languages[item.id] }
-  );
+  const localizedLanguages = languages.map((item) => {
+    if (locale === 'zh') return item;
+    const langEn = english.languages[item.id];
+    if (!langEn || !langEn.description?.trim()) {
+      throw new Error(`Missing English language '${item.id}'`);
+    }
+    return { ...item, ...langEn };
+  });
   const langNameMap = new Map(languages.map((l) => [l.id, l.name]));
   const localizedFeatures = features.map((item) => {
     if (locale === 'zh') return item;
     const value =
       (item as Feature & { en?: Partial<Feature> }).en ||
       english.features[item.id];
-    if (!value) throw new Error(`Missing English document ${item.id}`);
+    if (!value || !nonempty(value.title) || !nonempty(value.description)) {
+      throw new Error(`Missing English document '${item.id}'`);
+    }
     return {
       ...item,
       ...value,
-      entries: item.entries.map((entry) => ({
-        ...entry,
-        ...((entry as typeof entry & { en?: object }).en ||
-          (value.entries as unknown as Record<string, object>)[
+      entries: item.entries.map((entry) => {
+        const entryEn =
+          (entry as typeof entry & { en?: Partial<FeatureEntry> }).en ||
+          (value.entries as unknown as Record<string, Partial<FeatureEntry>>)?.[
             entry.languageId
-          ]),
-      })),
+          ];
+        if (
+          !entryEn ||
+          !nonempty(entryEn.summary) ||
+          !nonempty(entryEn.versionNotes) ||
+          !nonempty(entryEn.baseline)
+        ) {
+          throw new Error(
+            `Missing English entry for document '${item.id}' (${entry.languageId})`
+          );
+        }
+        return {
+          ...entry,
+          ...entryEn,
+        };
+      }),
     } as Feature;
   });
+  // Validate the resolved locale too: translations can override code and evidence.
+  validateFeatures(localizedFeatures);
   return {
     idioms: localizedIdioms,
     languages: localizedLanguages,
@@ -90,72 +129,3 @@ export function routeBase(locale: Locale) {
     import.meta.env.BASE_URL.replace(/\/$/, '') + (locale === 'en' ? '/en' : '')
   );
 }
-export const modules = [
-  {
-    id: 'basics',
-    zh: '基础语法',
-    en: 'Language basics',
-    ids: [
-      'syntax-basics',
-      'variables',
-      'constants',
-      'basic-types',
-      'operators',
-      'conditions',
-      'loops',
-      'functions',
-      'string-length',
-    ],
-  },
-  {
-    id: 'collections',
-    zh: '集合与查找',
-    en: 'Collections & lookup',
-    ids: ['sequence-collections', 'key-value-maps'],
-  },
-  {
-    id: 'functions-advanced',
-    zh: '函数与迭代',
-    en: 'Functions & iteration',
-    ids: ['closures', 'javascript-generators', 'python-comprehensions'],
-  },
-  {
-    id: 'types',
-    zh: '类型与数据建模',
-    en: 'Types & modeling',
-    ids: ['generics', 'typescript-discriminated-unions', 'swift-optionals'],
-  },
-  {
-    id: 'objects',
-    zh: '对象与行为',
-    en: 'Objects & behavior',
-    ids: [
-      'inheritance',
-      'polymorphism',
-      'ruby-open-classes',
-      'csharp-events',
-      'kotlin-delegated-properties',
-      'php-traits',
-    ],
-  },
-  {
-    id: 'safety',
-    zh: '错误与资源管理',
-    en: 'Errors & resources',
-    ids: ['java-checked-exceptions', 'rust-ownership', 'cpp-raii'],
-  },
-  {
-    id: 'concurrency',
-    zh: '并发',
-    en: 'Concurrency',
-    ids: ['go-goroutines-channels'],
-  },
-  {
-    id: 'files',
-    zh: '文件与目录',
-    en: 'Files & directories',
-    ids: ['compose-path', 'split-path', 'read-text-file', 'write-text-file'],
-  },
-  { id: 'data', zh: '数据格式', en: 'Data formats', ids: ['json'] },
-  { id: 'network', zh: '网络请求', en: 'Networking', ids: ['http-get'] },
-];

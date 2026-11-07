@@ -21,6 +21,8 @@ export default defineConfig({
   root,
   resolve: {
     alias: [
+      { find: /^@shared\/(.*)$/, replacement: `${root}../src/$1` },
+      { find: /^@scripts\/(.*)$/, replacement: `${root}../scripts/$1` },
       { find: /^react$/, replacement: `${root}node_modules/react/index.js` },
       {
         find: /^react\/jsx-runtime$/,

@@ -1,12 +1,41 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TopicArt from '../components/TopicArt.astro';
 import KnowledgeCatalog from '../components/KnowledgeCatalog';
-import {content,routeBase,type Locale} from '../lib/localized-content';
-import {knowledge,chapters} from '../lib/knowledge';
-interface Props {locale?:Locale}
-const {locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);
+import { content, routeBase, type Locale } from '../lib/localized-content';
+import { knowledge, chapters } from '../lib/knowledge';
+import { getMessages } from '../lib/messages';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const base = routeBase(locale);
+const t = getMessages(locale);
+const items = knowledge(locale);
+const { languages } = content(locale);
 ---
-<Layout title={en?'Programming knowledge directory':'编程知识目录'} locale={locale}>
-<header class="knowledge-heading"><div><h1>{en?'Programming knowledge':'编程知识目录'}</h1><p>{en?'Find a topic, choose your languages, and compare how it works.':'找到知识点，选择语言，一起看懂不同的实现。'}</p></div><div class="directory-stats"><strong>{knowledge(locale).length}</strong><span>{en?'topics':'个知识点'}</span><strong>{content(locale).languages.length}</strong><span>{en?'languages':'种语言'}</span></div></header>
-<KnowledgeCatalog items={knowledge(locale)} chapters={chapters.map(c=>({id:c.id,title:c[locale]}))} languages={content(locale).languages.map(l=>({id:l.id,name:l.name}))} base={base} locale={locale} client:load />
+<Layout title={t.index.title} locale={locale}>
+  <header class="knowledge-heading directory-heading">
+    <TopicArt topic="hello-world" />
+    <div>
+      <h1>{t.index.heading}</h1>
+      <p>{t.index.subtitle}</p>
+    </div>
+    <div class="directory-stats">
+      <strong>{items.length}</strong>
+      <span>{t.index.topicsCount}</span>
+      <strong>{languages.length}</strong>
+      <span>{t.index.languagesCount}</span>
+    </div>
+  </header>
+  <KnowledgeCatalog
+    items={items}
+    chapters={chapters.map((c) => ({ id: c.id, title: c[locale] }))}
+    languages={languages.map((l) => ({ id: l.id, name: l.name }))}
+    base={base}
+    locale={locale}
+    client:load
+  />
 </Layout>

@@ -1,10 +1,10 @@
 /** Server/build-only content. Never import this module from a client island. */
 import Prism from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
-import idiomData from '../../../src/data/idioms.json';
-import languageData from '../../../src/data/languages.json';
-import type { Idiom, Language } from '../../../src/types';
-import { validateContent } from '../../../scripts/content-schema.mjs';
+import idiomData from '@shared/data/idioms.json';
+import languageData from '@shared/data/languages.json';
+import type { Idiom, Language } from '@shared/types';
+import { validateContent } from '@scripts/content-schema.mjs';
 
 validateContent(idiomData, languageData);
 export const idioms = idiomData as Idiom[];

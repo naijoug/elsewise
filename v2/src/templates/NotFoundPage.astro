@@ -1,7 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import {routeBase,type Locale} from '../lib/localized-content';
-interface Props {locale?:Locale}
-const {locale='zh'}=Astro.props;const en=locale==='en';const base=routeBase(locale);
+import { routeBase, type Locale } from '../lib/localized-content';
+import { getMessages } from '../lib/messages';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const base = routeBase(locale);
+const t = getMessages(locale);
 ---
-<Layout title={en?'Page not found':'页面未找到'} locale={locale}><section class="document-heading"><p class="eyebrow">404</p><h1>{en?'This page could not be found.':'这个页面暂时找不到。'}</h1><p>{en?'The link may have changed. Continue from the knowledge directory.':'链接可能已经变更。你可以返回知识目录继续查找。'}</p><div class="actions"><a class="button-link" href={`${base}/`}>{en?'Browse knowledge':'浏览知识目录'}</a></div></section></Layout>
+<Layout title={t.notFound.title} locale={locale}>
+  <section class="document-heading">
+    <p class="eyebrow">404</p>
+    <h1>{t.notFound.heading}</h1>
+    <p>{t.notFound.message}</p>
+    <div class="actions">
+      <a class="button-link" href={`${base}/`}>
+        {t.notFound.browseKnowledge}
+      </a>
+    </div>
+  </section>
+</Layout>

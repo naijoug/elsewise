@@ -4,9 +4,13 @@
 
 # 统一知识目录（2026-10-28）
 
-生产首页以 `v2/src/lib/knowledge.ts` 的课程映射统一展示所有本仓文档与旧习语：基础语法、函数、集合、类型、对象、错误、并发、文件、数据格式、网络。映射不改写任何原始正文或外部生成快照。50 个知识点对应 30 篇文档与 21 个旧习语；闭包只占一个目录项，旧有状态示例仍有独立深链。
+生产首页以 `v2/src/lib/knowledge.ts` 的课程映射统一展示所有本仓文档与旧习语：基础语法、函数、集合、类型、对象、错误、并发、文件、数据格式、网络。映射不改写任何原始正文或外部生成快照。52 个知识点对应 32 篇文档与 21 个旧习语；闭包只占一个目录项，旧有状态示例仍有独立深链。
 
-首页、语言详情与收藏使用同一个摘要目录岛。代码与实现说明只在用户搜索时加载 `knowledge-index.json`；原索引和旧详情路由保留兼容。章节、语言、学习状态和搜索词保存在 URL 中，返回、刷新及切换界面语言保留筛选。详情侧栏只展开当前章节。
+`knowledge.ts` 的 `chapters` 是唯一知识点登记表；`localized-content.ts` 只处理语言内容，不再维护旧 `modules` 或重复校验分组。课程校验仍拒绝漏登、重复和未知条目；章节顺序、路由、收藏 ID 与闭包别名保持不变。原始文档 JSON 及合并英文覆盖后的文档均通过 `feature-content.ts` 的 `validateFeatures` 校验；具体字段与新增流程见 [数据格式](DATA_FORMAT.md#扩展本仓知识点与校验2026-11-05)。
+
+首页、语言详情与收藏使用同一个摘要目录岛。代码与实现说明只在用户搜索时加载 `knowledge-index.json`；原索引和旧详情路由保留兼容。章节、语言、收藏筛选和搜索词保存在 URL 中，返回、刷新及切换界面语言保留筛选。详情页的折叠目录列出各章，并在当前章节下显示主题链接。
+
+主题头图按知识点选择本地 WebP，闭包的两条深链共享配图。主页使用独立的 `topics/hello-world.webp` 和 `topics/hello-world-light.webp`，展示 `print("Hello World!");`，随明暗主题切换，不再复用变量插图；窄屏时将完整配图置于标题与统计下方，避免裁切代码。主题插图可通过 `topics/<id>-light.webp` / `topics/<id>-dark.webp` 覆盖对应主题，缺省回退到共享插图。头图底部渐隐。语言标签与主题偏好保存在浏览器；在窄屏上，对照区可横向滚动，各语言保留完整代码、复制入口和来源。
 
 `knowledge-identity.ts` 将 `closure` 与 `feature:closures` 视为同一学习/收藏知识点：任一旧键即可命中，取消时同时去除别名，读取不重写存储且保留未知 ID。其余近似概念（常量与不可变性、事件与观察者等）不强行合并。文档目录不是完整语言手册；收录数量不等于语言支持能力。
 
@@ -18,7 +22,7 @@
 
 当前生产首页是任务优先的对照文档工作台：按文件、数据格式、网络、函数、类型、对象、资源、并发分组；同一任务只有一个文档与逐语言实现。首批新章节为 UTF-8 文件读写、JSON、HTTP GET，每项覆盖 12 门已注册语言。此前 16 个概念保留稳定 ID 与来源，不再显示通用/特色分类徽章；未收录不等于不支持。目录不是完整语言手册。
 
-中文保留原路径，英文位于 `/en/`；正文、界面、搜索索引分别生成，代码语言选择与界面语言独立。原 `/idiom/:id`、`/feature/:id`、`/language/:id` 不变；`/idioms/` 现在直接显示习语目录，不再跳转首页。学习键、收藏键、主题和语言偏好仍共享同源且不带 locale；旧 ByteBite 回退逻辑保留。
+中文保留原路径，英文位于 `/en/`；正文、界面、搜索索引分别生成，代码语言选择与界面语言独立。页面模板文案由 `v2/src/lib/messages.ts` 的 `getMessages(locale)` 管理；`KnowledgeCatalog.tsx` 等交互组件仍保留局部双语文案，尚未全站统一到该字典。原 `/idiom/:id`、`/feature/:id`、`/language/:id` 不变；`/idioms/` 现在直接显示统一知识目录，不再跳转首页。学习键、收藏键、主题和语言偏好仍共享同源且不带 locale；旧 ByteBite 回退逻辑保留。
 
 `v2/src/data/practical-docs.json` 是本仓库新编写的任务内容；`english-content.json` 是既有内容的翻译层，不替代未知外部 handbook 权威源，生成快照未修改。官方目录/所选章节核查记录见 `official-docs-coverage.json`。所有新示例明确未执行；依赖、平台、编码及错误处理边界逐语言记录。Astro 构建期高亮、摘要 island、延迟代码索引架构保持。
 
@@ -29,6 +33,13 @@
 # 第二代生产架构（2026-10-26）
 
 生产入口现为 `v2/`：Astro静态生成目录、习语详情、语言目录/详情、收藏壳与404；React岛只承载搜索筛选、语言选择、复制、收藏与主题。Prism只在构建期使用。目录props只有摘要，代码搜索索引在首次输入时加载；详情只包含当前习语代码。
+
+`v2/` 与 `src/` 旧 SPA 彻底解耦，仅通过清晰的别名访问共享基础资产，对旧 SPA 页面、组件、Hook 与过滤器无任何依赖：
+- `@shared/types`: 类型契约定义（`src/types/index.ts`）
+- `@shared/config/brand`: 品牌配置（`src/config/brand.ts`）
+- `@shared/utils/storage`: 偏好持久化与兼容回退工具（`src/utils/storage.ts`）
+- `@shared/data/*`: 静态数据快照（`src/data/idioms.json`, `src/data/languages.json`）
+- `@scripts/*`: 内容 Schema 验证工具（`scripts/content-schema.mjs`）
 
 继续复用 `src/data` 快照和 `src/utils/storage.ts`，保留 `elsewise_preferences` 及旧 `bytebite_preferences` 回退键。主内容仍来自外部handbook，构建保留快照不等于更新权威内容。未提供账户或在线执行；示例输出不是实时结果。
 

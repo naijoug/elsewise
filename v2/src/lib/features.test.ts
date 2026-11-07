@@ -50,7 +50,16 @@ describe('reviewed feature catalog', () => {
     expect(() => validateFeatures(copy)).toThrow(/related feature/);
     const noEvidence = structuredClone(features);
     noEvidence[0].entries[0].sources = [];
-    expect(() => validateFeatures(noEvidence)).toThrow(/evidence/);
+    expect(() => validateFeatures(noEvidence)).toThrow(/sources/);
+  });
+  it('reports specific feature and language ID in validation errors', () => {
+    const copy = structuredClone(features);
+    copy[0].entries[0].baseline = '';
+    expect(() => validateFeatures(copy)).toThrow(
+      new RegExp(
+        `Feature '${copy[0].id}' entry '${copy[0].entries[0].languageId}': baseline`
+      )
+    );
   });
   it('does not conflate lack of subclassing with lack of polymorphism', () => {
     for (const id of ['go', 'rust']) {

@@ -2,7 +2,7 @@ import { act } from 'react';
 import { createRoot, hydrateRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { UserPreferences } from '../../../src/types';
+import type { UserPreferences } from '@shared/types';
 let store: typeof import('./preferences');
 let container: HTMLDivElement;
 let root: Root | undefined;

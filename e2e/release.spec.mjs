@@ -48,8 +48,6 @@ async function hydrated(page) {
 }
 async function expandLanguagePicker(page) {
   const picker = page.locator('details.language-picker');
-  // Desktop keeps the picker open and hides its disclosure summary.
-  // Only a closed picker needs the visible mobile disclosure control.
   if (!(await picker.evaluate((element) => element.open))) {
     await expect(picker.locator('summary')).toBeVisible();
     await picker.locator('summary').click();
@@ -643,7 +641,9 @@ test('documents retain learning/favorites, related idioms and language navigatio
   await expect(cards(page)).toHaveCount(1);
   await open(page, 'feature/polymorphism/');
   await expandLanguagePicker(page);
-  await page.getByRole('button', { name: 'Go', exact: true }).click();
+  const go = page.getByRole('button', { name: 'Go', exact: true });
+  if ((await go.getAttribute('aria-pressed')) === 'true') await go.click();
+  await go.click();
   await expect(page.locator('[data-language-card="go"]')).toBeVisible();
   await expect(
     page
@@ -941,10 +941,7 @@ test('language picker defaults match viewport and mobile disclosure supports rep
     const prefix = locale === 'en' ? 'en/' : '';
     await page.setViewportSize({ width: 1280, height: 900 });
     await open(page, `${prefix}feature/read-text-file/`);
-    await expect(page.locator('details.language-picker')).toHaveAttribute(
-      'open',
-      ''
-    );
+    await expect(page.locator('details.language-picker')).not.toHaveAttribute('open');
     await page.setViewportSize({ width: 375, height: 812 });
     await page.reload();
     await hydrated(page);
@@ -1480,6 +1477,9 @@ test('HTTP documentation icon actions retain tooltips, names and touch targets',
     for (const name of locale
       ? ['Favorite', 'Mark as learned', 'Reset selection', 'Copy code']
       : ['收藏文档', '标记学会', '恢复默认', '复制代码']) {
+      const picker = page.locator('details.language-picker');
+      if (name === 'Reset selection' || name === '恢复默认') await expandLanguagePicker(page);
+      else if (await picker.evaluate((element) => element.open)) await picker.locator('summary').click();
       const button = page.getByRole('button', { name, exact: true }).first();
       await expect(button.locator('svg')).toHaveAttribute(
         'aria-hidden',

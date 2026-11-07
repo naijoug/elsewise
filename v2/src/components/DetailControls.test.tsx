@@ -145,18 +145,11 @@ it('keeps English comparison, favorites and learning controls free of Chinese te
 });
 
 it('collapses the language picker on narrow screens and preserves native disclosure switching', async () => {
-  const addEventListener = vi.fn();
-  const removeEventListener = vi.fn();
-  const matchMedia = vi
-    .fn()
-    .mockReturnValue({ matches: false, addEventListener, removeEventListener });
-  vi.stubGlobal('matchMedia', matchMedia);
   await mount();
   const picker = host.querySelector<HTMLDetailsElement>(
     'details.language-picker'
   )!;
   const summary = picker.querySelector('summary')!;
-  expect(matchMedia).toHaveBeenCalledWith('(min-width: 850px)');
   expect(picker.open).toBe(false);
   expect(summary.textContent).toContain('选择语言');
   expect(summary.textContent).toContain('JavaScript, Python');
@@ -182,33 +175,19 @@ it('collapses the language picker on narrow screens and preserves native disclos
     JSON.parse(localStorage.getItem('elsewise_preferences')!).selectedLanguages
   ).toEqual(['js', 'go']);
 });
-it('opens the desktop picker and adapts to breakpoint changes without changing selected languages', async () => {
-  const media = {
-    matches: true,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  };
-  vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(media));
+it('removes comparison chips and retains preferred languages unavailable on this topic', async () => {
+  localStorage.setItem(
+    'elsewise_preferences',
+    JSON.stringify({ selectedLanguages: ['go', 'rust', 'py'] })
+  );
   await mount('en');
-  const picker = host.querySelector<HTMLDetailsElement>(
-    'details.language-picker'
-  )!;
-  expect(picker.open).toBe(true);
-  expect(picker.querySelector('summary')?.textContent).toContain(
-    'Choose languages'
-  );
-  expect(host.innerHTML).not.toMatch(/[\u4e00-\u9fff]/);
-  const change = media.addEventListener.mock.calls[0][1] as () => void;
-  media.matches = false;
-  act(() => change());
-  expect(picker.open).toBe(false);
-  expect(picker.querySelector('summary')?.textContent).toContain(
-    'JavaScript, Python'
-  );
+  expect(host.querySelector<HTMLDetailsElement>('details')?.open).toBe(false);
+  act(() => button('Remove Go').click());
+  expect(button('Remove Python').disabled).toBe(true);
   expect(
-    document.querySelectorAll('[data-language-card]:not([hidden])')
-  ).toHaveLength(2);
-  media.matches = true;
-  act(() => change());
-  expect(picker.open).toBe(true);
+    JSON.parse(localStorage.getItem('elsewise_preferences')!).selectedLanguages
+  ).toEqual(['py', 'rust']);
+  expect(
+    document.querySelector<HTMLElement>('[data-language-card="go"]')!.hidden
+  ).toBe(true);
 });

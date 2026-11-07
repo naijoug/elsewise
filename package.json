@@ -25,6 +25,8 @@
     "test:smoke": "bash scripts/e2e-test.sh",
     "postinstall": "npm --prefix v2 ci",
     "build:legacy": "npm run sync:tech-cards && tsc -b && vite build",
+    "test:legacy": "vitest --run src/components src/pages src/contexts src/hooks src/utils/accessibility.test.ts src/utils/dataLoader.test.ts src/utils/filters.test.ts src/utils/performance.test.ts",
+    "test:shared": "vitest --run src/utils/storage.test.ts scripts/syncTechCards.test.mjs scripts/content-schema.test.mjs scripts/verification.test.mjs",
     "test:v2": "vitest --config v2/vitest.config.ts --run"
   },
   "dependencies": {
